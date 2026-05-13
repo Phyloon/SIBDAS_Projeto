@@ -1,41 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-<link>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.C. Hospital</title>
+    <title>TrueTech</title>
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Habibi&display=swap" rel="stylesheet">
     <!--Favicon-->
     <link rel="shortcut icon" href="assets/images/logo.png" type="image/png" />
-
     <link rel="stylesheet" href="assets/css/main.css"/>
 </head>
 <body>
     <!--TOP OF SCREEN NAVBAR-->
-    <nav class="bng-navbar">
 
+
+    <nav class="bng-navbar">
         <!--LOGO AND NAME-->
         <div>
             <img src="assets/images/logo.png">
-            <h3>Strixhaven Central Hopsital</h3>
+            <h3 class="habibi-regular">TrueTech Inc.</h3>
         </div>
 
         <!--NAVIGATION BUTTONS-->
         <div class="container-navegacao">
             <a href="#quem-somos">Quem Somos</a>
             <a href="#nossa-equipa">Nossa Equipa</a>
+            <a href="#FAQ">FAQ</a>
             <a href="#servicos">Serviços</a>
         </div>
 
         <!--LOGIN BUTTON-->
         <div class="nav-cliente">
-            <a href="login_form" target="_blank">Login</a>
+            <div class="dropdown ms-3">
+                <button class="btn btn-outline-dark dropdown-toggle" type="button" id="bd-theme" data-bs-toggle="dropdown" aria-expanded="false">
+                    Aparência
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme">
+                    <li>
+                    <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light">
+                        Light
+                    </button>
+                    </li>
+                    <li>
+                    <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark">
+                        Dark
+                    </button>
+                    </li>
+                </ul>
+            </div>
+
+            <a href="login_form" target="_blank">Login</a>         
         </div>
     </nav>
 
+
     <!--PAGE CONTENT-->
-    <section class="container-texto-generico" id="quem-somos">
-        <article id="quem-somos">
+
+
+    <section id="quem-somos" class="container-texto-generico">
+        <div class="container">
+            <h2 class="display-5">Who are we</h2>
+            <p>Welcome to Strixhaven Central Hospital. We are leaders in medical equipment management...</p>
+        </div>
     </section>
+
+    <section id="nossa-equipa" class="container-texto-generico"> <!-- Alternating grey for visual separation -->
+        <div class="container">
+            <h2 class="display-5">Nossa equipa</h2>
+            <p>Meet our specialized team of biomedical engineers and technicians.</p>
+        </div>
+    </section>
+
+    <section id="FAQ" class="container-texto-FAQ">
+        <div class="container">
+            <h2 class="display-5">Frequently asked questions</h2>
+            <div class="accordion" id="accordionFAQ">
+                <!-- Item 1 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                            Como acesso a área técnica?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ">
+                        <div class="accordion-body">
+                            Utiliza o botão <strong>Login</strong> no topo direito e insere as tuas credenciais de técnico para aceder à gestão de manutenção.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                            O que significa a tag "OUT OF SERVICE"?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ">
+                        <div class="accordion-body">
+                            Esta tag indica que o equipamento está em manutenção ou foi requisitado pela equipa técnica para análise.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                            Quais as vantagens de escolher este sistema?
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ">
+                        <div class="accordion-body">
+                            It's simply superior, skill issue.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="servicos" class="container-texto-generico">
+        <div class="container">
+            <h2 class="display-5">Serviços</h2>
+            <p>From maintenance scheduling to real-time inventory tracking.</p>
+        </div>
+    </section>
+    
+    <!-- Bootstrap Bundle JS (Necessário para a sanfona funcionar) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

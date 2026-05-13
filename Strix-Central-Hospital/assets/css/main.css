@@ -6,13 +6,16 @@
 } 
 
 .bng-navbar {
- background-color: #A7A2A9; /* Cor de fundo escura */
+ background: linear-gradient(to bottom, #72ecc3 60%, rgba(169, 166, 172, 0) 100%);
+ border-bottom: none;
  display: flex; /* Coloca os elementos em linha */
  align-items: center; /* Centraliza os itens verticalmente */
  justify-content: space-between; /* Espaço entre os blocos */
  padding: 10px 20px; /* Espaçamento interno da barra */
+ padding-bottom: 17px;
  position: sticky; /* Fixa a barra no topo ao fazer scroll */
  top: 0; /* A barra fica colada ao topo */
+ z-index: 1050 !important; /* Makes sure its always on top */
 }
 
 .bng-navbar div {
@@ -37,7 +40,7 @@
 
 .container-navegacao a {
  font-size: 1.2em; /* Aumenta o tamanho da fonte dos links */
- margin: 0px 20px; /* Espaçamento horizontal entre os links */
+ margin: 0px 40px; /* Espaçamento horizontal entre os links */
  text-decoration: none; /* Remove o sublinhado */
  color: #575A5E; /* Define a cor dos links */
  
@@ -62,4 +65,31 @@
  transition:background 0.3s;
  transition:0.3s;
 }
+
+.container-texto-generico{
+ display: flex; /* Ativa o layout flexível */
+ justify-content: center; /* Centraliza os elementos horizontalmente */
+ flex-wrap: wrap; /* Permite quebra de linha em ecrãs menores */
+ gap: 10px; /* Espaço entre os elementos */
+ padding: 90px 40px; /* Espaçamento interno (superior/inferior e laterais) */
+ text-align: center; /* Centraliza o texto dentro dos artigos */
+ min-height: 100vh; /* Garante altura mínima de uma janela (ecrã) para fazer um intervalo entre os id's, para nao aparecerem todos juntos */
+}
+
+.container-texto-FAQ{
+ display: flex; /* Ativa o layout flexível */
+ justify-content: center; /* Centraliza os elementos horizontalmente */
+ flex-wrap: wrap; /* Permite quebra de linha em ecrãs menores */
+ gap: 10px; /* Espaço entre os elementos */
+ padding: 90px 250px; /* Espaçamento interno (superior/inferior e laterais) */
+ text-align: center; /* Centraliza o texto dentro dos artigos */
+ min-height: 100vh; /* Garante altura mínima de uma janela (ecrã) para fazer um intervalo entre os id's, para nao aparecerem todos juntos */
+}
+
+.habibi-regular {
+  font-family: "Habibi", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 
