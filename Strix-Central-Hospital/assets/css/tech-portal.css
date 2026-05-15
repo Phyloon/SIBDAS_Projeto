@@ -1,0 +1,136 @@
+* {
+ margin: 0; /* Remove margens padrão */
+ padding: 0; /* Remove preenchimento padrão */
+ box-sizing: border-box; /* Inclui a borda e o preenchimento no cálculo do tamanho */
+ font-family: Arial, Helvetica, sans-serif; /* Define a fonte padrão */
+} 
+
+:root {
+    --sidebar-bg: #1e293b;
+    --sidebar-hover: #334155;
+    --active-blue: #0ea5e9;
+    --main-bg: #f8fafc;
+    --accent-orange: #f97316;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--main-bg);
+    overflow-x: hidden;
+}
+
+/* Sidebar Styling */
+.sidebar{
+    min-width: 260px;
+    max-width: 400px;
+    background-color: var(--sidebar-bg);
+    color: rgb(255, 255, 255);
+    height: 100vh;
+    position: fixed;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    padding: 20px;
+    background: #0f172a;
+}
+
+.nav-link {
+    color: #94a3b8;
+    padding: 12px 20px;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    border-left: 4px solid transparent;
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    background-color: var(--sidebar-hover);
+    color: white;
+}
+
+.nav-link.active {
+    background-color: #334155;
+    color: white;
+    border-left-color: var(--active-blue);
+}
+
+.nav-link i {
+    margin-right: 12px;
+    font-size: 1.1rem;
+}
+
+.sub-nav {
+    background: #1a2233;
+    padding-left: 30px;
+}
+
+/* Main Content Styling */
+#content {
+    width: calc(100% - 260px);
+    margin-left: 260px;
+    min-height: 100vh;
+}
+
+.top-navbar {
+    background: white;
+    padding: 15px 30px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary-custom {
+    background-color: var(--accent-orange);
+    border: none;
+    padding: 10px 20px;
+    font-weight: 600;
+    color: white;
+}
+
+.btn-primary-custom:hover {
+    background-color: #ea580c;
+}
+
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.appointment-list-item {
+    border-bottom: 1px solid #f1f5f9;
+    padding: 12px 0;
+}
+
+.date-badge {
+    background: #f1f5f9;
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
+    min-width: 60px;
+}
+
+.logo-icon {
+    width: 32px;
+    height: 32px;
+    background-color: #007BFF;
+    border-radius: 8px; /* Cantos arredondados como os teus cartões */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-icon::after {
+    content: "T";
+    color: white;
+    font-weight: bold;
+    font-family: sans-serif;
+}

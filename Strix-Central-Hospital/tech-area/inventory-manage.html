@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrueTech Inc. - Technician Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="../assets/css/tech-portal.css"/>
+
+</head>
+<body>
+
+    <div class="d-flex">
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header d-flex">
+                <div class="logo-icon me-2"></div>
+                <div>
+                    <h5 class="mb-2">TrueTech Inc.</h5>
+                    <small class="text-secondary">Strixhaven</small>
+                </div>
+            </div>  
+
+            <ul class="nav flex-column mt-2">
+                <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="bi bi-calendar-check"></i> Fixing Appointments</a></li>
+
+                <!-- Equipment Status with Submenu -->
+                <li class="nav-item">
+                    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#equipmentSubmenu">
+                        <span><i class="bi bi-tools"></i> Equipment Status</span>
+                        <i class="bi bi-chevron-down small"></i>
+                    </a>
+                    <div class="collapse sub-nav" id="equipmentSubmenu">
+                        <ul class="nav flex-column">
+                            <li class="nav-item"><a href="#" class="nav-link py-2">Used</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link py-2">Broken</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link py-2">Under Maintenance</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- Other Links -->
+                <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-clipboard-data"></i> Maintenance Records</a></li>
+                <li class="nav-item"><a href="inventory-manage.html" class="nav-link active"><i class="bi bi-box-seam"></i> Inventory</a></li>
+                <li class="nav-item"><a href="tickets.html" class="nav-link"><i class="bi bi-ticket"></i> Tickets</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-pin-map"></i> Location</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-file-earmark-bar-graph"></i> Reports</a></li>
+            </ul>
+        </nav>
+
+        <!--Page content-->
+        <div id="content">
+            <nav class="top-navbar d-flex justify-content-between align-items-center">
+                <div class="input-group d-none d-md-flex" style="width: 300px;">
+                    <span class="input-group-text bg-light border-0"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control bg-light border-0" placeholder="Search equipment...">
+                </div>
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-bell text-secondary fs-5 me-4"></i>
+                    <div class="d-flex align-items-center">
+                        <div class="text-end me-2">
+                            <p class="mb-0 small fw-bold">John Doe</p>
+                            <p class="mb-0 text-muted small">Senior Technician</p>
+                        </div>
+                        <img src="https://ui-avatars.com/api/?name=John+Doe&background=random" class="rounded-circle" width="35" height="35">
+                    </div>
+                </div>
+            </nav>
+
+            <div class="row g-4 p-4">
+                <!-- Each card gets its own column -->
+                <div class="col-auto">
+                    <div class="card" style="width: 18rem;">
+                        <img src="null" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Catheter</h5>
+                            <p class="card-text text-center">Some quick example text...</p>
+                        </div>
+                        <ul class="list-group list-group-flush text-center">
+                            <li class="list-group-item">An item</li>
+                            <li class="list-group-item">A second item</li>
+                            <li class="list-group-item">A third item</li>
+                        </ul>
+                        <div class="card-body text-center">
+                            <a href="#" class="btn btn-primary">Remaining components</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Just copy this col block for every new card -->
+                <div class="col-auto">
+                    <div class="card" style="width: 18rem;">
+                        <img src="null" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Card title</h5>
+                            <p class="card-text text-center">Some quick example text...</p>
+                        </div>
+                        <ul class="list-group list-group-flush text-center">
+                            <li class="list-group-item">An item</li>
+                            <li class="list-group-item">A second item</li>
+                            <li class="list-group-item">A third item</li>
+                        </ul>
+                        <div class="card-body text-center">
+                            <a href="#" class="btn btn-primary">Remaining components</a>
+                        </div>
+                    </div>
+                </div>
+                                <div class="col-auto">
+                    <div class="card" style="width: 18rem;">
+                        <img src="null" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Card title</h5>
+                            <p class="card-text text-center">Some quick example text...</p>
+                        </div>
+                        <ul class="list-group list-group-flush text-center">
+                            <li class="list-group-item">An item</li>
+                            <li class="list-group-item">A second item</li>
+                            <li class="list-group-item">A third item</li>
+                        </ul>
+                        <div class="card-body text-center">
+                            <a href="#" class="btn btn-primary">Remaining components</a>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>         
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
