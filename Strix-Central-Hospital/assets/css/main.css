@@ -82,6 +82,18 @@
  min-height: 100vh; /* Garante altura mínima de uma janela (ecrã) para fazer um intervalo entre os id's, para nao aparecerem todos juntos */
 }
 
+.container-texto-servicos{
+ display: flex; /* Ativa o layout flexível */
+ justify-content: center; /* Centraliza os elementos horizontalmente */
+ flex-wrap: wrap; /* Permite quebra de linha em ecrãs menores */
+ gap: 10px; /* Espaço entre os elementos */
+ padding-top: 110px !important;
+ padding: 0px 40px; /* Espaçamento interno (superior/inferior e laterais) */
+ text-align: center; /* Centraliza o texto dentro dos artigos */
+ min-height: 80vh; /* Garante altura mínima de uma janela (ecrã) para fazer um intervalo entre os id's, para nao aparecerem todos juntos */
+ color: #007BFF;
+}
+
 .container-texto-quem-somos{
  display: flex; /* Ativa o layout flexível */
  justify-content: center; /* Centraliza os elementos horizontalmente */
@@ -116,7 +128,6 @@
   background-repeat: no-repeat;
 }
 
-
 .container-texto-FAQ{
  display: flex; /* Ativa o layout flexível */
  justify-content: center; /* Centraliza os elementos horizontalmente */
@@ -126,6 +137,7 @@
  padding: 100px 250px; /* Espaçamento interno (superior/inferior e laterais) */
  text-align: center; /* Centraliza o texto dentro dos artigos */
  min-height: 100vh; /* Garante altura mínima de uma janela (ecrã) para fazer um intervalo entre os id's, para nao aparecerem todos juntos */
+ color: #007BFF;
 }
 
 .habibi-regular {
@@ -184,3 +196,37 @@
   text-align: center;
 }
 
+.team-card:hover{
+  background-color: #cccccc;
+  color:#08090A;
+  transition:background 0.5s;
+  transition:0.3s;
+}
+
+.hero-section{
+  padding-top: 100px ;
+  padding-bottom: 200px ;
+}
+
+.logo-icon {
+    width: 32px;
+    height: 32px;
+    background-color: #007BFF;
+    border-radius: 8px; /* Cantos arredondados como os teus cartões */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-icon::after {
+    content: "T";
+    color: white;
+    font-weight: bold;
+    font-family: sans-serif;
+}
+
+.logo-text {
+    letter-spacing: -1px;
+    color: #333;
+}

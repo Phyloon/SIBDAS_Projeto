@@ -9,19 +9,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Habibi&display=swap" rel="stylesheet">
+
     <!--Favicon-->
     <link rel="shortcut icon" href="assets/images/logo.png" type="image/png" />
     <link rel="stylesheet" href="assets/css/main.css"/>
 </head>
 
 <body class="body">
+
     <!--TOP OF SCREEN NAVBAR-->
     <nav class="bng-navbar">
+
         <!--LOGO AND NAME-->
-        <div class="container-navegacao">
-            <img src="assets/images/logo.png">
-            <h5 class="habibi-regular nav-cliente" >TrueTech Inc.</h5>
-        </div>
+        <a href="#" id="logo-scroll-top" class="navbar-brand d-flex align-items-center">
+            <div class="logo-icon me-2"></div>
+            <span class="logo-text fw-bold fs-4">True<span class="text-primary">Tech</span></span>
+        </a>
 
         <!--NAVIGATION BUTTONS-->
         <div class="container-navegacao">
@@ -32,7 +35,6 @@
         </div>
 
         <!--APPEARANCE AND LOGIN-->
-
         <div class="nav-cliente">
             <div class="dropdown ms-3">
                 <button class="btn btn-outline-dark dropdown-toggle nav-cliente" type="button" id="bd-theme" data-bs-toggle="dropdown" aria-expanded="false">
@@ -58,13 +60,14 @@
 
     <!--PAGE CONTENT-->
 
+
     <!-- Hero Section -->
     <header id="inicio" class="hero-section">
         <div class="container py-5">
             <div class="row align-items-center">
                 <div class="col-lg-6">
                     <h1 class="display-4 fw-bold text-dark mb-4">Gestão de Material <span class="text-primary">Strixhaven</span></h1>
-                    <p class="lead text-secondary">A plataforma da TrueTech dedicada à manutenção preventiva e monitorização em tempo real de ativos hospitalares críticos.</p>
+                    <p class="lead text-secondary">TrueTech's innovative solution for medical equipment management. With this new platform your equipment will be organized like never before.</p>
                     <a href="#servicos" class="btn btn-primary btn-lg mt-3">Explorar Software</a>
                 </div>
             </div>
@@ -79,14 +82,13 @@
                 <p class="col-lg-4 fs-5 quem-somos-texto ms-auto">
                     TrueTech Inc. is a leading company in the field of medical equipment management, providing inovative, reliable and efficient solutions to aid the work of our healthcare professionals.
                     <br>
-                    With their new software, <span class="fst-italic" >Strixhaven</span>, they aim to revolutionize the way equipment is maintained and monitored. Using a key based system, they ensure that each professional doesn't need to see more than they need, simplyfying the interface and  reducing the visual clutter, speeding up the workflow.
+                    With their new software, <span class="fst-italic" >Strixhaven</span>, they aim to revolutionize the way equipment is maintained and monitored. Using a key based system, they ensure that each professional doesn't need to see more than they need, simplyfying the interface and reducing the visual clutter, speeding up the workflow.
                 </p>   
             </div>
         </div>
     </section>
 
     <!-- Team Section -->
-    <!--<section id="nossa-equipa" class="container-texto-generico"> <div class="container"><h2 class="display-5">Nossa equipa</h2><p>Meet our specialized team of biomedical engineers and technicians.</p></div></section>-->
     <section id="nossa-equipa" class="container-texto-generico">
         <div class="container">
             <div class="text-center mb-5">
@@ -95,9 +97,8 @@
             </div>
 
             <div class="row g-4 justify-content-center">
-
                 <div class="col-12 col-md-6 col-lg-3">
-                    <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center strix-card-hover">                        
+                    <div class="team-card card h-100 border-0 shadow-sm rounded-4 p-3 text-center strix-card-hover">                        
                         <div>
                             <img src="../Strix-Central-Hospital/assets/images/engineer_man.jpg" class="rounded-3 mb-3" width="200" height="200" alt="Foto de perfil de John Mariah">
                         </div>
@@ -107,13 +108,13 @@
                             <p class="card-text small text-muted">Especialista em manutenção de equipamentos de imagem diagnóstica.</p>
                         </div>
                         <div class="card-footer bg-transparent border-0 pb-3">
-                            <a href="#" class="btn btn-outline-primary btn-sm rounded-pill px-4">Ver Perfil</a>
+                            <a target="_blank" href="https://github.com/Phyloon" class="btn btn-outline-primary btn-sm rounded-pill px-4">Ver Perfil</a>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-3">
-                    <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center strix-card-hover">
+                    <div class="team-card card h-100 border-0 shadow-sm rounded-4 p-3 text-center strix-card-hover">
                         <div>
                             <img src="../Strix-Central-Hospital/assets/images/doctor_dude_man.jpg" class="rounded-3 mb-3" width="200" height="200" alt="Foto de perfil de John Mariah">
                         </div>
@@ -123,13 +124,13 @@
                             <p class="card-text small text-muted">Gestão de calibrações hospitalares e vistorias técnicas de segurança.</p>
                         </div>
                         <div class="card-footer bg-transparent border-0 pb-3">
-                            <a href="#" class="btn btn-outline-primary btn-sm rounded-pill px-4">Ver Perfil</a>
+                            <a target="_blank" href="https://github.com/Phyloon" class="btn btn-outline-primary btn-sm rounded-pill px-4">Ver Perfil</a>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-3">
-                    <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center strix-card-hover">
+                    <div class="team-card card h-100 border-0 shadow-sm rounded-4 p-3 text-center strix-card-hover">
                         <div>
                             <img src="../Strix-Central-Hospital/assets/images/one_of_the_dudes.jpg" class="rounded-3 mb-3" width="200" height="200" alt="Foto de perfil de John Mariah">
                         </div>
@@ -139,7 +140,7 @@
                             <p class="card-text small text-muted">Gestão de calibrações hospitalares e vistorias técnicas de segurança.</p>
                         </div>
                         <div class="card-footer bg-transparent border-0 pb-3">
-                            <a href="#" class="btn btn-outline-primary btn-sm rounded-pill px-4">Ver Perfil</a>
+                            <a target="_blank" href="https://github.com/Phyloon" class="btn btn-outline-primary btn-sm rounded-pill px-4">Ver Perfil</a>
                         </div>
                     </div>
                 </div>
@@ -199,7 +200,7 @@
     </section>
 
     <!-- Services Section -->
-    <section id="servicos" class=" bg-white shadow-sm container-texto-generico">
+    <section id="servicos" class=" bg-white shadow-sm container-texto-servicos">
         <div class="container">
             <h2 class="display-5 text-center mb-5">Serviços</h2>
             <div class="row g-4">
@@ -258,6 +259,7 @@
             </div>
         </div>
     </footer>
+
     <!-- Bootstrap Bundle JS (Necessário para a sanfona funcionar) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
