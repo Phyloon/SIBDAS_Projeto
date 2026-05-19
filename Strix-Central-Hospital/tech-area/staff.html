@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrueTech Inc. - Equipment Location</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/tech-portal.css"/>
+    
+</head>
+<body>
+    <div class="d-flex">
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header d-flex">
+                <div class="logo-icon me-2"></div>
+                <div>
+                    <span class="logo-text fw-bold fs-4">True<span class="text-primary">Tech</span></span>
+                    <small class="text-secondary">Strixhaven</small>
+                </div>
+            </div>
+
+            <ul class="nav flex-column mt-2">
+                <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="bi bi-calendar-check"></i> Fixing Appointments</a></li>
+                <li class="nav-item"><a href="staff.html" class="nav-link active"><i class="bi bi-tools"></i> Staff</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-clipboard-data"></i> Maintenance Records</a></li>
+                <li class="nav-item"><a href="inventory-manage.html" class="nav-link"><i class="bi bi-box-seam"></i> Inventory</a></li>
+                <li class="nav-item"><a href="tickets.html" class="nav-link"><i class="bi bi-ticket"></i> Tickets</a></li>
+                <li class="nav-item"><a href="location.html" class="nav-link"><i class="bi bi-pin-map"></i> Location</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-file-earmark-bar-graph"></i> Reports</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-phone-vibrate"></i> Quick Contacts</a></li>
+            </ul>
+        </nav>
+
+        <div id="content">
+
+            <!-- Top navbar -->
+            <nav class="top-navbar d-flex justify-content-between align-items-center">
+                <div class="input-group d-none d-md-flex" style="width: 300px;">
+                    <span class="input-group-text bg-light border-0"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control bg-light border-0" placeholder="Search equipment...">
+                </div>
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-bell text-secondary fs-5 me-4"></i>
+                    <div class="d-flex align-items-center">
+                        <div class="text-end me-2">
+                            <p class="mb-0 small fw-bold">John Doe</p>
+                            <p class="mb-0 text-muted small">Senior Technician</p>
+                        </div>
+                        <img src="https://ui-avatars.com/api/?name=John+Doe&background=random" class="rounded-circle" width="35" height="35">
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid p-4">
+ 
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h3 class="fw-bold mb-1">Staff</h3>
+                        <p class="text-muted small mb-0">All hospital staff and their current availability</p>
+                    </div>
+                    <button class="btn btn-primary-custom">
+                        <i class="bi bi-plus-lg me-2"></i> Add Staff Member
+                    </button>
+                </div>
+    
+                <!-- Stat cards -->
+                <div class="row g-3 mb-4">
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="stat-card" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">
+                            <div class="stat-icon"><i class="bi bi-people"></i></div>
+                            <div>
+                                <div class="stat-value">42</div>
+                                <div class="stat-label">Total Staff</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="stat-card" style="background: linear-gradient(135deg, #10b981, #059669);">
+                            <div class="stat-icon"><i class="bi bi-check-circle"></i></div>
+                            <div>
+                                <div class="stat-value">28</div>
+                                <div class="stat-label">On Shift</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="stat-card" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                            <div class="stat-icon"><i class="bi bi-telephone"></i></div>
+                            <div>
+                                <div class="stat-value">8</div>
+                                <div class="stat-label">On Call</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="stat-card" style="background: linear-gradient(135deg, #94a3b8, #64748b);">
+                            <div class="stat-icon"><i class="bi bi-moon"></i></div>
+                            <div>
+                                <div class="stat-value">6</div>
+                                <div class="stat-label">Off Duty</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Filter bar (no JS — left for you to implement) -->
+                <div class="filter-bar mb-4">
+                    <i class="bi bi-funnel text-muted"></i>
+                    <select data-filter="role">
+                        <option>All Roles</option>
+                        <option>Doctor</option>
+                        <option>Nurse</option>
+                        <option>Biomedical Technician</option>
+                        <option>Radiologist</option>
+                        <option>Surgeon</option>
+                    </select>
+                    <select data-filter="department">
+                        <option>All Departments</option>
+                        <option>Cardiology</option>
+                        <option>Radiology</option>
+                        <option>Neurology</option>
+                        <option>ICU</option>
+                        <option>Surgery</option>
+                    </select>
+                    <select data-filter="availability">
+                        <option>All Availability</option>
+                        <option>On Shift</option>
+                        <option>On Call</option>
+                        <option>Off Duty</option>
+                    </select>
+                    
+                    <input type="text" placeholder="Search by name or ID...">
+                </div>
+    
+                <!-- Staff table -->
+                <div class="card">
+                    <div class="card-body p-0">
+                        <table class="table staff-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Staff Member</th>
+                                    <th>Role</th>
+                                    <th>Department</th>
+                                    <th>Availability</th>
+                                    <th>Pager Contact</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-role="Doctor" data-availability="On Shift" data-department="Cardiology">
+                                    <td>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <img src="https://ui-avatars.com/api/?name=Maria+Santos&background=0ea5e9&color=fff" class="staff-avatar">
+                                            <div>
+                                                <div class="staff-name">Dr. Maria Santos</div>
+                                                <div class="staff-id">#ST-00021</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="role-badge" style="background:#dbeafe; color:#1d4ed8;">Doctor</span></td>
+                                    <td>Cardiology</td>
+                                    <td>
+                                        <span class="availability-dot" style="background:#10b981;"></span>
+                                        <span class="availability-label" style="color:#10b981;">On Shift</span>
+                                    </td>
+                                    <td><span class="assignment-pill"><i class="bi bi-heart-pulse"></i> ECG Monitoring</span></td>
+                                </tr>
+                                <tr data-role="Biomedical Technician" data-availability="On Shift" data-department="Radiology">
+                                    <td>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <img src="https://ui-avatars.com/api/?name=John+Doe&background=f97316&color=fff" class="staff-avatar">
+                                            <div>
+                                                <div class="staff-name">John Doe</div>
+                                                <div class="staff-id">#ST-00001</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="role-badge" style="background:#ffedd5; color:#c2410c;">Biomedical Tech.</span></td>
+                                    <td>Radiology</td>
+                                    <td>
+                                        <span class="availability-dot" style="background:#10b981;"></span>
+                                        <span class="availability-label" style="color:#10b981;">On Shift</span>
+                                    </td>
+                                    <td><span class="assignment-pill"><i class="bi bi-tools"></i> MRI Coil Replacement</span></td>
+                                </tr>
+                                <tr data-role="Nurse" data-availability="On Call" data-department="ICU">
+                                    <td>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <img src="https://ui-avatars.com/api/?name=Ana+Costa&background=10b981&color=fff" class="staff-avatar">
+                                            <div>
+                                                <div class="staff-name">Ana Costa</div>
+                                                <div class="staff-id">#ST-00034</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="role-badge" style="background:#d1fae5; color:#065f46;">Nurse</span></td>
+                                    <td>ICU</td>
+                                    <td>
+                                        <span class="availability-dot" style="background:#f59e0b;"></span>
+                                        <span class="availability-label" style="color:#f59e0b;">On Call</span>
+                                    </td>
+                                    <td><span class="assignment-pill"><i class="bi bi-clipboard-pulse"></i> Patient Monitoring</span></td>
+                                </tr>
+                                <tr data-role="Radiologist" data-availability="On Shift" data-department="Radiology">
+                                    <td>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <img src="https://ui-avatars.com/api/?name=Carlos+Lima&background=8b5cf6&color=fff" class="staff-avatar">
+                                            <div>
+                                                <div class="staff-name">Dr. Carlos Lima</div>
+                                                <div class="staff-id">#ST-00009</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="role-badge" style="background:#ede9fe; color:#6d28d9;">Radiologist</span></td>
+                                    <td>Radiology</td>
+                                    <td>
+                                        <span class="availability-dot" style="background:#10b981;"></span>
+                                        <span class="availability-label" style="color:#10b981;">On Shift</span>
+                                    </td>
+                                    <td><span class="assignment-pill"><i class="bi bi-image"></i> CT Scan Review</span></td>
+                                </tr>
+                                <tr data-role="Surgeon" data-availability="Off Duty" data-department="Surgery">
+                                    <td>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <img src="https://ui-avatars.com/api/?name=Pedro+Alves&background=64748b&color=fff" class="staff-avatar">
+                                            <div>
+                                                <div class="staff-name">Dr. Pedro Alves</div>
+                                                <div class="staff-id">#ST-00015</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="role-badge" style="background:#f1f5f9; color:#475569;">Surgeon</span></td>
+                                    <td>Surgery</td>
+                                    <td>
+                                        <span class="availability-dot" style="background:#94a3b8;"></span>
+                                        <span class="availability-label" style="color:#94a3b8;">Off Duty</span>
+                                    </td>
+                                    <td><span class="assignment-pill">—</span></td>
+                                </tr>
+                                <tr data-role="Nurse" data-availability="On Shift" data-department="Neurology">
+                                    <td>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <img src="https://ui-avatars.com/api/?name=Sofia+Ferreira&background=ec4899&color=fff" class="staff-avatar">
+                                            <div>
+                                                <div class="staff-name">Sofia Ferreira</div>
+                                                <div class="staff-id">#ST-00041</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="role-badge" style="background:#d1fae5; color:#065f46;">Nurse</span></td>
+                                    <td>Neurology</td>
+                                    <td>
+                                        <span class="availability-dot" style="background:#10b981;"></span>
+                                        <span class="availability-label" style="color:#10b981;">On Shift</span>
+                                    </td>
+                                    <td><span class="assignment-pill"><i class="bi bi-activity"></i> Neuro Observation</span></td>
+                                </tr>
+                                <tr data-role="Biomedical Technician" data-availability="On Call" data-department="ICU">
+                                    <td>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <img src="https://ui-avatars.com/api/?name=Rui+Mendes&background=f97316&color=fff" class="staff-avatar">
+                                            <div>
+                                                <div class="staff-name">Rui Mendes</div>
+                                                <div class="staff-id">#ST-00007</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="role-badge" style="background:#ffedd5; color:#c2410c;">Biomedical Tech.</span></td>
+                                    <td>ICU</td>
+                                    <td>
+                                        <span class="availability-dot" style="background:#f59e0b;"></span>
+                                        <span class="availability-label" style="color:#f59e0b;">On Call</span>
+                                    </td>
+                                    <td><span class="assignment-pill"><i class="bi bi-tools"></i> Ventilator Check</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/1240863.js"></script>
+</body>
+</html>
