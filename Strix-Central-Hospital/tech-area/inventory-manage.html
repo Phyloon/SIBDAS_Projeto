@@ -28,7 +28,7 @@
                 <li class="nav-item"><a href="staff.html" class="nav-link"><i class="bi bi-tools"></i> Staff</a></li>
                 <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-clipboard-data"></i> Maintenance Records</a></li>
                 <li class="nav-item">
-                    <a href="#inventory-accordion"data-bs-toggle="collapse" role="button" class="nav-link d-flex justify-content-between align-items-center active">
+                    <a href="#inventory-accordion" data-bs-toggle="collapse" role="button" class="nav-link d-flex justify-content-between align-items-center ">
                         <span><i class="bi bi-box-seam"></i> Inventory</span>
                         <i class="bi bi-chevron-down submenu-arrow small"></i>
                     </a>
@@ -148,9 +148,9 @@
             </div>
 
             <div class="row g-4 p-3">
-                <!-- Each card gets its own column -->
-                <div class="col-md-3">
-                    <div class="card" style="width: 18rem;">
+                <!-- cards com os items -->
+                <div class="col-md-3" data-group="Grupo 2- Suporte de Vida" data-availability="Disponivel" data-department="ICU">
+                    <div class="card" style="width: 18rem; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#item1_modal">
                         <div style="padding: 15px;">   
                             <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
                         </div>
@@ -161,71 +161,133 @@
                             <li class="list-group-item">Marca: Zoll</li>
                             <li class="list-group-item">Modelo: R Series</li>
                             <li class="list-group-item">00-0000-00</li>
+                            <li class="list-group-item">Disponibilidade</li>
                         </ul>
-                        <div class="card-body text-center">
-                            <a href="#" class="btn btn-primary">Remaining components</a>
+                    </div>
+                </div>
+                <div class="col-md-3" data-group="Grupo 3- Terapia" data-availability="Em Uso" data-department="ICU">
+                    <div class="card" style="width: 18rem;" data-bs-toggle="modal" data-bs-target="#item2_modal">
+                        <div style="padding: 15px;">   
+                            <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
                         </div>
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Card title</h5>
+                            <p class="card-text text-center">Some quick example text...</p>
+                        </div>
+                        <ul class="list-group list-group-flush text-center">
+                            <li class="list-group-item">An item</li>
+                            <li class="list-group-item">A second item</li>
+                            <li class="list-group-item">A third item</li>
+                            <li class="list-group-item">Disponibilidade</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card" style="width: 18rem;" data-bs-toggle="modal" data-bs-target="#item3_modal">
+                        <div style="padding: 15px;">   
+                            <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Card title</h5>
+                            <p class="card-text text-center">Some quick example text...</p>
+                        </div>
+                        <ul class="list-group list-group-flush text-center">
+                            <li class="list-group-item">An item</li>
+                            <li class="list-group-item">A second item</li>
+                            <li class="list-group-item">A third item</li>
+                            <li class="list-group-item">Disponibilidade</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card" style="width: 18rem;" data-bs-toggle="modal" data-bs-target="#item4_modal">
+                        <div style="padding: 15px;">   
+                            <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Card title</h5>
+                            <p class="card-text text-center">Some quick example text...</p>
+                        </div>
+                        <ul class="list-group list-group-flush text-center">
+                            <li class="list-group-item">An item</li>
+                            <li class="list-group-item">A second item</li>
+                            <li class="list-group-item">A third item</li>
+                            <li class="list-group-item">Disponibilidade</li>
+                        </ul>
                     </div>
                 </div>
 
-                <div class="col-md-3">
-                    <div class="card" style="width: 18rem;">
-                        <div style="padding: 15px;">   
-                            <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
+                
+            </div> 
+
+
+            <!--Modais dos cards-->
+            <div class="modal fade" id="item1_modal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content" style="border-radius: 16px; border: none;">
+                        <div class="modal-header border-0">
+                            <h5 class="modal-title fw-bold">Desfibrilhador</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
-                        <div class="card-body">
-                            <h5 class="card-title text-center">Card title</h5>
-                            <p class="card-text text-center">Some quick example text...</p>
+                        <div class="modal-body">
+                            <img src="../assets/images/Placeholder.jpg" class="img-fluid rounded mb-3" alt="...">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Fornecedor:</strong> Zoll</li>
+                                <li class="list-group-item"><strong>Modelo:</strong> R Series</li>
+                                <li class="list-group-item"><strong>ID:</strong> 00-0000-00</li>
+                            </ul>
+
+                            <hr>
+                            <a href="#components-1" data-bs-toggle="collapse" role="button" 
+                            class="d-flex justify-content-between align-items-center text-decoration-none text-dark fw-bold mb-2">
+                                <span><i class="bi bi-cpu me-2"></i> Componentes Associados</span>
+                                <i class="bi bi-chevron-down small"></i>
+                            </a>
+
+                            <div id="components-1" class="collapse">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="fw-semibold">Sensor de Ritmo Cardíaco</div>
+                                            <div class="small text-muted">ID: 00-0000-01</div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="fw-semibold">Cabo de Eletrodos</div>
+                                            <div class="small text-muted">ID: 00-0000-02</div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="fw-semibold">Bateria Principal</div>
+                                            <div class="small text-muted">ID: 00-0000-03</div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+
+                            <hr>
+                            <h6 class="fw-bold mb-3"><i class="bi bi-file-earmark-pdf me-2 text-danger"></i>Documentação</h6>
+                            <div class="d-flex flex-column gap-2">
+                                <a href="#" class="btn btn-outline-secondary btn-sm text-start">
+                                    <i class="bi bi-file-earmark-pdf text-danger me-2"></i> Manual do Utilizador.pdf
+                                </a>
+                                <a href="#" class="btn btn-outline-secondary btn-sm text-start">
+                                    <i class="bi bi-file-earmark-pdf text-danger me-2"></i> Ficha Técnica.pdf
+                                </a>
+                                <a href="#" class="btn btn-outline-secondary btn-sm text-start">
+                                    <i class="bi bi-file-earmark-pdf text-danger me-2"></i> Certificado de Calibração.pdf
+                                </a>
+                            </div>
                         </div>
-                        <ul class="list-group list-group-flush text-center">
-                            <li class="list-group-item">An item</li>
-                            <li class="list-group-item">A second item</li>
-                            <li class="list-group-item">A third item</li>
-                        </ul>
-                        <div class="card-body text-center">
-                            <a href="#" class="btn btn-primary">Remaining components</a>
+                        <div class="modal-footer border-0">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="card" style="width: 18rem;">
-                        <div style="padding: 15px;">   
-                            <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title text-center">Card title</h5>
-                            <p class="card-text text-center">Some quick example text...</p>
-                        </div>
-                        <ul class="list-group list-group-flush text-center">
-                            <li class="list-group-item">An item</li>
-                            <li class="list-group-item">A second item</li>
-                            <li class="list-group-item">A third item</li>
-                        </ul>
-                        <div class="card-body text-center">
-                            <a href="#" class="btn btn-primary">Remaining components</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card" style="width: 18rem;">
-                        <div style="padding: 15px;">   
-                            <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title text-center">Card title</h5>
-                            <p class="card-text text-center">Some quick example text...</p>
-                        </div>
-                        <ul class="list-group list-group-flush text-center">
-                            <li class="list-group-item">An item</li>
-                            <li class="list-group-item">A second item</li>
-                            <li class="list-group-item">A third item</li>
-                        </ul>
-                        <div class="card-body text-center">
-                            <a href="#" class="btn btn-primary">Remaining components</a>
-                        </div>
-                    </div>
-                </div>
-            </div>         
+            </div>        
         </div>
     </div>
 
