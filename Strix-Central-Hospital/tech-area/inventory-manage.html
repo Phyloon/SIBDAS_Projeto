@@ -27,7 +27,32 @@
                 <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="bi bi-calendar-check"></i> Fixing Appointments</a></li>
                 <li class="nav-item"><a href="staff.html" class="nav-link"><i class="bi bi-tools"></i> Staff</a></li>
                 <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-clipboard-data"></i> Maintenance Records</a></li>
-                <li class="nav-item"><a href="inventory-manage.html" class="nav-link active"><i class="bi bi-box-seam"></i> Inventory</a></li>
+                <li class="nav-item">
+                    <a href="#inventory-accordion"data-bs-toggle="collapse" role="button" class="nav-link d-flex justify-content-between align-items-center active">
+                        <span><i class="bi bi-box-seam"></i> Inventory</span>
+                        <i class="bi bi-chevron-down submenu-arrow small"></i>
+                    </a>
+                    
+                    <div id="inventory-accordion" class="collapse">
+                        <ul class="nav flex-column ms-4 border-start border-secondary ">
+                            <li class="nav-item">
+                                <a href="inventory-manage.html" class="nav-link small">
+                                    <i class="bi bi-layers me-1"></i> Equipamentos
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link small">
+                                    <i class="bi bi-truck me-1"></i> Fornecedores
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link small">
+                                    <i class="bi bi-file-earmark-text me-1"></i> Documentação
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li class="nav-item"><a href="tickets.html" class="nav-link"><i class="bi bi-ticket"></i> Tickets</a></li>
                 <li class="nav-item"><a href="location.html" class="nav-link"><i class="bi bi-pin-map"></i> Location</a></li>
                 <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-file-earmark-bar-graph"></i> Reports</a></li>
@@ -37,7 +62,7 @@
 
         <!--Page content-->
         <div id="content">
-
+            
             <!-- Top Navigation Bar -->
             <nav class="top-navbar d-flex justify-content-between align-items-center">
                 <div class="input-group d-none d-md-flex" style="width: 300px;">
@@ -56,6 +81,72 @@
                 </div>
             </nav>
 
+            <!-- progress bars and filters -->
+            <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
+                <div class="card-body p-4">
+                    
+                    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+                        <h6 class="fw-bold m-0 text-secondary">
+                            <i class="bi bi-pie-chart-fill me-2"></i> Estado Geral do Inventário
+                        </h6>
+                        <div class="d-flex gap-3 small fw-semibold flex-wrap">
+                            <span><i class="bi bi-circle-fill text-success me-1"></i> Disponíveis (65%)</span>
+                            <span><i class="bi bi-circle-fill text-primary me-1"></i> Em Uso (20%)</span>
+                            <span><i class="bi bi-circle-fill text-warning me-1"></i> Em Manutenção (10%)</span>
+                            <span><i class="bi bi-circle-fill text-danger me-1"></i> Partidos (5%)</span>
+                        </div>
+                    </div>
+
+                    <div class="progress mb-4" style="height: 12px; border-radius: 6px;">
+                        <div class="progress-bar bg-success" style="width: 65%"></div>
+                        <div class="progress-bar bg-primary" style="width: 20%"></div>
+                        <div class="progress-bar bg-warning" style="width: 10%"></div>
+                        <div class="progress-bar bg-danger" style="width: 5%"></div>
+                    </div>
+
+                    <hr class="text-muted opacity-25 mb-4">
+
+                    <div class="d-flex flex-wrap align-items-center gap-3">
+                        <i class="bi bi-funnel-fill text-muted"></i>
+                        <select class="form-select form-select-sm w-auto text-center" data-filter="group" style="border-radius: 8px;">
+                            <option>Grupo</option>
+                            <option>Grupo 1- Monitorizacao</option>
+                            <option>Grupo 2- Suporte de Vida</option>
+                            <option>Grupo 3- Terapia</option>
+                            <option>Grupo 4- Diagnostico</option>
+                            <option>Grupo 5- Laboratorio</option>
+                            <option>Grupo 6- Esterilizacao</option>
+                            <option>Grupo 7- Reabilitacao</option>
+                        </select>
+                        
+                        <select class="form-select form-select-sm w-auto text-center" data-filter="floor" style="border-radius: 8px;">
+                            <option>Disponibilidade</option>
+                            <option>Disponivel</option>
+                            <option>Em uso</option>
+                            <option>Em manutencao</option>
+                            <option>Fora de servico</option>
+                        </select>
+                        
+                        <select class="form-select form-select-sm w-auto text-center" data-filter="department" style="border-radius: 8px;">
+                            <option>All Departments</option>
+                            <option>Cardiology</option>
+                            <option>Radiology</option>
+                            <option>Neurology</option>
+                            <option>ICU</option>
+                            <option>Unknown</option>
+                        </select>
+                        
+                        <div class="flex-grow-1 min-w-200">
+                            <input type="text" placeholder="Search by room, equipment name or ID..." class="form-control form-control-sm text-center" style="border-radius: 8px;">
+                        </div>
+
+                        <div>
+                            <button class="btn btn-primary-custom"><i class="bi bi-plus-lg me-2"></i> Add Inventory</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row g-4 p-3">
                 <!-- Each card gets its own column -->
                 <div class="col-md-3">
@@ -64,13 +155,12 @@
                             <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title text-center">Catheter</h5>
-                            <p class="card-text text-center">Some quick example text...</p>
+                            <h5 class="card-title text-center">Desfibrilhador</h5>
                         </div>
                         <ul class="list-group list-group-flush text-center">
-                            <li class="list-group-item">An item</li>
-                            <li class="list-group-item">A second item</li>
-                            <li class="list-group-item">A third item</li>
+                            <li class="list-group-item">Marca: Zoll</li>
+                            <li class="list-group-item">Modelo: R Series</li>
+                            <li class="list-group-item">00-0000-00</li>
                         </ul>
                         <div class="card-body text-center">
                             <a href="#" class="btn btn-primary">Remaining components</a>
