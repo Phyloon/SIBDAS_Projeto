@@ -252,6 +252,12 @@ body {
             align-items: center;
         }
 
+        /*exclusively for the purpose of the js function to be able to propperly filter */
+        .filter-bar-modal{
+            align-items: center;
+            gap: 12px;
+        }
+
         .filter-bar select, .filter-bar input {
             border: 1px solid #e2e8f0;
             border-radius: 8px;

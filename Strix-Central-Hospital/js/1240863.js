@@ -32,6 +32,21 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    const clearBtn = document.getElementById('clearFiltersBtn');
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+            // Find all selects and reset them to their first option (index 0)
+            document.querySelectorAll('.filter-bar-modal select').forEach(select => {
+                select.selectedIndex = 0;
+            });
+            // Clear the search bar
+            const searchInput = document.querySelector('.filter-bar-modal input');
+            if (searchInput) searchInput.value = '';
+            
+            // Run the filter function to show all items again
+            applyFilters();
+        });
+    }
 });
 
 function applyFilters() {
@@ -41,6 +56,12 @@ function applyFilters() {
     const search     = document.querySelector('.filter-bar input').value.toLowerCase();
     const role       = document.querySelector('select[data-filter="role"]')?.value;
     const availability = document.querySelector('select[data-filter="availability"]')?.value;
+
+    const group       = document.querySelector('select[data-filter="group"]')?.value;
+    const criticality  = document.querySelector('select[data-filter="criticality"]')?.value;
+    const items        = document.querySelectorAll('tbody tr, .inventory-card');
+
+    
 
     document.querySelectorAll('tbody tr').forEach(row => {
         const matchWing   = !wing || wing === 'All Wings'             || row.dataset.wing === wing;

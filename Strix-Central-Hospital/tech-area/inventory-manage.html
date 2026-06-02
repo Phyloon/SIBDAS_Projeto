@@ -104,42 +104,70 @@
                         <div class="progress-bar bg-danger" style="width: 5%"></div>
                     </div>
 
-                    <hr class="text-muted opacity-25 mb-4">
 
-                    <div class="d-flex flex-wrap align-items-center gap-3">
-                        <i class="bi bi-funnel-fill text-muted"></i>
-                        <select class="form-select form-select-sm w-auto text-center" data-filter="group" style="border-radius: 8px;">
-                            <option>Grupo</option>
-                            <option>Grupo 1- Monitorizacao</option>
-                            <option>Grupo 2- Suporte de Vida</option>
-                            <option>Grupo 3- Terapia</option>
-                            <option>Grupo 4- Diagnostico</option>
-                            <option>Grupo 5- Laboratorio</option>
-                            <option>Grupo 6- Esterilizacao</option>
-                            <option>Grupo 7- Reabilitacao</option>
-                        </select>
-                        
-                        <select class="form-select form-select-sm w-auto text-center" data-filter="floor" style="border-radius: 8px;">
-                            <option>Disponibilidade</option>
-                            <option>Disponivel</option>
-                            <option>Em uso</option>
-                            <option>Em manutencao</option>
-                            <option>Fora de servico</option>
-                        </select>
-                        
-                        <select class="form-select form-select-sm w-auto text-center" data-filter="department" style="border-radius: 8px;">
-                            <option>All Departments</option>
-                            <option>Cardiology</option>
-                            <option>Radiology</option>
-                            <option>Neurology</option>
-                            <option>ICU</option>
-                            <option>Unknown</option>
-                        </select>
-                        
-                        <div class="flex-grow-1 min-w-200">
+                    <!-- filtros e search bar -->
+                    <div class="d-flex flex-wrap align-items-center gap-3 filter-bar-modal">
+                        <div class="flex-grow-1 position-relative">
                             <input type="text" placeholder="Search by room, equipment name or ID..." class="form-control form-control-sm text-center" style="border-radius: 8px;">
                         </div>
 
+                        <div class="dropdown align-items-center">
+                            <button class="btn btn-outline-secondary btn-sm dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" style="border-radius: 8px;">
+                                <i class="bi bi-funnel-fill me-1"></i> Filtros:
+                            </button>
+
+                            <div class="dropdown-menu dropdown-menu-end p-3 shadow" style="min-width: 260px; border-radius: 12px; border: none;">
+                                <h6 class="dropdown-header fw-bold text-dark mb-3">Opcoes de Filtragem</h6>
+
+                                <div class="mb-3 align-items-center">
+                                    <select class="form-select form-select-sm text-center" data-filter="group" style="border-radius: 8px;">
+                                        <option>Grupo</option>
+                                        <option>Grupo 1- Monitorizacao</option>
+                                        <option>Grupo 2- Suporte de Vida</option>
+                                        <option>Grupo 3- Terapia</option>
+                                        <option>Grupo 4- Diagnostico</option>
+                                        <option>Grupo 5- Laboratorio</option>
+                                        <option>Grupo 6- Esterilizacao</option>
+                                        <option>Grupo 7- Reabilitacao</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3 align-items-center">
+                                    <select class="form-select form-select-sm text-center" data-filter="availability" style="border-radius: 8px;">
+                                        <option>Disponibilidade</option>
+                                        <option>Disponivel</option>
+                                        <option>Em uso</option>
+                                        <option>Em manutencao</option>
+                                        <option>Fora de servico</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3 align-items-center">
+                                    <select class="form-select form-select-sm text-center" data-filter="department" style="border-radius: 8px;">
+                                        <option>Departamento</option>
+                                        <option>Cardiology</option>
+                                        <option>Radiology</option>
+                                        <option>Neurology</option>
+                                        <option>ICU</option>
+                                        <option>Unknown</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3 align-items-center">
+                                    <select class="form-select form-select-sm text-center" data-filter="criticality" style="border-radius: 8px;">
+                                        <option>Criticidade</option>
+                                        <option>Suporte de Vida</option>
+                                        <option>Alta</option>
+                                        <option>Média</option>
+                                        <option>Baixa</option>
+                                    </select>
+                                </div>
+
+                                <button class="btn btn-sm btn-light w-100 text-danger fw-bold mt-2" id="clearFiltersBtn" style="border-radius: 6px;">
+                                    <i class="bi bi-x-circle me-1"></i> Limpar Filtros
+                                </button>
+                            </div>
+                        </div>
                         <div>
                             <button class="btn btn-primary-custom"><i class="bi bi-plus-lg me-2"></i> Add Inventory</button>
                         </div>
@@ -147,10 +175,11 @@
                 </div>
             </div>
 
-            <div class="row g-4 p-3">
+            <div class="row mb-4">
+
                 <!-- cards com os items -->
-                <div class="col-md-3" data-group="Grupo 2- Suporte de Vida" data-availability="Disponivel" data-department="ICU">
-                    <div class="card" style="width: 18rem; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#item1_modal">
+                <div class="col-3" data-group="Grupo 2- Suporte de Vida" data-availability="Disponivel" data-department="ICU">
+                    <div class="card" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#item1_modal">
                         <div style="padding: 15px;">   
                             <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
                         </div>
@@ -160,13 +189,14 @@
                         <ul class="list-group list-group-flush text-center">
                             <li class="list-group-item">Marca: Zoll</li>
                             <li class="list-group-item">Modelo: R Series</li>
-                            <li class="list-group-item">00-0000-00</li>
+                            <li class="list-group-item">02.3567.00</li>
                             <li class="list-group-item">Disponibilidade</li>
+                            <li class="list-group-item">Local</li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-3" data-group="Grupo 3- Terapia" data-availability="Em Uso" data-department="ICU">
-                    <div class="card" style="width: 18rem;" data-bs-toggle="modal" data-bs-target="#item2_modal">
+                <div class="col-3" data-group="Grupo 3- Terapia" data-availability="Em Uso" data-department="ICU">
+                    <div class="card" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#item2_modal">
                         <div style="padding: 15px;">   
                             <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
                         </div>
@@ -179,11 +209,12 @@
                             <li class="list-group-item">A second item</li>
                             <li class="list-group-item">A third item</li>
                             <li class="list-group-item">Disponibilidade</li>
+                            <li class="list-group-item">Local</li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="card" style="width: 18rem;" data-bs-toggle="modal" data-bs-target="#item3_modal">
+                <div class="col-3">
+                    <div class="card" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#item3_modal">
                         <div style="padding: 15px;">   
                             <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
                         </div>
@@ -196,11 +227,12 @@
                             <li class="list-group-item">A second item</li>
                             <li class="list-group-item">A third item</li>
                             <li class="list-group-item">Disponibilidade</li>
+                            <li class="list-group-item">Local</li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="card" style="width: 18rem;" data-bs-toggle="modal" data-bs-target="#item4_modal">
+                <div class="col-3">
+                    <div class="card" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#item4_modal">
                         <div style="padding: 15px;">   
                             <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
                         </div>
@@ -213,13 +245,11 @@
                             <li class="list-group-item">A second item</li>
                             <li class="list-group-item">A third item</li>
                             <li class="list-group-item">Disponibilidade</li>
+                            <li class="list-group-item">Local</li>
                         </ul>
                     </div>
                 </div>
-
-                
             </div> 
-
 
             <!--Modais dos cards-->
             <div class="modal fade" id="item1_modal" tabindex="-1">
@@ -256,6 +286,23 @@
                                 </div>
                             </div>
 
+                            <hr>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="fw-bold mb-0"><i class="bi bi-question-circle me-2 text-decoration-none"></i> Caracterizacao:</h6>
+                                
+                            </div> 
+                            <div class="me-2 p-2">
+                                dadadad jhjhjh jhjhjh jh jhjh jhj h jhjhj hjhjh jhj hh
+                            </div>
+
+                            <hr>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="fw-bold mb-0"><i class="bi bi-map-fill me-2 text-decoration-none"></i> Localização:</h6>
+                                <span class="me-2">Wing A, Floor 03, Room 324</span>
+                                <span class="text-muted">(A.03.324)</span>
+                            </div>  
+
+                             
                             <!--IMPORTANT DATES-->
                             <hr> <!--cabeca do dropdown-->
                             <a href="#dates-1" data-bs-toggle="collapse" role="button" 
@@ -295,19 +342,22 @@
                             </div>
 
                             <hr>
-                            <ul class="list-group list-group-flush">    
-                                <li class="list-group-item"><strong>
-                                    <ul class="list-group list-group-flush">Fornecedor/es:</strong>
-                                        <li class="list-group-item bi bi-1-circle"> Zoll</li>
-                                        <li class="list-group-item bi bi-2-circle"> Medtronic</li>
-                                    </ul>
-                                </li>
-                                <li class="list-group-item"><strong>Modelo:</strong> R Series</li>
+                            <div class="d-flex mb-2">
+                                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-truck me-2 text-decoration-none"></i> Fornecedor/es</h6>
+                            </div>
+                            <ul class="list-unstyled mb-3 ps-4 small text-muted">
+                                <li class="mb-1 bi bi-1-circle-fill"> Zoll</li>
+                                <li class="mb-1 bi bi-2-circle-fill"> Medtronic</li>
                             </ul>
 
                             <hr>
-                            <a href="#components-1" data-bs-toggle="collapse" role="button" 
-                            class="d-flex justify-content-between align-items-center text-decoration-none text-dark fw-bold mb-2">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="fw-bold mb-0"><i class="bi bi-map-fill me-2 text-decoration-none"></i> Modelo</h6>
+                                <i class="me-2">R Series</i>
+                            </div>
+
+                            <hr>
+                            <a href="#components-1" data-bs-toggle="collapse" role="button" class="d-flex justify-content-between align-items-center text-decoration-none text-dark fw-bold mb-2">
                                 <span><i class="bi bi-cpu me-2"></i> Componentes Associados</span>
                                 <i class="bi bi-chevron-down small"></i>
                             </a>
