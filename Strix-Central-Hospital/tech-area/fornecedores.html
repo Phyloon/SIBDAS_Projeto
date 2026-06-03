@@ -85,9 +85,11 @@
                         <h5 class="fw-bold text-dark mb-1"><i class="bi bi-truck text-primary me-2"></i>Fornecedores & Equipamentos Associados</h5>
                         <p class="text-muted small mb-0">Consulte e gira o seu inventário através da rede de fornecedores da TrueTech.</p>
                     </div>
+
+                    <!--adicionar fornecedor/item-->
                     <div class="dropdown align-items-center">
                         <button class="btn btn-primary-custom btn-sm" data-bs-toggle="dropdown" data-bs-target="#addDropdown" style="border-radius: 8px;">
-                            <i class="bi bi-chevron-down me-2"></i> Adicionar:
+                            <i class="bi bi-chevron-down me-2"></i> Adicionar
                         </button>
                         <div class="dropdown-menu" id="addDropdown">
                             <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addSupplierModal">
@@ -101,9 +103,13 @@
                     
                 </div>
 
+                <!--main page content-->
                 <div class="accordion" id="suppliers-accordion">
-                <!--MORE INFORMATION-->
+                    
+                    <!--information tab-->
                     <div class="accordion" id="supplierInfoAccordion">
+
+                        
                         <div class="accordion-item border-0 shadow-sm mb-3" style="border-radius: 12px; overflow: hidden;" >
                             <h2 class="accordion-header" id="moreinfo">
                                 <button class="accordion-button collapsed fw-bold d-flexR" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInfo"  style="background-color: #fff; color: #333;">
@@ -120,6 +126,61 @@
                             <div id="collapseInfo" class="accordion-collapse collapse ">
                                 <div class="accordion-body bg-light border-top p-4">
                                     <div class="row g-4">
+                                        <div class="card border-0 shadow-sm mb-4">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                                    <h6 class="fw-bold m-0"><i class="bi bi-funnel me-2"></i>Filtrar Fornecedores</h6>
+                                                    
+                                                    <button class="btn btn-sm btn-light border" type="button" data-bs-toggle="collapse" data-bs-target="#advancedFilters" aria-expanded="false" aria-controls="advancedFilters">
+                                                        <i class="bi bi-chevron-down"></i> More filters
+                                                    </button>
+                                                </div>
+
+                                                <div class="row g-3">
+                                                    <div class="col-md-4">
+                                                        <label class="form-label small">Nome da empresa</label>
+                                                        <input type="text" class="form-control form-control-sm" placeholder="Nome...">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="form-label small">Nif</label>
+                                                        <input type="text" class="form-control form-control-sm" placeholder="NIF...">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="form-label small">Telefone</label>
+                                                        <input type="text" class="form-control form-control-sm" placeholder="Telefone...">
+                                                    </div>
+                                                </div>
+
+                                                <div class="collapse" id="advancedFilters">
+                                                    <div class="row g-3 pt-3">
+                                                        <div class="col-md-4">
+                                                            <label class="form-label small">Email</label>
+                                                            <input type="text" class="form-control form-control-sm" placeholder="Email...">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="form-label small">Endereço</label>
+                                                            <input type="text" class="form-control form-control-sm" placeholder="Endereço...">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="form-label small">Website</label>
+                                                            <input type="text" class="form-control form-control-sm" placeholder="Website...">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="form-label small">Pessoa de Contacto</label>
+                                                            <input type="text" class="form-control form-control-sm" placeholder="Nome da pessoa...">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="form-label small">Telefone da P.C.</label>
+                                                            <input type="text" class="form-control form-control-sm" placeholder="Telefone...">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="form-label small">Tipo de Fornecedor</label>
+                                                            <input type="text" class="form-control form-control-sm" placeholder="Tipo...">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
@@ -154,6 +215,7 @@
                         </div>
                     </div>
                     
+                    <!--Fornecedores e equipamentos correspondentes-->
                     <div class="accordion-item border-0 shadow-sm mb-3" style="border-radius: 12px; overflow: hidden;">
                         <h2 class="accordion-header" id="headingZoll">
                             <button class="accordion-button collapsed fw-bold d-flex align-items-center gap-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseZoll" aria-expanded="false" style="background-color: #fff; color: #333;">
@@ -213,6 +275,7 @@
                         </div>  
                     </div>
 
+                    <!--Fornecedores e equipamentos correspondentes-->
                     <div class="accordion-item border-0 shadow-sm mb-3" style="border-radius: 12px; overflow: hidden;">
                         <h2 class="accordion-header" id="headingMedTronic">
                             <button class="accordion-button collapsed fw-bold d-flex align-items-center gap-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMedTronic" aria-expanded="false" style="background-color: #fff; color: #333;">
@@ -253,6 +316,7 @@
                         </div>
                     </div>
 
+                    <!--Fornecedores e equipamentos correspondentes-->
                     <div class="accordion-item border-0 shadow-sm mb-3" style="border-radius: 12px; overflow: hidden;">
                         <h2 class="accordion-header" id="headingPhilips">
                             <button class="accordion-button collapsed fw-bold d-flex align-items-center gap-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePhilips" aria-expanded="false" style="background-color: #fff; color: #333;">
@@ -279,7 +343,7 @@
                     </div>
                 </div>
 
-                <!--modals adicionar fornecedor / equipamento -->
+                <!--modals adicionar fornecedor-->
                 <div class="modal fade" id="addSupplierModal" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content" style="border-radius: 16px; border: none;">
@@ -335,6 +399,7 @@
                     </div>
                 </div>
 
+                 <!--modal adicionar equipamento-->
                 <div class="modal fade" id="addEquipmentModal" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content" style="border-radius: 16px; border: none;">
