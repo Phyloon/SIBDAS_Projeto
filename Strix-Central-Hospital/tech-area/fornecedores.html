@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrueTech Inc. - Technician Dashboard</title>
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="../assets/css/tech-portal.css"/>
+
+</head>
+<body>
+
+    <div class="d-flex">
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header d-flex">
+                <div class="logo-icon me-2"></div>
+                <div>
+                    <span class="logo-text fw-bold fs-4">True<span class="text-primary">Tech</span></span>
+                    <small class="text-secondary">Strixhaven</small>
+                </div>
+            </div>  
+
+            <ul class="nav flex-column mt-2">
+                <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="bi bi-calendar-check"></i> Fixing Appointments</a></li>
+                <li class="nav-item"><a href="staff.html" class="nav-link"><i class="bi bi-tools"></i> Staff</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-clipboard-data"></i> Maintenance Records</a></li>
+                <li class="nav-item">
+                    <a href="#inventory-accordion"data-bs-toggle="collapse" role="button" class="nav-link d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-box-seam"></i> Inventory</span>
+                        <i class="bi bi-chevron-down submenu-arrow small"></i>
+                    </a>
+                    
+                    <div id="inventory-accordion" class="collapse">
+                        <ul class="nav flex-column ms-4 border-start border-secondary ">
+                            <li class="nav-item">
+                                <a href="inventory-manage.html" class="nav-link small">
+                                    <i class="bi bi-layers me-1"></i> Equipamentos
+                                </a>
+                            </li>
+                            <li class="nav-item active">
+                                <a href="#" class="nav-link small">
+                                    <i class="bi bi-truck me-1"></i> Fornecedores
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link small">
+                                    <i class="bi bi-file-earmark-text me-1"></i> Documentação
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="tickets.html" class="nav-link"><i class="bi bi-ticket"></i> Tickets</a></li>
+                <li class="nav-item"><a href="location.html" class="nav-link"><i class="bi bi-pin-map"></i> Location</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-file-earmark-bar-graph"></i> Reports</a></li>
+                <li class="nav-item"><a href="quick-contacts.html" class="nav-link"><i class="bi bi-phone-vibrate"></i> Quick Contacts</a></li>
+            </ul>
+        </nav>
+
+        <div id="content">
+            <nav class="top-navbar d-flex justify-content-between align-items-center">
+                <div class="input-group d-none d-md-flex" style="width: 300px;">
+                    <span class="input-group-text bg-light border-0"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control bg-light border-0" placeholder="Search Supplier...">
+                </div>
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-bell text-secondary fs-5 me-4"></i>
+                    <div class="d-flex align-items-center">
+                        <div class="text-end me-2">
+                            <p class="mb-0 small fw-bold">John Doe</p>
+                            <p class="mb-0 text-muted small">Senior Technician</p>
+                        </div>
+                        <img src="https://ui-avatars.com/api/?name=John+Doe&background=random" class="rounded-circle" width="35" height="35">
+                    </div>
+                </div>
+            </nav>
+
+            <!--main page content-->
+            <div class="accordion mt-3" id="suppliers-accordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            MedTronic
+                            <span class="badge rounded-pill bg-dark ms-1">Número de equipamentos: 3</span>  
+                        </button>
+                         
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#suppliers-accordion">
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div class="col-3" data-group="Grupo 2- Suporte de Vida" data-availability="Disponivel" data-department="ICU">
+                                    <div class="card" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#item1_modal">
+                                        <div style="padding: 15px;">   
+                                            <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title text-center">Desfibrilhador</h5>
+                                        </div>
+                                        <ul class="list-group list-group-flush text-center">
+                                            <li class="list-group-item">Marca: Zoll</li>
+                                            <li class="list-group-item">Modelo: R Series</li>
+                                            <li class="list-group-item">02.3567.00</li>
+                                            <li class="list-group-item">Disponibilidade</li>
+                                            <li class="list-group-item">Local</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="col-3" data-group="Grupo 2- Suporte de Vida" data-availability="Disponivel" data-department="ICU">
+                                    <div class="card" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#item1_modal">
+                                        <div style="padding: 15px;">   
+                                            <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title text-center">Desfibrilhador</h5>
+                                        </div>
+                                        <ul class="list-group list-group-flush text-center">
+                                            <li class="list-group-item">Marca: Zoll</li>
+                                            <li class="list-group-item">Modelo: R Series</li>
+                                            <li class="list-group-item">02.3567.00</li>
+                                            <li class="list-group-item">Disponibilidade</li>
+                                            <li class="list-group-item">Local</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="col-3" data-group="Grupo 2- Suporte de Vida" data-availability="Disponivel" data-department="ICU">
+                                    <div class="card" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#item1_modal">
+                                        <div style="padding: 15px;">   
+                                            <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title text-center">Desfibrilhador</h5>
+                                        </div>
+                                        <ul class="list-group list-group-flush text-center">
+                                            <li class="list-group-item">Marca: Zoll</li>
+                                            <li class="list-group-item">Modelo: R Series</li>
+                                            <li class="list-group-item">02.3567.00</li>
+                                            <li class="list-group-item">Disponibilidade</li>
+                                            <li class="list-group-item">Local</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="col-3" data-group="Grupo 2- Suporte de Vida" data-availability="Disponivel" data-department="ICU">
+                                    <div class="card" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#item1_modal">
+                                        <div style="padding: 15px;">   
+                                            <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title text-center">Desfibrilhador</h5>
+                                        </div>
+                                        <ul class="list-group list-group-flush text-center">
+                                            <li class="list-group-item">Marca: Zoll</li>
+                                            <li class="list-group-item">Modelo: R Series</li>
+                                            <li class="list-group-item">02.3567.00</li>
+                                            <li class="list-group-item">Disponibilidade</li>
+                                            <li class="list-group-item">Local</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/1240863.js"></script>
+</body>
+</html>   
