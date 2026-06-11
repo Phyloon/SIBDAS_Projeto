@@ -1,85 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TrueTech Inc. - Technician Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <link rel="stylesheet" href="../assets/css/tech-portal.css"/>
-
-</head>
-<body>
+<?php include '../includes/header.php'?>
 
     <div class="d-flex">
-        <nav id="sidebar" class="sidebar">
-            <div class="sidebar-header d-flex">
-                <div class="logo-icon me-2"></div>
-                <div>
-                    <span class="logo-text fw-bold fs-4">True<span class="text-primary">Tech</span></span>
-                    <small class="text-secondary">Strixhaven</small>
-                </div>
-            </div> 
-            <ul class="nav flex-column mt-2">
-                <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="bi bi-calendar-check"></i> Fixing Appointments</a></li>
-                <li class="nav-item"><a href="staff.html" class="nav-link"><i class="bi bi-tools"></i> Staff</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-clipboard-data"></i> Maintenance Records</a></li>
-                <li class="nav-item">
-                    <a href="#inventory-accordion"data-bs-toggle="collapse" role="button" class="nav-link d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-box-seam"></i> Inventory</span>
-                        <i class="bi bi-chevron-down submenu-arrow small"></i>
-                    </a>
-                    
-                    <div id="inventory-accordion" class="collapse">
-                        <ul class="nav flex-column ms-4 border-start border-secondary ">
-                            <li class="nav-item">
-                                <a href="inventory-manage.html" class="nav-link small">
-                                    <i class="bi bi-layers me-1"></i> Equipamentos
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="fornecedores.html" class="nav-link small">
-                                    <i class="bi bi-truck me-1"></i> Fornecedores
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link small">
-                                    <i class="bi bi-file-earmark-text me-1"></i> Documentação
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item"><a href="tickets.html" class="nav-link active"><i class="bi bi-ticket"></i> Tickets</a></li>
-                <li class="nav-item"><a href="location.html" class="nav-link"><i class="bi bi-pin-map"></i> Location</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-file-earmark-bar-graph"></i> Reports</a></li>
-                <li class="nav-item"><a href="quick-contacts.html" class="nav-link"><i class="bi bi-phone-vibrate"></i> Quick Contacts</a></li>
-            </ul>
-        </nav>
+
+        <?php include '../includes/nav.php'?>
 
         <!--Page content-->
         <div id="content">
 
-            <!--Navbar-->
-            <nav class="top-navbar d-flex justify-content-between align-items-center">
-                <div class="input-group d-none d-md-flex" style="width: 300px;">
-                    <span class="input-group-text bg-light border-0"><i class="bi bi-search"></i></span>
-                    <input type="text" class="form-control bg-light border-0" placeholder="Search department...">
-                </div>
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-bell text-secondary fs-5 me-4"></i>
-                    <i class="bi bi-moon text-secondary fs-5 me-4"></i>
-                    <div class="d-flex align-items-center">
-                        <div class="text-end me-2">
-                            <p class="mb-0 small fw-bold">John Doe</p>
-                            <p class="mb-0 text-muted small">Senior Technician</p>
-                        </div>
-                        <img src="https://ui-avatars.com/api/?name=John+Doe&background=random" class="rounded-circle" width="35" height="35">
-                    </div>
-                </div>
-            </nav>
+            <!-- Top Navigation Bar -->
+            <?php include '../includes/topbar.php'?>
             
             <!--Dpt. Acordions-->
             <div class="accordion mt-4" id="ticketsAccordion">
@@ -166,6 +95,4 @@
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<?php include "../includes/footer.php"?>  

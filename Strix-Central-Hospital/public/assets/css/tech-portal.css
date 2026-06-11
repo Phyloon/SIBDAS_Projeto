@@ -1,0 +1,274 @@
+* {
+ margin: 0; /* Remove margens padrão */
+ padding: 0; /* Remove preenchimento padrão */
+ box-sizing: border-box; /* Inclui a borda e o preenchimento no cálculo do tamanho */
+ font-family: Arial, Helvetica, sans-serif; /* Define a fonte padrão */
+} 
+
+:root {
+    --sidebar-bg: #1e293b;
+    --sidebar-hover: #334155;
+    --active-blue: #0ea5e9;
+    --main-bg: #f8fafc;
+    --accent-orange: #f97316;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--main-bg);
+    overflow-x: hidden;
+}
+
+/* Sidebar Styling */
+.sidebar{
+    min-width: 260px;
+    max-width: 400px;
+    background-color: var(--sidebar-bg);
+    color: rgb(255, 255, 255);
+    height: 100vh;
+    position: fixed;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    padding: 20px;
+    background: #0f172a;
+}
+
+.nav-link {
+    color: #94a3b8;
+    padding: 12px 20px;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    border-left: 4px solid transparent;
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    background-color: var(--sidebar-hover);
+    color: white;
+}
+
+.nav-link.active {
+    background-color: #334155;
+    color: white;
+    border-left-color: var(--active-blue);
+}
+
+.nav-link i {
+    margin-right: 12px;
+    font-size: 1.1rem;
+}
+
+.sub-nav {
+    background: #1a2233;
+    padding-left: 30px;
+}
+
+/* Main Content Styling */
+#content {
+    width: calc(100% - 260px);
+    margin-left: 260px;
+    min-height: 100vh;
+}
+
+.top-navbar {
+    background: white;
+    padding: 15px 30px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary-custom {
+    background-color: var(--accent-orange);
+    border: none;
+    padding: 10px 20px;
+    font-weight: 600;
+    color: white;
+}
+
+.btn-primary-custom:hover {
+    background-color: #ea580c;
+}
+
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.appointment-list-item {
+    border-bottom: 1px solid #f1f5f9;
+    padding: 12px 0;
+}
+
+.date-badge {
+    background: #f1f5f9;
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
+    min-width: 60px;
+}
+
+.logo-icon {
+    width: 32px;
+    height: 32px;
+    background-color: #007BFF;
+    border-radius: 8px; /* Cantos arredondados como os teus cartões */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-icon::after {
+    content: "T";
+    color: white;
+    font-weight: bold;
+    font-family: sans-serif;
+}
+
+
+
+/* Dashboard shii, will try to make it smaller */
+        /* ── Stats row ── */
+        .stat-card {
+            border-radius: 12px;
+            padding: 20px 24px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .stat-card .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .stat-card .stat-value { font-size: 1.8rem; font-weight: 700; line-height: 1; }
+        .stat-card .stat-label { font-size: 0.8rem; opacity: 0.85; margin-top: 2px; }
+
+        /* ── Table ── */
+        .location-table thead th {
+            background: #f1f5f9;
+            color: #64748b;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border: none;
+            padding: 12px 16px;
+        }
+
+        .location-table tbody td {
+            padding: 14px 16px;
+            vertical-align: middle;
+            border-color: #f1f5f9;
+            font-size: 0.9rem;
+        }
+
+        .location-table tbody tr:hover { background: #f8fafc; }
+
+        .equipment-name { font-weight: 600; color: #1e293b; }
+        .equipment-id   { font-size: 0.75rem; color: #94a3b8; }
+
+        .location-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #f1f5f9;
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            color: #475569;
+            font-weight: 500;
+        }
+
+        .location-pill i { color: #0ea5e9; font-size: 0.75rem; }
+
+        .scan-time { font-size: 0.8rem; color: #94a3b8; }
+        .scan-time i { margin-right: 4px; }
+
+        .badge-status {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* ── QR modal ── */
+        .qr-placeholder {
+            width: 160px;
+            height: 160px;
+            background: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 0.8rem;
+            gap: 8px;
+        }
+
+        .qr-placeholder i { font-size: 2.5rem; }
+
+        .form-label { font-weight: 600; font-size: 0.85rem; color: #374151; }
+
+        .btn-primary-custom {
+            background-color: var(--accent-orange);
+            border: none;
+            padding: 10px 20px;
+            font-weight: 600;
+            color: white;
+            border-radius: 8px;
+        }
+
+        .btn-primary-custom:hover { background-color: #ea580c; color: white; }
+
+        .filter-bar {
+            background: white;
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07);
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        /*exclusively for the purpose of the js function to be able to propperly filter */
+        .filter-bar-modal{
+            align-items: center;
+            gap: 12px;
+        }
+
+        .filter-bar select, .filter-bar input {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 7px 12px;
+            font-size: 0.85rem;
+            color: #374151;
+            background: #f8fafc;
+        }
+
+        .filter-bar select:focus, .filter-bar input:focus {
+            outline: none;
+            border-color: var(--active-blue);
+            box-shadow: 0 0 0 3px rgba(14,165,233,0.1);
+        }
