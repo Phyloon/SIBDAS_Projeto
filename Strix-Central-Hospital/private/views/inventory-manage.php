@@ -1,3 +1,21 @@
+<?php 
+require_once '../../config/config.php';
+$stmt = $pdo->query("SELECT * FROM equipamentos");
+$equipamentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// stats for progress bar
+$total = count($equipamentos);
+$disponivel   = count(array_filter($equipamentos, fn($e) => $e['estado'] === 'Disponivel'));
+$em_uso       = count(array_filter($equipamentos, fn($e) => $e['estado'] === 'Em Uso'));
+$manutencao   = count(array_filter($equipamentos, fn($e) => $e['estado'] === 'Em Manutenção'));
+$fora         = count(array_filter($equipamentos, fn($e) => $e['estado'] === 'Fora de Servico'));
+
+$pct_disp = $total ? round($disponivel / $total * 100) : 0;
+$pct_uso  = $total ? round($em_uso    / $total * 100) : 0;
+$pct_man  = $total ? round($manutencao/ $total * 100) : 0;
+$pct_fora = $total ? round($fora      / $total * 100) : 0;
+?>
+
 <?php include '../includes/header.php'?>
 
     <div class="d-flex">
@@ -19,18 +37,18 @@
                             <i class="bi bi-pie-chart-fill me-2"></i> Estado Geral do Inventário
                         </h6>
                         <div class="d-flex gap-3 small fw-semibold flex-wrap">
-                            <span><i class="bi bi-circle-fill text-success me-1"></i> Disponíveis (65%)</span>
-                            <span><i class="bi bi-circle-fill text-primary me-1"></i> Em Uso (20%)</span>
-                            <span><i class="bi bi-circle-fill text-warning me-1"></i> Em Manutenção (10%)</span>
-                            <span><i class="bi bi-circle-fill text-danger me-1"></i> Partidos (5%)</span>
+                            <span><i class="bi bi-circle-fill text-success me-1"></i> Disponíveis (<?= $pct_disp ?>%)</span>
+                            <span><i class="bi bi-circle-fill text-primary me-1"></i> Em Uso (<?= $pct_uso ?>%)</span>
+                            <span><i class="bi bi-circle-fill text-warning me-1"></i> Em Manutenção (<?= $pct_man ?>%)</span>
+                            <span><i class="bi bi-circle-fill text-danger me-1"></i> Fora de Serviço (<?= $pct_fora ?>%)</span>
                         </div>
                     </div>
 
                     <div class="progress mb-4" style="height: 12px; border-radius: 6px;">
-                        <div class="progress-bar bg-success" style="width: 65%"></div>
-                        <div class="progress-bar bg-primary" style="width: 20%"></div>
-                        <div class="progress-bar bg-warning" style="width: 10%"></div>
-                        <div class="progress-bar bg-danger" style="width: 5%"></div>
+                        <div class="progress-bar bg-success" style="width: <?= $pct_disp ?>%"></div>
+                        <div class="progress-bar bg-primary" style="width: <?= $pct_uso ?>%"></div>
+                        <div class="progress-bar bg-warning" style="width: <?= $pct_man ?>%"></div>
+                        <div class="progress-bar bg-danger" style="width: <?= $pct_fora ?>%"></div>
                     </div>
 
 
@@ -106,95 +124,42 @@
             </div>
 
             
-
+            <!--cards-->
             <div class="row mb-4">
-
-                <!-- cards com os items -->
-                <div class="col-3" data-group="Grupo 2- Suporte de Vida" data-availability="Disponivel" data-department="ICU">
-                    <div class="card" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#item1_modal">
-                        <div style="padding: 15px;">   
-                            <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
+                <?php foreach ($equipamentos as $eq): ?>
+                <div class="col-3 mb-4" data-group="<?= htmlspecialchars($eq['grupo']) ?>" data-availability="<?= htmlspecialchars($eq['estado']) ?>" data-department="<?= htmlspecialchars($eq['departamento']) ?>">
+                    <div class="card h-100" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modal_<?= $eq['id'] ?>">
+                        <div style="padding: 15px;">
+                            <img src="<?= htmlspecialchars($eq['imagem']) ?>" class="card-img-top" style="border-radius: 15px;">
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title text-center">Desfibrilhador</h5>
+                            <h5 class="card-title text-center"><?= htmlspecialchars($eq['nome']) ?></h5>
                         </div>
                         <ul class="list-group list-group-flush text-center">
-                            <li class="list-group-item">Marca: Zoll</li>
-                            <li class="list-group-item">Modelo: R Series</li>
-                            <li class="list-group-item">02.3567.00</li>
-                            <li class="list-group-item">Disponibilidade</li>
-                            <li class="list-group-item">Local</li>
+                            <li class="list-group-item">Marca: <?= htmlspecialchars($eq['marca']) ?></li>
+                            <li class="list-group-item">Modelo: <?= htmlspecialchars($eq['modelo']) ?></li>
+                            <li class="list-group-item"><?= htmlspecialchars($eq['serial']) ?></li>
+                            <li class="list-group-item"><?= htmlspecialchars($eq['estado']) ?></li>
+                            <li class="list-group-item"><?= htmlspecialchars($eq['local_equipamento']) ?></li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-3" data-group="Grupo 3- Terapia" data-availability="Em Uso" data-department="ICU">
-                    <div class="card" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#item2_modal">
-                        <div style="padding: 15px;">   
-                            <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title text-center">Card title</h5>
-                            <p class="card-text text-center">Some quick example text...</p>
-                        </div>
-                        <ul class="list-group list-group-flush text-center">
-                            <li class="list-group-item">An item</li>
-                            <li class="list-group-item">A second item</li>
-                            <li class="list-group-item">A third item</li>
-                            <li class="list-group-item">Disponibilidade</li>
-                            <li class="list-group-item">Local</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="card" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#item3_modal">
-                        <div style="padding: 15px;">   
-                            <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title text-center">Card title</h5>
-                            <p class="card-text text-center">Some quick example text...</p>
-                        </div>
-                        <ul class="list-group list-group-flush text-center">
-                            <li class="list-group-item">An item</li>
-                            <li class="list-group-item">A second item</li>
-                            <li class="list-group-item">A third item</li>
-                            <li class="list-group-item">Disponibilidade</li>
-                            <li class="list-group-item">Local</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="card" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#item4_modal">
-                        <div style="padding: 15px;">   
-                            <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style=" border-radius: 15px;">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title text-center">Card title</h5>
-                            <p class="card-text text-center">Some quick example text...</p>
-                        </div>
-                        <ul class="list-group list-group-flush text-center">
-                            <li class="list-group-item">An item</li>
-                            <li class="list-group-item">A second item</li>
-                            <li class="list-group-item">A third item</li>
-                            <li class="list-group-item">Disponibilidade</li>
-                            <li class="list-group-item">Local</li>
-                        </ul>
-                    </div>
-                </div>
+                <?php endforeach; ?> 
             </div> 
 
             <!--Modais dos cards-->
-            <div class="modal fade" id="item1_modal" tabindex="-1">
+            <?php foreach ($equipamentos as $eq): ?>
+            <div class="modal fade" id="modal_<?= $eq['id'] ?>" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content" style="border-radius: 16px; border: none;">
                         <div class="modal-header border-0">
-                            <h5 class="modal-title fw-bold">Desfibrilhador</h5>
+                            <h5 class="modal-title fw-bold"><?= htmlspecialchars($eq['nome']) ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body" style="overflow-y: auto; max-height: 75vh;">
                             <div class="row mb-4">
                                 <div class="col-7">
-                                    <img src="../assets/images/Placeholder.jpg" class="img-fluid rounded" alt="...">
+                                    <img src="<?= htmlspecialchars($eq['imagem']) ?>" alt="..." class="img-fluid">
                                     
                                 </div>
                                 
@@ -202,13 +167,13 @@
                                     <!-- ID -->
                                     <div class="card px-3 py-2">
                                         <small class="text-muted">ID</small>
-                                        <span><i class="bi bi-hash me-1"></i>00-0000-00</span>
+                                        <span><i class="bi bi-hash me-1"></i><?= htmlspecialchars($eq['serial']) ?></span>
                                     </div>
                                     
                                     <!-- State -->
                                     <div class="card px-3 py-2">
                                         <small class="text-muted">Estado</small>
-                                        <span><i class="bi bi-circle-fill me-1" style="font-size: 0.5rem;"></i>Disponível</span> 
+                                        <span><i class="bi bi-circle-fill me-1" style="font-size: 0.5rem;"><?= htmlspecialchars($eq['estado']) ?></i></span> 
                                     </div>
                                     
                                     <div class="card px-3 py-2">
@@ -229,8 +194,8 @@
                             <hr>
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <h6 class="fw-bold mb-0"><i class="bi bi-map-fill me-2 text-decoration-none"></i> Localização:</h6>
-                                <span class="me-2">Wing A, Floor 03, Room 324</span>
-                                <span class="text-muted">(A.03.324)</span>
+                                <span class="me-2"><?= htmlspecialchars($eq['local_equipamento']) ?></span>
+                                <span class="text-muted"><?= htmlspecialchars($eq['local_equipamento']) ?></span>
                             </div>  
 
                              
@@ -283,25 +248,29 @@
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <div>
                                             <div class="fw-semibold">Número de Série</div>
-                                            <div class="small text-muted">ID: 00-0000-01</div>
+                                            <div class="small text-muted"><?= htmlspecialchars($eq['serial']) ?></div>
                                         </div>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <div>
                                             <div class="fw-semibold">Modelo</div>
-                                            <div class="small text-muted">R Series</div>
+                                            <div class="small text-muted"><?= htmlspecialchars($eq['modelo']) ?></div>
                                         </div>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <div>
                                             <div class="fw-semibold">Aquisição</div>
-                                            <div class="small text-muted">Data de aquisicao, custo de aquisicao e tipo de entrada</div>
+                                            <div class="small text-muted">
+                                                <?= htmlspecialchars($eq['data_aquisicao']) ?> — 
+                                                <?= htmlspecialchars($eq['tipo_aquisicao']) ?> — 
+                                                <?= number_format($eq['custo_aquisicao'], 2) ?>€
+                                            </div>
                                         </div>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <div>
                                             <div class="fw-semibold">Ano de Fabrico</div>
-                                            <div class="small text-muted">ID: 00-0000-03</div>
+                                            <div class="small text-muted"><?= htmlspecialchars($eq['ano_fabrico']) ?></div>
                                         </div>
                                     </li>
                                 </ul>
@@ -365,77 +334,11 @@
                     </div>
                 </div>
             </div>
+            <?php endforeach; ?>
             
             <!--modal adicionar equipamento-->
-            <div class="modal fade" id="addEquipmentModal" tabindex="-1">
-                <div class="modal-dialog">
-                    <div class="modal-content" style="border-radius: 16px; border: none;">
-                        <div class="modal-header border-0 pb-0">
-                            <h5 class="modal-title fw-bold">Add New Equipment</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body pt-3">
+            <?php include '../includes/new_equipment.php'?>
 
-                            <div class="d-flex flex-column align-items-center mb-4">
-                                <div class="qr-placeholder" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; border-radius: 50%;">
-                                    <i class="bi bi-box-seam" style="font-size: 2rem; color: #64748b;"></i>
-                                </div>
-                                <small class="text-muted mt-2">Register new inventory item</small>
-                            </div>
-
-                            <div class="row g-3">
-                                <div class="col-6">
-                                    <label class="form-label">Equipment Name</label>
-                                    <input type="text" class="form-control" placeholder="e.g. Defibrillator" style="border-radius:8px;">
-                                </div>
-
-                                <div class="col-6">
-                                    <label class="form-label">Equipment Model</label>
-                                    <input type="text" class="form-control" placeholder="e.g. R Series" style="border-radius:8px;">
-                                </div>
-                                
-                                <div class="col-6">
-                                    <label class="form-label">Equipment ID</label>
-                                    <input type="text" class="form-control" placeholder="e.g. 04.324.00" style="border-radius:8px;">
-                                </div>
-
-                                <div class="col-6">
-                                    <label class="form-label">Criticality</label>
-                                    <select class="form-select" style="border-radius:8px;">
-                                        <option value="low">Low</option>
-                                        <option value="medium">Medium</option>
-                                        <option value="high">High</option>
-                                        <option value="life support">Life Support</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-12">
-                                    <label class="form-label">Supplier</label>
-                                    <select class="form-select" style="border-radius:8px;">
-                                        <option value="">Select supplier...</option>
-                                        <option>Zoll Medical Corporation</option>
-                                        <option>Drägerwerke AG</option>
-                                        <option>Philips Healthcare</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-12">
-                                    <label class="form-label">Description <span class="text-muted fw-normal">(optional)</span></label>
-                                    <textarea class="form-control" rows="2" placeholder="Brief technical notes" style="border-radius:8px;"></textarea>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="modal-footer border-0 pt-3">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius:8px;">Cancel</button>
-                            <button type="button" class="btn btn-primary-custom">
-                                <i class="bi bi-plus-lg me-1"></i> Add Equipment
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
-
 <?php include "../includes/footer.php"?>
