@@ -1,3 +1,14 @@
+<?php 
+require_once '../../config/config.php';
+$stmt = $pdo->query("SELECT * FROM staff WHERE deleted_at IS NULL");
+$staff = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$total      = count($staff);
+$on_shift   = count(array_filter($staff, fn($s) => $s['disponibilidade'] === 'On Shift'));
+$on_call    = count(array_filter($staff, fn($s) => $s['disponibilidade'] === 'On Call'));
+$off_duty   = count(array_filter($staff, fn($s) => $s['disponibilidade'] === 'Off Duty'));
+?>
+
 <?php include '../includes/header.php'?>
 
     <div class="d-flex">
@@ -16,9 +27,28 @@
                         <h3 class="fw-bold mb-1">Staff</h3>
                         <p class="text-muted small mb-0">All hospital staff and their current availability</p>
                     </div>
-                    <button class="btn btn-primary-custom">
-                        <i class="bi bi-plus-lg me-2"></i> Add Staff Member
-                    </button>
+
+                    <div class="dropdown align-items-center">
+                        <button class="btn btn-primary-custom" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 8px;">
+                            Actions <i class="bi bi-chevron-down ms-2"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="border-radius: 8px; border: none;">
+                            <li>
+                                <button class="dropdown-item py-2" data-bs-toggle="modal" data-bs-target="#addStaffModal">
+                                    <i class="bi bi-person-plus me-2 text-muted"></i> Add Staff
+                                </button>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <button class="dropdown-item py-2 text-danger" data-bs-toggle="modal" data-bs-target="#deleteStaffModal">
+                                    <i class="bi bi-person-dash me-2"></i> Delete Staff
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!--modal add staff-->
+                    <?php include '../includes/new_staff.php'?>
                 </div>
     
                 <!-- Stat cards -->
@@ -27,7 +57,7 @@
                         <div class="stat-card" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">
                             <div class="stat-icon"><i class="bi bi-people"></i></div>
                             <div>
-                                <div class="stat-value">42</div>
+                                <div class="stat-value"><?= $total ?></div>
                                 <div class="stat-label">Total Staff</div>
                             </div>
                         </div>
@@ -36,7 +66,7 @@
                         <div class="stat-card" style="background: linear-gradient(135deg, #10b981, #059669);">
                             <div class="stat-icon"><i class="bi bi-check-circle"></i></div>
                             <div>
-                                <div class="stat-value">28</div>
+                                <div class="stat-value"><?= $on_shift ?></div>
                                 <div class="stat-label">On Shift</div>
                             </div>
                         </div>
@@ -45,7 +75,7 @@
                         <div class="stat-card" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
                             <div class="stat-icon"><i class="bi bi-telephone"></i></div>
                             <div>
-                                <div class="stat-value">8</div>
+                                <div class="stat-value"><?= $on_call ?></div>
                                 <div class="stat-label">On Call</div>
                             </div>
                         </div>
@@ -54,7 +84,7 @@
                         <div class="stat-card" style="background: linear-gradient(135deg, #94a3b8, #64748b);">
                             <div class="stat-icon"><i class="bi bi-moon"></i></div>
                             <div>
-                                <div class="stat-value">6</div>
+                                <div class="stat-value"><?= $off_duty ?></div>
                                 <div class="stat-label">Off Duty</div>
                             </div>
                         </div>
@@ -103,138 +133,43 @@
                                     <th>Personal Contact</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr data-role="Doctor" data-availability="On Shift" data-department="Cardiology">
+                                <?php foreach ($staff as $s): 
+                                    // set dot colour based on availability
+                                    $dot_color = match($s['disponibilidade']) {
+                                        'On Shift' => '#10b981',
+                                        'On Call'  => '#f59e0b',
+                                        'Off Duty' => '#94a3b8',
+                                        default    => '#94a3b8'
+                                    };
+                                ?>
+                                <tr data-role="<?= htmlspecialchars($s['role']) ?>" 
+                                    data-availability="<?= htmlspecialchars($s['disponibilidade']) ?>" 
+                                    data-department="<?= htmlspecialchars($s['departamento']) ?>">
                                     <td>
                                         <div class="d-flex align-items-center gap-3">
-                                            <img src="https://ui-avatars.com/api/?name=Maria+Santos&background=0ea5e9&color=fff" class="staff-avatar">
+                                            <img src="<?= htmlspecialchars($s['imagem']) ?>" class="staff-avatar">
                                             <div>
-                                                <div class="staff-name">Dr. Maria Santos</div>
-                                                <div class="staff-id">#ST-00021</div>
+                                                <div class="staff-name"><?= htmlspecialchars($s['nome']) ?></div>
+                                                <div class="staff-id"><?= htmlspecialchars($s['staff_id']) ?></div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td><span class="role-badge" style="background:#dbeafe; color:#1d4ed8;">Doctor</span></td>
-                                    <td>Cardiology</td>
+                                    <td><span class="role-badge"><?= htmlspecialchars($s['role']) ?></span></td>
+                                    <td><?= htmlspecialchars($s['departamento']) ?></td>
                                     <td>
-                                        <span class="availability-dot" style="background:#10b981;"></span>
-                                        <span class="availability-label" style="color:#10b981;">On Shift</span>
+                                        <span class="availability-dot" style="background:<?= $dot_color ?>;"></span>
+                                        <span class="availability-label" style="color:<?= $dot_color ?>;"><?= htmlspecialchars($s['disponibilidade']) ?></span>
                                     </td>
-                                    <td><span class="assignment-pill"><i class="bi bi-phone"></i> +351 911 871 461</span></td>
+                                    <td><span class="assignment-pill"><i class="bi bi-phone"></i> <?= htmlspecialchars($s['contacto']) ?></span></td>
                                 </tr>
-                                <tr data-role="Biomedical Technician" data-availability="On Shift" data-department="Radiology">
-                                    <td>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <img src="https://ui-avatars.com/api/?name=John+Doe&background=f97316&color=fff" class="staff-avatar">
-                                            <div>
-                                                <div class="staff-name">John Doe</div>
-                                                <div class="staff-id">#ST-00001</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><span class="role-badge" style="background:#ffedd5; color:#c2410c;">Biomedical Tech.</span></td>
-                                    <td>Radiology</td>
-                                    <td>
-                                        <span class="availability-dot" style="background:#10b981;"></span>
-                                        <span class="availability-label" style="color:#10b981;">On Shift</span>
-                                    </td>
-                                    <td><span class="assignment-pill"><i class="bi bi-phone"></i> +351 913 522 453</span></td>
-                                </tr>
-                                <tr data-role="Nurse" data-availability="On Call" data-department="ICU">
-                                    <td>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <img src="https://ui-avatars.com/api/?name=Ana+Costa&background=10b981&color=fff" class="staff-avatar">
-                                            <div>
-                                                <div class="staff-name">Ana Costa</div>
-                                                <div class="staff-id">#ST-00034</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><span class="role-badge" style="background:#d1fae5; color:#065f46;">Nurse</span></td>
-                                    <td>ICU</td>
-                                    <td>
-                                        <span class="availability-dot" style="background:#f59e0b;"></span>
-                                        <span class="availability-label" style="color:#f59e0b;">On Call</span>
-                                    </td>
-                                    <td><span class="assignment-pill"><i class="bi bi-phone"></i> +351 918 452 633</span></td>
-                                </tr>
-                                <tr data-role="Radiologist" data-availability="On Shift" data-department="Radiology">
-                                    <td>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <img src="https://ui-avatars.com/api/?name=Carlos+Lima&background=8b5cf6&color=fff" class="staff-avatar">
-                                            <div>
-                                                <div class="staff-name">Dr. Carlos Lima</div>
-                                                <div class="staff-id">#ST-00009</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><span class="role-badge" style="background:#ede9fe; color:#6d28d9;">Radiologist</span></td>
-                                    <td>Radiology</td>
-                                    <td>
-                                        <span class="availability-dot" style="background:#10b981;"></span>
-                                        <span class="availability-label" style="color:#10b981;">On Shift</span>
-                                    </td>
-                                    <td><span class="assignment-pill"><i class="bi bi-phone"></i> +351 914 522 782</span></td>
-                                </tr>
-                                <tr data-role="Surgeon" data-availability="Off Duty" data-department="Surgery">
-                                    <td>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <img src="https://ui-avatars.com/api/?name=Pedro+Alves&background=64748b&color=fff" class="staff-avatar">
-                                            <div>
-                                                <div class="staff-name">Dr. Pedro Alves</div>
-                                                <div class="staff-id">#ST-00015</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><span class="role-badge" style="background:#f1f5f9; color:#475569;">Surgeon</span></td>
-                                    <td>Surgery</td>
-                                    <td>
-                                        <span class="availability-dot" style="background:#94a3b8;"></span>
-                                        <span class="availability-label" style="color:#94a3b8;">Off Duty</span>
-                                    </td>
-                                    <td><span class="assignment-pill"><i class="bi bi-phone"></i> +351 913 522 453</span></td>
-                                </tr>
-                                <tr data-role="Nurse" data-availability="On Shift" data-department="Neurology">
-                                    <td>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <img src="https://ui-avatars.com/api/?name=Sofia+Ferreira&background=10b981&color=fff" class="staff-avatar">
-                                            <div>
-                                                <div class="staff-name">Sofia Ferreira</div>
-                                                <div class="staff-id">#ST-00041</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><span class="role-badge" style="background:#d1fae5; color:#065f46;">Nurse</span></td>
-                                    <td>Neurology</td>
-                                    <td>
-                                        <span class="availability-dot" style="background:#10b981;"></span>
-                                        <span class="availability-label" style="color:#10b981;">On Shift</span>
-                                    </td>
-                                    <td><span class="assignment-pill"><i class="bi bi-phone"></i> +351 917 145 221</span></td>
-                                </tr>
-                                <tr data-role="Biomedical Technician" data-availability="On Call" data-department="ICU">
-                                    <td>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <img src="https://ui-avatars.com/api/?name=Rui+Mendes&background=f97316&color=fff" class="staff-avatar">
-                                            <div>
-                                                <div class="staff-name">Rui Mendes</div>
-                                                <div class="staff-id">#ST-00007</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><span class="role-badge" style="background:#ffedd5; color:#c2410c;">Biomedical Tech.</span></td>
-                                    <td>ICU</td>
-                                    <td>
-                                        <span class="availability-dot" style="background:#f59e0b;"></span>
-                                        <span class="availability-label" style="color:#f59e0b;">On Call</span>
-                                    </td>
-                                    <td><span class="assignment-pill"><i class="bi bi-phone"></i> +351 914 735 086</span></td>
-                                </tr>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </div>
+
+                
+            </div> 
         </div>
     </div>
     

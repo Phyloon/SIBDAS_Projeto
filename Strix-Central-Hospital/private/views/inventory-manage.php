@@ -116,7 +116,9 @@ $pct_fora = $total ? round($fora      / $total * 100) : 0;
                             </div>
                         </div>
                         <div>
-                            <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addEquipmentModal"><i class="bi bi-plus-lg me-2"></i> Add Inventory</button>
+                            <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addEquipmentModal">
+                                <i class="bi bi-plus-lg me-2"></i> Add Inventory
+                            </button>
                         </div>
                     </div>
 
