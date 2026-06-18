@@ -1,4 +1,15 @@
-<?php include '../includes/header.php'?>
+<?php 
+include '../includes/header.php';
+include '../includes/location_stats.php';
+?>
+
+    <?php
+    // Ensure stats variables are defined to avoid undefined variable notices
+    $total = isset($total) ? $total : 0;
+    $located = isset($located) ? $located : 0;
+    $unconfirmed = isset($unconfirmed) ? $unconfirmed : 0;
+    ?>
+
 
     <div class="d-flex">
 
@@ -24,11 +35,12 @@
 
                 <!-- Stat cards -->
                 <div class="row g-3 mb-4">
+                    
                     <div class="col-sm-6 col-xl-3">
                         <div class="stat-card" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">
                             <div class="stat-icon"><i class="bi bi-boxes"></i></div>
                             <div>
-                                <div class="stat-value">230</div>
+                                <div class="stat-value"><?=$total?></div>
                                 <div class="stat-label">Total Tracked Items</div>
                             </div>
                         </div>
@@ -37,7 +49,7 @@
                         <div class="stat-card" style="background: linear-gradient(135deg, #10b981, #059669);">
                             <div class="stat-icon"><i class="bi bi-geo-alt"></i></div>
                             <div>
-                                <div class="stat-value">198</div>
+                                <div class="stat-value"><?= $located ?></div>
                                 <div class="stat-label">Located</div>
                             </div>
                         </div>
@@ -46,7 +58,7 @@
                         <div class="stat-card" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
                             <div class="stat-icon"><i class="bi bi-question-circle"></i></div>
                             <div>
-                                <div class="stat-value">24</div>
+                                <div class="stat-value"><?= $unconfirmed ?></div>
                                 <div class="stat-label">Unconfirmed</div>
                             </div>
                         </div>
@@ -55,7 +67,7 @@
                         <div class="stat-card" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
                             <div class="stat-icon"><i class="bi bi-exclamation-triangle"></i></div>
                             <div>
-                                <div class="stat-value">8</div>
+                                <div class="stat-value"></div>
                                 <div class="stat-label">Missing / Not Scanned</div>
                             </div>
                         </div>
@@ -102,82 +114,42 @@
                                     <th>Room</th>
                                     <th>Department</th>
                                     <th>Last Scanned</th>
-                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr data-wing="Wing A" data-floor="Floor 2" data-department="Cardiology">
-                                    <td>
-                                        <div class="equipment-name">ECG Machine</div>
-                                        <div class="equipment-id">#EQ-00142</div>
-                                    </td>
-                                    <td><span class="location-pill"><i class="bi bi-building"></i> Wing A</span></td>
-                                    <td><span class="location-pill"><i class="bi bi-layers"></i> Floor 2</span></td>
-                                    <td><span class="location-pill"><i class="bi bi-door-open"></i> Room 204</span></td>
-                                    <td>Cardiology</td>
-                                    <td class="scan-time"><i class="bi bi-clock"></i> Today, 09:14</td>
-                                    <td><span class="badge-status bg-success text-white">Located</span></td>
-                                </tr>
-                                <tr data-wing="Wing B" data-floor="Floor 1" data-department="ICU">
-                                    <td>
-                                        <div class="equipment-name">Portable Ventilator</div>
-                                        <div class="equipment-id">#EQ-00089</div>
-                                    </td>
-                                    <td><span class="location-pill"><i class="bi bi-building"></i> Wing B</span></td>
-                                    <td><span class="location-pill"><i class="bi bi-layers"></i> Floor 1</span></td>
-                                    <td><span class="location-pill"><i class="bi bi-door-open"></i> ICU-03</span></td>
-                                    <td>ICU</td>
-                                    <td class="scan-time"><i class="bi bi-clock"></i> Today, 08:47</td>
-                                    <td><span class="badge-status bg-success text-white">Located</span></td>
-                                </tr>
-                                <tr data-wing="Wing C" data-floor="Floor 1" data-department="Radiology">
-                                    <td>
-                                        <div class="equipment-name">MRI Scanner</div>
-                                        <div class="equipment-id">#EQ-00011</div>
-                                    </td>
-                                    <td><span class="location-pill"><i class="bi bi-building"></i> Wing C</span></td>
-                                    <td><span class="location-pill"><i class="bi bi-layers"></i> Floor 1</span></td>
-                                    <td><span class="location-pill"><i class="bi bi-door-open"></i> Radiology-1</span></td>
-                                    <td>Radiology</td>
-                                    <td class="scan-time"><i class="bi bi-clock"></i> Yesterday, 17:30</td>
-                                    <td><span class="badge-status bg-warning text-dark">Unconfirmed</span></td>
-                                </tr>
-                                <tr data-wing="Wing A" data-floor="Floor 3" data-department="Cardiology">
-                                    <td>
-                                        <div class="equipment-name">Defibrillator Model X</div>
-                                        <div class="equipment-id">#EQ-00057</div>
-                                    </td>
-                                    <td><span class="location-pill"><i class="bi bi-building"></i> Wing A</span></td>
-                                    <td><span class="location-pill"><i class="bi bi-layers"></i> Floor 3</span></td>
-                                    <td><span class="location-pill"><i class="bi bi-door-open"></i> Room 301</span></td>
-                                    <td>Cardiology</td>
-                                    <td class="scan-time"><i class="bi bi-clock"></i> Today, 11:02</td>
-                                    <td><span class="badge-status bg-success text-white">Located</span></td>
-                                </tr>
-                                <tr data-wing="Unknown" data-floor="Unknown" data-department="Unknown">
-                                    <td>
-                                        <div class="equipment-name">Infusion Pump</div>
-                                        <div class="equipment-id">#EQ-00203</div>
-                                    </td>
-                                    <td><span class="location-pill text-muted" style="background:#fee2e2; color:#ef4444 !important;"><i class="bi bi-question-lg" style="color:#ef4444;"></i> Unknown</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td class="scan-time text-danger"><i class="bi bi-clock"></i> 3 days ago</td>
-                                    <td><span class="badge-status bg-danger text-white">Missing</span></td>
-                                </tr>
-                                <tr data-wing="Wing B" data-floor="Floor 2" data-department="Neurology">
-                                    <td>
-                                        <div class="equipment-name">Ultrasound Unit</div>
-                                        <div class="equipment-id">#EQ-00178</div>
-                                    </td>
-                                    <td><span class="location-pill"><i class="bi bi-building"></i> Wing B</span></td>
-                                    <td><span class="location-pill"><i class="bi bi-layers"></i> Floor 2</span></td>
-                                    <td><span class="location-pill"><i class="bi bi-door-open"></i> Room 215</span></td>
-                                    <td>Neurology</td>
-                                    <td class="scan-time"><i class="bi bi-clock"></i> Today, 10:33</td>
-                                    <td><span class="badge-status bg-success text-white">Located</span></td>
-                                </tr>
+                                <?php 
+                                    try {
+                                        $smt = $pdo->query("SELECT nome, serial, location_wing, location_floor, location_room, departamento FROM equipamentos");
+                                        $equipamentos = $smt->fetchAll(PDO::FETCH_ASSOC);
+                                        foreach ($equipamentos as $row): 
+                                            // Logic to determine status badge based on data presence
+                                            $isLocated = (!empty($row['location_wing']) && !empty($row['location_room']));
+                                            $badgeClass = $isLocated ? 'bg-success' : 'bg-danger';
+                                            $statusText = $isLocated ? 'Located' : 'Missing';
+                                    
+                                ?>
+                                    <tr data-wing="<?= htmlspecialchars($row['location_wing'] ?? 'Unknown') ?>" 
+                                        data-floor="<?= htmlspecialchars($row['location_floor'] ?? 'Unknown') ?>" 
+                                        data-department="<?= htmlspecialchars($row['departamento'] ?? 'Unknown') ?>">
+                                        
+                                        <td>
+                                            <div class="equipment-name"><?= htmlspecialchars($row['nome']) ?></div>
+                                            <div class="equipment-id">#<?= htmlspecialchars($row['serial']) ?></div>
+                                        </td>
+                                        
+                                        <td><span class="location-pill"><i class="bi bi-building"></i> <?= htmlspecialchars($row['location_wing'] ?? 'Unknown') ?></span></td>
+                                        <td><span class="location-pill"><i class="bi bi-layers"></i> <?= htmlspecialchars($row['location_floor'] ?? 'Unknown') ?></span></td>
+                                        <td><span class="location-pill"><i class="bi bi-door-open"></i> <?= htmlspecialchars($row['location_room'] ?? 'Unknown') ?></span></td>
+                                        <td><?= htmlspecialchars($row['departamento'] ?? 'Unknown') ?></td>
+                                        
+                                        <td class="scan-time"><i class="bi bi-clock"></i> Today, 09:14</td>
+                                    </tr>
+                                    <?php 
+                                        endforeach; 
+                                    } catch (PDOException $e) {
+                                        echo "<tr><td colspan='7'>Error loading data: " . $e->getMessage() . "</td></tr>";
+                                    }
+                                    ?>
                             </tbody>
                         </table>
                     </div>
