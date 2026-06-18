@@ -49,6 +49,7 @@ $off_duty   = count(array_filter($staff, fn($s) => $s['disponibilidade'] === 'Of
 
                     <!--modal add staff-->
                     <?php include '../includes/new_staff.php'?>
+                    <?php include '../includes/delete_staff.php'?>
                 </div>
     
                 <!-- Stat cards -->
@@ -129,18 +130,11 @@ $off_duty   = count(array_filter($staff, fn($s) => $s['disponibilidade'] === 'Of
                                     <th>Staff Member</th>
                                     <th>Role</th>
                                     <th>Department</th>
-                                    <th>Availability</th>
                                     <th>Personal Contact</th>
                                 </tr>
                             </thead>
                                 <?php foreach ($staff as $s): 
                                     // set dot colour based on availability
-                                    $dot_color = match($s['disponibilidade']) {
-                                        'On Shift' => '#10b981',
-                                        'On Call'  => '#f59e0b',
-                                        'Off Duty' => '#94a3b8',
-                                        default    => '#94a3b8'
-                                    };
                                 ?>
                                 <tr data-role="<?= htmlspecialchars($s['role']) ?>" 
                                     data-availability="<?= htmlspecialchars($s['disponibilidade']) ?>" 
@@ -156,10 +150,6 @@ $off_duty   = count(array_filter($staff, fn($s) => $s['disponibilidade'] === 'Of
                                     </td>
                                     <td><span class="role-badge"><?= htmlspecialchars($s['role']) ?></span></td>
                                     <td><?= htmlspecialchars($s['departamento']) ?></td>
-                                    <td>
-                                        <span class="availability-dot" style="background:<?= $dot_color ?>;"></span>
-                                        <span class="availability-label" style="color:<?= $dot_color ?>;"><?= htmlspecialchars($s['disponibilidade']) ?></span>
-                                    </td>
                                     <td><span class="assignment-pill"><i class="bi bi-phone"></i> <?= htmlspecialchars($s['contacto']) ?></span></td>
                                 </tr>
                                 <?php endforeach; ?>
