@@ -1,12 +1,19 @@
 <?php require_once '../includes/header.php';
-
-$stmt = $pdo->query("
-    SELECT *
-    FROM fornecedores
-    ORDER BY nome_empresa
-");
-
+//get all suppliers
+$stmt = $pdo->query("SELECT * FROM fornecedores ORDER BY nome_empresa");
 $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+//get all equipments
+$stmtEq = $pdo->query("SELECT * FROM equipamentos ORDER BY nome");
+$allEquipments = $stmtEq->fetchAll(PDO::FETCH_ASSOC);
+
+//agrupar equipamento por fornecedor
+$eqBySupplier = [];
+foreach($allEquipments as $eq) {
+    // use marca to make a connection
+    $marca = !empty($eq['marca']) ? $eq['marca'] : 'Desconhecido';
+    $eqBySupplier[$marca][] = $eq;
+}
 
 ?>
 
@@ -140,17 +147,33 @@ $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>Zoll Medical Corporation</td>
-                                                    <td>123456789</td>
-                                                    <td>+1 800-123-4567</td>
-                                                    <td><a href="mailto:info@zoll.com">info@zoll.com</a></td>
-                                                    <td>123 Main Street, Anytown, USA</td>
-                                                    <td><a href="https://www.zoll.com" target="_blank">www.zoll.com</a></td>
-                                                    <td>John Doe</td>
-                                                    <td>+1 800-123-4568</td>
-                                                    <td>Medical Equipment</td>
-                                                </tr>
+                                                <?php foreach($fornecedores as $f): ?>
+                                                    <tr>
+                                                        <td><?= htmlspecialchars($f['nome_empresa']) ?></td>
+                                                        <td><?= htmlspecialchars($f['nif']) ?></td>
+                                                        <td><?= htmlspecialchars($f['telefone']) ?></td>
+
+                                                        <td>
+                                                            <a href="mailto:<?= htmlspecialchars($f['email']) ?>">
+                                                                <?= htmlspecialchars($f['email']) ?>
+                                                            </a>
+                                                        </td>
+
+                                                        <td><?= htmlspecialchars($f['endereco']) ?></td>
+
+                                                        <td>
+                                                            <a href="<?= htmlspecialchars($f['website']) ?>" target="_blank">
+                                                                Website
+                                                            </a>
+                                                        </td>
+
+                                                        <td><?= htmlspecialchars($f['pessoa_contacto']) ?></td>
+
+                                                        <td><?= htmlspecialchars($f['telefone_contacto']) ?></td>
+
+                                                        <td><?= htmlspecialchars($f['tipo_fornecedor']) ?></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -160,131 +183,71 @@ $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     
                     <!--Fornecedores e equipamentos correspondentes-->
-                    <div class="accordion-item border-0 shadow-sm mb-3" style="border-radius: 12px; overflow: hidden;">
-                        <h2 class="accordion-header" id="headingZoll">
-                            <button class="accordion-button collapsed fw-bold d-flex align-items-center gap-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseZoll" aria-expanded="false" style="background-color: #fff; color: #333;">
-                                <div class="bg-light p-2 rounded text-primary">
-                                    <i class="bi bi-building fs-5"></i>
-                                </div>
-                                <div class="d-flex flex-column flex-grow-1 text-start">
-                                    <span class="fs-6">Zoll Medical Corporation</span>
-                                    <span class="text-muted small fw-normal">Supporte de Vida & Monitorização</span>
-                                </div>
-                                
-                                <span class="badge bg-light text-dark border px-3 py-2 me-3 fw-normal" style="border-radius: 6px;">
-                                    Total Equipments: 2
-                                </span>
-                            </button>
-                        </h2>
-
-                        <div id="collapseZoll" class="accordion-collapse collapse " data-bs-parent="#suppliers-accordion">
-                            <div class="accordion-body bg-light border-top p-4">
-                                <div class="row g-4">
+                    <?php foreach($eqBySupplier as $marca => $equipamentosMarca): ?>
+                        <?php
+                            //criar um safe id, remove tudo o que nao e um ^, letra ou numero e substitui por " " em todos os $marca
+                            $safeId = preg_replace('/[^a-zA-Z0-9]/', '', $marca); 
+                            $totalEq = count($equipamentosMarca);
+                        ?>
+                        <div class="accordion-item border-0 shadow-sm mb-3" style="border-radius: 12px; overflow: hidden;">
+                            <h2 class="accordion-header" id="heading<?= $safeId ?>">
+                                <button class="accordion-button collapsed fw-bold d-flex align-items-center gap-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?= $safeId ?>" aria-expanded="false" style="background-color: #fff; color: #333;">
+                                    <div class="bg-light p-2 rounded text-primary">
+                                        <i class="bi bi-building fs-5"></i>
+                                    </div>
+                                    <div class="d-flex flex-column flex-grow-1 text-start">
+                                        <span class="fs-6"><?= htmlspecialchars($marca) ?></span>
+                                        <span class="text-muted small fw-normal">Equipamentos associados</span>
+                                    </div>
                                     
-                                    <div class="col-3">
-                                        <div class="card border-0 shadow-sm h-100" style="cursor: pointer;">
-                                            <div style="padding: 15px;">   
-                                                <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style="border-radius: 10px;">
-                                            </div>
-                                            <div class="card-body py-2">
-                                                <h6 class="card-title text-center fw-bold mb-3">Desfibrilhador</h6>
-                                            </div>
-                                            <ul class="list-group list-group-flush text-center small">
-                                                <li class="list-group-item text-muted">A.00.000</li>
-                                                <li class="list-group-item">R Series</li>
-                                                <li class="list-group-item"><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill">Disponível</span></li>
-                                                <li class="list-group-item text-muted">ICU <i class="bi bi-dot"></i> Wing B</li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                                    <span class="badge bg-light text-dark border px-3 py-2 me-3 fw-normal" style="border-radius: 6px;">
+                                        Total Equipments: <?= $totalEq ?>
+                                    </span>
+                                </button>
+                            </h2>
 
-                                    <div class="col-3">
-                                        <div class="card border-0 shadow-sm h-100" style="cursor: pointer;">
-                                            <div style="padding: 15px;">   
-                                                <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style="border-radius: 10px;">
+                            <div id="collapse<?= $safeId ?>" class="accordion-collapse collapse" data-bs-parent="#suppliers-accordion">
+                                <div class="accordion-body bg-light border-top p-4">
+                                    <div class="row g-4">
+                                        
+                                        <?php foreach($equipamentosMarca as $eq): 
+                                            // Logic for the beautiful colored status badges
+                                            $estado = $eq['estado'];
+                                            $bClass = 'secondary'; // Default gray
+                                            if ($estado === 'Disponivel') $bClass = 'success';
+                                            elseif ($estado === 'Em Uso') $bClass = 'primary';
+                                            elseif ($estado === 'Em Manutenção') $bClass = 'warning text-dark';
+                                            elseif ($estado === 'Fora de Servico') $bClass = 'danger';
+                                        ?>
+                                        <div class="col-3">
+                                            <div class="card border-0 shadow-sm h-100" style="cursor: pointer;">
+                                                <div style="padding: 15px;">   
+                                                    <img src="<?= htmlspecialchars($eq['imagem']) ?>" class="card-img-top" alt="..." style="border-radius: 10px; height: 140px; object-fit: cover;">
+                                                </div>
+                                                <div class="card-body py-2">
+                                                    <h6 class="card-title text-center fw-bold mb-3"><?= htmlspecialchars($eq['nome']) ?></h6>
+                                                </div>
+                                                <ul class="list-group list-group-flush text-center small">
+                                                    <li class="list-group-item text-muted"><?= htmlspecialchars($eq['serial']) ?></li>
+                                                    <li class="list-group-item"><?= htmlspecialchars($eq['modelo']) ?></li>
+                                                    <li class="list-group-item">
+                                                        <span class="badge bg-<?= $bClass ?> bg-opacity-10 text-<?= str_replace(' text-dark', '', $bClass) ?> border border-<?= str_replace(' text-dark', '', $bClass) ?> border-opacity-25 rounded-pill">
+                                                            <?= htmlspecialchars($eq['estado']) ?>
+                                                        </span>
+                                                    </li>
+                                                    <li class="list-group-item text-muted">
+                                                        <?= htmlspecialchars($eq['departamento'] ?? 'N/A') ?> <i class="bi bi-dot"></i> <?= htmlspecialchars($eq['local_equipamento'] ?? 'N/A') ?>
+                                                    </li>
+                                                </ul>
                                             </div>
-                                            <div class="card-body py-2">
-                                                <h6 class="card-title text-center fw-bold mb-3">Bomba de Infusão</h6>
-                                            </div>
-                                            <ul class="list-group list-group-flush text-center small">
-                                                <li class="list-group-item text-muted">B.02.211</li>
-                                                <li class="list-group-item">Zoll AutoPulse</li>
-                                                <li class="list-group-item"><span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill">Em Uso</span></li>
-                                                <li class="list-group-item text-muted">Emergency <i class="bi bi-dot"></i> Wing B</li>
-                                            </ul>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>  
-                    </div>
+                                        <?php endforeach; ?>
 
-                    <!--Fornecedores e equipamentos correspondentes-->
-                    <div class="accordion-item border-0 shadow-sm mb-3" style="border-radius: 12px; overflow: hidden;">
-                        <h2 class="accordion-header" id="headingMedTronic">
-                            <button class="accordion-button collapsed fw-bold d-flex align-items-center gap-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMedTronic" aria-expanded="false" style="background-color: #fff; color: #333;">
-                                <div class="bg-light p-2 rounded text-primary">
-                                    <i class="bi bi-building fs-5"></i>
-                                </div>
-                                <div class="d-flex flex-column flex-grow-1 text-start">
-                                    <span class="fs-6">MedTronic Inc.</span>
-                                    <span class="text-muted small fw-normal">Tecnologia Médica & Terapia</span>
-                                </div>
-                                <span class="badge bg-light text-dark border px-3 py-2 me-3 fw-normal" style="border-radius: 6px;">
-                                    Total Equipments: 4
-                                </span>
-                            </button>
-                        </h2>
-                        <div id="collapseMedTronic" class="accordion-collapse collapse" data-bs-parent="#suppliers-accordion">
-                            <div class="accordion-body bg-light border-top p-4">
-                                <div class="row g-4">
-                                    
-                                    <div class="col-3">
-                                        <div class="card border-0 shadow-sm h-100" style="cursor: pointer;">
-                                            <div style="padding: 15px;">   
-                                                <img src="../assets/images/Placeholder.jpg" class="card-img-top" alt="..." style="border-radius: 10px;">
-                                            </div>
-                                            <div class="card-body py-2">
-                                                <h6 class="card-title text-center fw-bold mb-3">Ventilador PB 980</h6>
-                                            </div>
-                                            <ul class="list-group list-group-flush text-center small">
-                                                <li class="list-group-item text-muted">C.01.102</li>
-                                                <li class="list-group-item">Puritan Bennett</li>
-                                                <li class="list-group-item"><span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill text-dark">Em Manutenção</span></li>
-                                                <li class="list-group-item text-muted">ICU <i class="bi bi-dot"></i> Wing A</li>
-                                            </ul>
-                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>  
                         </div>
-                    </div>
-
-                    <!--Fornecedores e equipamentos correspondentes-->
-                    <div class="accordion-item border-0 shadow-sm mb-3" style="border-radius: 12px; overflow: hidden;">
-                        <h2 class="accordion-header" id="headingPhilips">
-                            <button class="accordion-button collapsed fw-bold d-flex align-items-center gap-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePhilips" aria-expanded="false" style="background-color: #fff; color: #333;">
-                                <div class="bg-light p-2 rounded text-primary">
-                                    <i class="bi bi-building fs-5"></i>
-                                </div>
-                                <div class="d-flex flex-column flex-grow-1 text-start">
-                                    <span class="fs-6">Philips Healthcare</span>
-                                    <span class="text-muted small fw-normal">Diagnóstico & Imagem</span>
-                                </div>
-                                <span class="badge bg-light text-dark border px-3 py-2 me-3 fw-normal" style="border-radius: 6px;">
-                                    Total Equipments: 1
-                                </span>
-                            </button>
-                        </h2>
-                        <div id="collapsePhilips" class="accordion-collapse collapse" data-bs-parent="#suppliers-accordion">
-                            <div class="accordion-body bg-light border-top p-4">
-                                <div class="text-center text-muted py-4">
-                                    <i class="bi bi-box-seam fs-1 d-block mb-2"></i>
-                                    Não há equipamentos associados a este fornecedor. Clique em "Add Supplier" para começar a adicionar equipamentos ou associe equipamentos existentes a este fornecedor.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
 
                 <!--modals adicionar fornecedor-->
