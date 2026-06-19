@@ -1,4 +1,16 @@
-<?php include '../includes/header.php'?>
+<?php require_once '../includes/header.php';
+
+$stmt = $pdo->query("
+    SELECT *
+    FROM fornecedores
+    ORDER BY nome_empresa
+");
+
+$fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+?>
+
+
 
     <div class="d-flex">
 

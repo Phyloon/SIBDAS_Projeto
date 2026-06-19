@@ -84,8 +84,8 @@ $pct_fora = $total ? round($fora      / $total * 100) : 0;
                                         <option>Disponibilidade</option>
                                         <option>Disponivel</option>
                                         <option>Em uso</option>
-                                        <option>Em manutencao</option>
-                                        <option>Fora de servico</option>
+                                        <option>Em Manutenção</option>
+                                        <option>Fora de Servico</option>
                                     </select>
                                 </div>
                                 
@@ -129,7 +129,7 @@ $pct_fora = $total ? round($fora      / $total * 100) : 0;
             <!--cards-->
             <div class="row mb-4">
                 <?php foreach ($equipamentos as $eq): ?>
-                <div class="col-3 mb-4" data-group="<?= htmlspecialchars($eq['grupo']) ?>" data-availability="<?= htmlspecialchars($eq['estado']) ?>" data-department="<?= htmlspecialchars($eq['departamento']) ?>">
+                <div class="col-3 mb-4" data-group="<?= htmlspecialchars($eq['grupo']) ?>" data-availability="<?= htmlspecialchars($eq['estado']) ?>" data-department="<?= htmlspecialchars($eq['departamento']) ?>" data-criticality="<?= htmlspecialchars($eq['criticidade']) ?>">
                     <div class="card h-100" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modal_<?= $eq['id'] ?>">
                         <div style="padding: 15px;">
                             <img src="<?= htmlspecialchars($eq['imagem']) ?>" class="card-img-top" style="border-radius: 15px;">
@@ -142,7 +142,7 @@ $pct_fora = $total ? round($fora      / $total * 100) : 0;
                             <li class="list-group-item">Modelo: <?= htmlspecialchars($eq['modelo']) ?></li>
                             <li class="list-group-item"><?= htmlspecialchars($eq['serial']) ?></li>
                             <li class="list-group-item"><?= htmlspecialchars($eq['estado']) ?></li>
-                            <li class="list-group-item"><?= htmlspecialchars($eq['local_equipamento']) ?></li>
+                            <li class="list-group-item"><?= htmlspecialchars(("Wing: " . $eq['location_wing'] ?? '') . " || Floor: " . ($eq['location_floor'] ?? '') . " || Room: " . ($eq['location_room'] ?? '')) ?></li>
                         </ul>
                     </div>
                 </div>
@@ -175,12 +175,12 @@ $pct_fora = $total ? round($fora      / $total * 100) : 0;
                                     <!-- State -->
                                     <div class="card px-3 py-2">
                                         <small class="text-muted">Estado</small>
-                                        <span><i class="bi bi-circle-fill me-1" style="font-size: 0.5rem;"><?= htmlspecialchars($eq['estado']) ?></i></span> 
+                                        <span><i class="bi bi-circle-fill me-1" style="text-decoration: none;" ><?= htmlspecialchars($eq['estado']) ?></i></span> 
                                     </div>
                                     
                                     <div class="card px-3 py-2">
                                         <small class="text-muted">Criticidade</small>
-                                        <small><i class="bi bi-exclamation-triangle-fill me-1"></i> Baixa</small>
+                                        <small><i class="bi bi-exclamation-triangle-fill me-1"></i> <?= htmlspecialchars($eq['criticidade']) ?> </small>
                                     </div>
                                 </div>
                             </div>
@@ -196,8 +196,8 @@ $pct_fora = $total ? round($fora      / $total * 100) : 0;
                             <hr>
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <h6 class="fw-bold mb-0"><i class="bi bi-map-fill me-2 text-decoration-none"></i> Localização:</h6>
-                                <span class="me-2"><?= htmlspecialchars($eq['local_equipamento']) ?></span>
-                                <span class="text-muted"><?= htmlspecialchars($eq['local_equipamento']) ?></span>
+                                <span class="me-2"><?= htmlspecialchars(("Wing: " . $eq['location_wing'] ?? '') . " || Floor: " . ($eq['location_floor'] ?? '') . " || Room: " . ($eq['location_room'] ?? '')) ?></span>
+                                
                             </div>  
 
                              

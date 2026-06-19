@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+    // 4 bar graph on dashboard
     // only attach filters if the filter bar exists on this page
     if (document.querySelector('.filter-bar')) {
         document.querySelector('.filter-bar input').addEventListener('input', applyFilters);
@@ -7,6 +8,13 @@ document.addEventListener('DOMContentLoaded', function () {
             select.addEventListener('change', applyFilters);
         });
     }
+
+    if (document.querySelector('.filter-bar-modal')) {
+    document.querySelector('.filter-bar-modal input')?.addEventListener('input', applyFilters);
+    document.querySelectorAll('.filter-bar-modal select').forEach(select => {
+        select.addEventListener('change', applyFilters);
+    });
+}
 
     // --- CORREÇÃO 1: Mudar o 'return' por um bloco 'if' seguro ---
     const canvas = document.getElementById('statusChart');
@@ -73,10 +81,13 @@ function applyFilters() {
     const floor        = document.querySelector('select[data-filter="floor"]')?.value;
     const department   = document.querySelector('select[data-filter="department"]')?.value;
     // Evita crash se a filter-bar não existir na página atual usando ?.value
-    const search       = document.querySelector('.filter-bar input')?.value.toLowerCase() || '';
+    const search       = document.querySelector('.filter-bar input')?.value.toLowerCase() || document.querySelector('.filter-bar-modal input')?.value.toLowerCase() || '';
     const role         = document.querySelector('select[data-filter="role"]')?.value;
     const availability = document.querySelector('select[data-filter="availability"]')?.value;
+    const group        = document.querySelector('select[data-filter="group"]')?.value;
+    const criticality  = document.querySelector('select[data-filter="criticality"]')?.value;
 
+    // only works on the table, cuz it says tbody
     document.querySelectorAll('tbody tr').forEach(row => {
         const matchWing   = !wing || wing === 'All Wings'             || row.dataset.wing === wing;
         const matchFloor  = !floor || floor === 'All Floors'           || row.dataset.floor === floor;
@@ -85,6 +96,18 @@ function applyFilters() {
         const matchRole   = !role || role === 'All Roles'             || row.dataset.role === role;
         const matchAvailability = !availability || availability === 'All Availability'     || row.dataset.availability === availability;
 
+        
+
         row.style.display = (matchWing && matchFloor && matchDept && matchSearch && matchRole && matchAvailability) ? '' : 'none';
+    });
+
+    document.querySelectorAll('[data-group]').forEach(card => {
+        const matchGroup  = !group || group === 'Grupo' || card.dataset.group === group;
+        const matchAvail  = !availability || availability === 'Disponibilidade' || card.dataset.availability === availability;
+        const matchDept   = !department || department === 'Departamento' || card.dataset.department === department;
+        const matchSearch = !search || card.textContent.toLowerCase().includes(search);
+        const matchCriticality = !criticality || criticality === "Criticidade" || card.dataset.criticality === criticality;
+
+        card.style.display = (matchGroup && matchAvail && matchDept && matchSearch && matchCriticality) ? '' : 'none';
     });
 }

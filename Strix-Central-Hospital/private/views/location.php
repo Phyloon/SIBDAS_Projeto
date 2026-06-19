@@ -4,7 +4,7 @@ include '../includes/location_stats.php';
 ?>
 
     <?php
-    // Ensure stats variables are defined to avoid undefined variable notices
+    // estava a dar undefined variable, isto resolve
     $total = isset($total) ? $total : 0;
     $located = isset($located) ? $located : 0;
     $unconfirmed = isset($unconfirmed) ? $unconfirmed : 0;
