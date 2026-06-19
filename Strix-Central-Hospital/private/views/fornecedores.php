@@ -3,16 +3,16 @@
 $stmt = $pdo->query("SELECT * FROM fornecedores ORDER BY nome_empresa");
 $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-//get all equipments
-$stmtEq = $pdo->query("SELECT * FROM equipamentos ORDER BY nome");
+//get the join between supplier id's on mixed table and the equipment id's associated to them
+$stmtEq = $pdo->query("SELECT ef.fornecedor_id, e.* FROM equipamento_fornecedor ef INNER JOIN equipamentos e ON ef.equipamento_id = e.id ORDER BY e.nome");
 $allEquipments = $stmtEq->fetchAll(PDO::FETCH_ASSOC);
 
 //agrupar equipamento por fornecedor
 $eqBySupplier = [];
 foreach($allEquipments as $eq) {
-    // use marca to make a connection
-    $marca = !empty($eq['marca']) ? $eq['marca'] : 'Desconhecido';
-    $eqBySupplier[$marca][] = $eq;
+    // second one shows desconheido if an equipment doesnt have a supplier
+    $supplierID = !empty($eq['fornecedor_id']) ? $eq['fornecedor_id'] : 'Desconhecido';
+    $eqBySupplier[$supplierID][] = $eq;
 }
 
 ?>
@@ -183,11 +183,15 @@ foreach($allEquipments as $eq) {
                     </div>
                     
                     <!--Fornecedores e equipamentos correspondentes-->
-                    <?php foreach($eqBySupplier as $marca => $equipamentosMarca): ?>
+                    <?php foreach($fornecedores as $f): ?>
                         <?php
-                            //criar um safe id, remove tudo o que nao e um ^, letra ou numero e substitui por " " em todos os $marca
-                            $safeId = preg_replace('/[^a-zA-Z0-9]/', '', $marca); 
+                            $supplierId = $f['id'];
+                            // Get equipment for this specific supplier, empty array if none exist yet
+                            $equipamentosMarca = $eqBySupplier[$supplierId] ?? []; 
                             $totalEq = count($equipamentosMarca);
+                            
+                            // Using the numeric ID makes it safe for Bootstrap targets
+                            $safeId = $supplierId;
                         ?>
                         <div class="accordion-item border-0 shadow-sm mb-3" style="border-radius: 12px; overflow: hidden;">
                             <h2 class="accordion-header" id="heading<?= $safeId ?>">
@@ -196,7 +200,7 @@ foreach($allEquipments as $eq) {
                                         <i class="bi bi-building fs-5"></i>
                                     </div>
                                     <div class="d-flex flex-column flex-grow-1 text-start">
-                                        <span class="fs-6"><?= htmlspecialchars($marca) ?></span>
+                                        <span class="fs-6"><?= htmlspecialchars($f['nome_empresa']) ?></span>
                                         <span class="text-muted small fw-normal">Equipamentos associados</span>
                                     </div>
                                     
@@ -210,15 +214,20 @@ foreach($allEquipments as $eq) {
                                 <div class="accordion-body bg-light border-top p-4">
                                     <div class="row g-4">
                                         
-                                        <?php foreach($equipamentosMarca as $eq): 
-                                            // Logic for the beautiful colored status badges
-                                            $estado = $eq['estado'];
-                                            $bClass = 'secondary'; // Default gray
-                                            if ($estado === 'Disponivel') $bClass = 'success';
-                                            elseif ($estado === 'Em Uso') $bClass = 'primary';
-                                            elseif ($estado === 'Em Manutenção') $bClass = 'warning text-dark';
-                                            elseif ($estado === 'Fora de Servico') $bClass = 'danger';
-                                        ?>
+                                        <?php if (empty($equipamentosMarca)): ?>
+                                            <div class="col-12 text-center text-muted py-3">
+                                                <i class="bi bi-box-seam fs-4 d-block mb-2"></i>
+                                                Nenhum equipamento associado a este fornecedor.
+                                            </div>
+                                        <?php else: ?>
+                                            <?php foreach($equipamentosMarca as $eq): 
+                                                $estado = $eq['estado'];
+                                                $bClass = 'secondary';
+                                                if ($estado === 'Disponivel') $bClass = 'success';
+                                                elseif ($estado === 'Em Uso') $bClass = 'primary';
+                                                elseif ($estado === 'Em Manutenção') $bClass = 'warning text-dark';
+                                                elseif ($estado === 'Fora de Servico') $bClass = 'danger';
+                                            ?>
                                         <div class="col-3">
                                             <div class="card border-0 shadow-sm h-100" style="cursor: pointer;">
                                                 <div style="padding: 15px;">   
@@ -242,7 +251,7 @@ foreach($allEquipments as $eq) {
                                             </div>
                                         </div>
                                         <?php endforeach; ?>
-
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>  
@@ -342,6 +351,7 @@ foreach($allEquipments as $eq) {
                                     <div class="col-6">
                                         <label class="form-label">Criticality</label>
                                         <select class="form-select" style="border-radius:8px;">
+                                            <option value="">Select criticality...</option>
                                             <option value="low">Low</option>
                                             <option value="medium">Medium</option>
                                             <option value="high">High</option>
@@ -353,9 +363,9 @@ foreach($allEquipments as $eq) {
                                         <label class="form-label">Supplier</label>
                                         <select class="form-select" style="border-radius:8px;">
                                             <option value="">Select supplier...</option>
-                                            <option>Zoll Medical Corporation</option>
-                                            <option>Drägerwerke AG</option>
-                                            <option>Philips Healthcare</option>
+                                                <?php foreach($fornecedores as $f): ?>
+                                                    <option value="<?= $f['id'] ?>"><?= htmlspecialchars($f['nome_empresa']) ?></option>
+                                                <?php endforeach; ?>
                                         </select>
                                     </div>
 
