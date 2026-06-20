@@ -119,14 +119,14 @@ include '../includes/location_stats.php';
                             <tbody>
                                 <?php 
                                     try {
-                                        $smt = $pdo->query("SELECT nome, serial, location_wing, location_floor, location_room, departamento FROM equipamentos");
+                                        $smt = $pdo->query("SELECT nome, serial, location_wing, location_floor, location_room, departamento, last_scanned FROM equipamentos ORDER BY nome ");
                                         $equipamentos = $smt->fetchAll(PDO::FETCH_ASSOC);
                                         foreach ($equipamentos as $row): 
                                             // Logic to determine status badge based on data presence
                                             $isLocated = (!empty($row['location_wing']) && !empty($row['location_room']));
                                             $badgeClass = $isLocated ? 'bg-success' : 'bg-danger';
+                                  
                                             $statusText = $isLocated ? 'Located' : 'Missing';
-                                    
                                 ?>
                                     <tr data-wing="<?= htmlspecialchars($row['location_wing'] ?? 'Unknown') ?>" 
                                         data-floor="<?= htmlspecialchars($row['location_floor'] ?? 'Unknown') ?>" 
@@ -134,7 +134,7 @@ include '../includes/location_stats.php';
                                         
                                         <td>
                                             <div class="equipment-name"><?= htmlspecialchars($row['nome']) ?></div>
-                                            <div class="equipment-id">#<?= htmlspecialchars($row['serial']) ?></div>
+                                            <div class="equipment-id"><?= htmlspecialchars($row['serial']) ?></div>
                                         </td>
                                         
                                         <td><span class="location-pill"><i class="bi bi-building"></i> <?= htmlspecialchars($row['location_wing'] ?? 'Unknown') ?></span></td>
@@ -142,14 +142,10 @@ include '../includes/location_stats.php';
                                         <td><span class="location-pill"><i class="bi bi-door-open"></i> <?= htmlspecialchars($row['location_room'] ?? 'Unknown') ?></span></td>
                                         <td><?= htmlspecialchars($row['departamento'] ?? 'Unknown') ?></td>
                                         
-                                        <td class="scan-time"><i class="bi bi-clock"></i> Today, 09:14</td>
+                                        <td class="scan-time"><i class="bi bi-clock"></i> <?= htmlspecialchars($row['last_scanned'] ?? 'Unknown') ?></td>
                                     </tr>
-                                    <?php 
-                                        endforeach; 
-                                    } catch (PDOException $e) {
-                                        echo "<tr><td colspan='7'>Error loading data: " . $e->getMessage() . "</td></tr>";
-                                    }
-                                    ?>
+
+                                <?php endforeach; } catch (PDOException $e) {echo "<tr><td colspan='7'>Error loading data: " . $e->getMessage() . "</td></tr>"; } ?>
                             </tbody>
                         </table>
                     </div>
@@ -159,70 +155,83 @@ include '../includes/location_stats.php';
         </div>
     </div>
 
-    <!-- QR Scan Modal -->
+    <!-- Update Location Modal -->
     <div class="modal fade" id="updateLocationModal" tabindex="-1">
-        <div class="modal-dialog ">
+        <div class="modal-dialog">
             <div class="modal-content" style="border-radius: 16px; border: none;">
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold">Log Equipment Location</h5>
+                <form method="POST" action="../includes/process_location_update.php">
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title fw-bold">Log Equipment Location</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body pt-3">
 
-                    <!--CLOSE BUTTON-->
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body pt-3">
-
-                    <!-- QR placeholder -->
-                    <div class="d-flex flex-column align-items-center mb-4">
-                        <div class="qr-placeholder">
-                            <i class="bi bi-qr-code-scan"></i>
-                            <span>QR scanner goes here</span>
+                        <!-- QR placeholder -->
+                        <div class="d-flex flex-column align-items-center mb-4">
+                            <div class="qr-placeholder">
+                                <i class="bi bi-qr-code-scan"></i>
+                                <span>QR scanner goes here</span>
+                            </div>
+                            <small class="text-muted mt-2">Scan the QR code on the equipment, or select it below</small>
                         </div>
-                        <small class="text-muted mt-2">Scan the QR code on the equipment, or enter the ID manually below</small>
-                    </div>
 
-                    <!-- Equipment ID -->
-                    <div class="mb-3">
-                        <label class="form-label">Equipment ID</label>
-                        <input type="text" class="form-control" placeholder="e.g. #EQ-00142" style="border-radius:8px;">
-                    </div>
-
-                    <!-- Location fields -->
-                    <div class="row g-3">
-                        <div class="col-12">
-                            <label class="form-label">Wing</label>
-                            <select class="form-select" style="border-radius:8px;">
-                                <option value="">Select wing...</option>
-                                <option>Wing A</option>
-                                <option>Wing B</option>
-                                <option>Wing C</option>
+                        <!-- Equipment Selection -->
+                        <div class="mb-3">
+                            <label class="form-label">Select Equipment <span class="text-danger">*</span></label>
+                            <select name="equipment_id" class="form-select" style="border-radius:8px;" required>
+                                <option value="">-- Select Equipment --</option>
+                                <?php 
+                                try {
+                                    $stmt = $pdo->query("SELECT id, nome, serial FROM equipamentos ORDER BY nome");
+                                    while ($eq = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                        echo "<option value='{$eq['id']}'>{$eq['nome']} - {$eq['serial']}</option>";
+                                    }
+                                } catch (PDOException $e) {
+                                    echo "<option value=''>Error loading equipment</option>";
+                                }
+                                ?>
                             </select>
                         </div>
-                        <div class="col-6">
-                            <label class="form-label">Floor</label>
-                            <select class="form-select" style="border-radius:8px;">
-                                <option value="">Select floor...</option>
-                                <option>Floor 1</option>
-                                <option>Floor 2</option>
-                                <option>Floor 3</option>
-                            </select>
-                        </div>
-                        <div class="col-6">
-                            <label class="form-label">Room</label>
-                            <input type="text" class="form-control" placeholder="e.g. Room 204" style="border-radius:8px;">
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">Notes <span class="text-muted fw-normal">(optional)</span></label>
-                            <textarea class="form-control" rows="2" placeholder="e.g. Left next to bed 3" style="border-radius:8px;"></textarea>
-                        </div>
-                    </div>
 
-                </div>
-                <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius:8px;">Cancel</button>
-                    <button type="button" class="btn btn-primary-custom">
-                        <i class="bi bi-check-lg me-1"></i> Confirm Location
-                    </button>
-                </div>
+                        <hr>
+
+                        <!-- Location fields -->
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label">Wing <span class="text-danger">*</span></label>
+                                <select name="location_wing" class="form-select" style="border-radius:8px;" required>
+                                    <option value="">Select wing...</option>
+                                    <option value="WA">Wing A</option>
+                                    <option value="WB">Wing B</option>
+                                    <option value="WC">Wing C</option>
+                                    <option value="WD">Wing D</option>
+                                    <option value="WE">Wing E</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Floor</label>
+                             <input type="text" class="form-control" name="location_floor" placeholder="e.g. 02" style="border-radius:8px;">
+                            </div>
+
+                            <div class="col-6">
+                                <label class="form-label">Room</label>
+                                <input type="text" class="form-control" name="location_room" placeholder="e.g. 201" style="border-radius:8px;">
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">Notes <span class="text-muted fw-normal">(optional)</span></label>
+                                <textarea  class="form-control" rows="2" placeholder="e.g. Left next to bed 3" style="border-radius:8px;"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius:8px;">Cancel</button>
+                        <button type="submit" name="update_location" class="btn btn-primary-custom">
+                            <i class="bi bi-check-lg me-1"></i> Confirm Location
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

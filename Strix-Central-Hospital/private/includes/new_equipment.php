@@ -33,32 +33,11 @@
                             <input type="text" name="modelo" class="form-control" placeholder="e.g. R Series" style="border-radius:8px;">
                         </div>
                         
-                        <div class="col-6">
+                        <div class="col-4">
                             <label class="form-label">Serial</label>
                             <input type="text" name="serial" class="form-control" placeholder="e.g. 04.324.00" style="border-radius:8px;">
                         </div>
 
-                        <div class="col-6">
-                            <label class="form-label">Criticidade</label>
-                            <select name="criticidade" class="form-select" style="border-radius:8px;">
-                                <option value="">Select criticality...</option>
-                                <option value="low">Baixa</option>
-                                <option value="medium">Media</option>
-                                <option value="high">Alta</option>
-                                <option value="life support">Suporte de Vida</option>
-                            </select>
-                        </div>
-
-                        <div class="col-4">
-                            <label class="form-label">Fornecedor</label>
-                            <select  name="fornecedor_id" class="form-select" style="border-radius:8px;">
-                                <option value="">Select supplier...</option>
-                                    <?php foreach($fornecedores as $f): ?>
-                                        <option value="<?= $f['id'] ?>"><?= htmlspecialchars($f['nome_empresa']) ?></option>
-                                    <?php endforeach; ?>
-                            </select>
-                        </div>
-                        
                         <div class="col-4">
                             <label class="form-label">Marca</label>
                             <input type="text" name="marca" class="form-control" placeholder="e.g. R Series" style="border-radius:8px;">
@@ -68,6 +47,58 @@
                             <label class="form-label">Year of Mfg.</label>
                             <input type="number" min="1990" max="2026" class="form-control" name="ano_fabrico" placeholder="YYYY" style="border-radius:8px;">
                         </div>
+
+                        <div class="col-6">
+                            <label class="form-label">Fabricante</label>
+                            <select name="fornecedor_id" class="form-select" style="border-radius:8px;">
+                                <option value="">Select...</option>
+                                <?php foreach($fornecedores as $f): ?>
+                                    <?php if($f['tipo_fornecedor'] === 'Fabricante'): ?>
+                                        <option value="<?= $f['id'] ?>"><?= htmlspecialchars($f['nome_empresa']) ?></option>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="col-6">
+                            <label class="form-label">Distribuidor Comercial</label>
+                            <select name="fornecedor_distribuidor" class="form-select" style="border-radius:8px;">
+                                <option value="">Select...</option>
+                                <?php foreach($fornecedores as $f): ?>
+                                    <?php if($f['tipo_fornecedor'] === 'Distribuidor' || $f['tipo_fornecedor'] === 'Representante'): ?>
+                                        <option value="<?= $f['id'] ?>"><?= htmlspecialchars($f['nome_empresa']) ?></option>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="col-6">
+                            <label class="form-label">Assistência Técnica</label>
+                            <select name="fornecedor_manutencao" class="form-select" style="border-radius:8px;">
+                                <option value="">Select...</option>
+                                <?php foreach($fornecedores as $f): ?>
+                                    <?php if($f['tipo_fornecedor'] === 'Manutencao'): ?>
+                                        <option value="<?= $f['id'] ?>"><?= htmlspecialchars($f['nome_empresa']) ?></option>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="col-6">
+                            <label class="form-label">Fornecedor de Consumíveis</label>
+                            <select name="fornecedor_consumiveis" class="form-select" style="border-radius:8px;">
+                                <option value="">Select...</option>
+                                <?php foreach($fornecedores as $f): ?>
+                                    <?php if($f['tipo_fornecedor'] === 'Consumiveis'): ?>
+                                        <option value="<?= $f['id'] ?>"><?= htmlspecialchars($f['nome_empresa']) ?></option>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        
+                        
+
+                        
 
                         <div class="col-4">
                             <label class="form-label">Wing (Ala)</label>

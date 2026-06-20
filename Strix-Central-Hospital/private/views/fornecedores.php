@@ -43,7 +43,7 @@ foreach($allEquipments as $eq) {
                         <input type='text' id='supplierSearchInput' class="form-control form-control-sm" placeholder="Search Supplier or Equipment..." style="border-radius:8px; width:260px;">
                         <div class="dropdown">
                             <button class="btn btn-primary-custom btn-sm" data-bs-toggle="dropdown" data-bs-target="#addDropdown" style="border-radius: 8px;">
-                                <i class="bi bi-chevron-down me-2"></i> Adicionar
+                                <i class="bi bi-chevron-down me-2"></i> Funcoes
                             </button>
                             <div class="dropdown-menu dropdown-menu-end" id="addDropdown">
                                 <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addSupplierModal">
@@ -51,6 +51,9 @@ foreach($allEquipments as $eq) {
                                 </button>
                                 <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addEquipmentModal">
                                     <i class="bi bi-wrench me-2"></i> Adicionar Equipamento
+                                </button>
+                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#linkEquipmentModal">
+                                    <i class="bi bi-link-45deg me-2"></i> Ligar Equipamento a Fornecedor
                                 </button>
                             </div>
                         </div>
@@ -261,63 +264,136 @@ foreach($allEquipments as $eq) {
                     <?php endforeach; ?>
                 </div>
 
-                <!--modals adicionar fornecedor-->
-                <div class="modal fade" id="addSupplierModal" tabindex="-1">
+                <!-- modal link equipamento e fornecedor -->
+                <div class="modal fade" id="linkEquipmentModal" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content" style="border-radius: 16px; border: none;">
-                            <div class="modal-header border-0 pb-0">
-                                <h5 class="modal-title fw-bold">Add New Supplier</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body pt-3">
-
-                                <div class="d-flex flex-column align-items-center mb-4">
-                                    <div class="qr-placeholder" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; border-radius: 50%;">
-                                        <i class="bi bi-building" style="font-size: 2rem; color: #64748b;"></i>
-                                    </div>
-                                    <small class="text-muted mt-2">Upload or assign a supplier logo</small>
+                            <form action="../includes/process_link_equip_forn.php" method="post">
+                                <div class="modal-header border-0 pb-0">
+                                    <h5 class="modal-title fw-bold">Link Equipment to Supplier</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
-
-                                <div class="row g-3">
-                                    <div class="col-12">
-                                        <label class="form-label">Supplier Name</label>
-                                        <input type="text" class="form-control" placeholder="e.g. Medtronic" style="border-radius:8px;">
-                                    </div>
-                                    
-                                    <div class="col-12">
-                                        <label class="form-label">Category</label>
-                                        <select class="form-select" style="border-radius:8px;">
-                                            <option value="">Select category...</option>
-                                            <option>Life Support</option>
-                                            <option>Imaging & Diagnostics</option>
-                                            <option>Patient Monitoring</option>
-                                            <option>Surgical Equipment</option>
+                                <div class="modal-body pt-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Select Equipment</label>
+                                        <select name="equipamento_id" class="form-select" required>
+                                            <?php 
+                                            $stmt = $pdo->query("SELECT id, nome, serial FROM equipamentos ORDER BY nome");
+                                            foreach($stmt->fetchAll() as $eq): ?>
+                                                <option value="<?= $eq['id'] ?>"><?= $eq['nome'] ?> (<?= $eq['serial'] ?>)</option>
+                                            <?php endforeach; ?>
                                         </select>
                                     </div>
-
-                                    <div class="col-12">
-                                        <label class="form-label">Contact Email</label>
-                                        <input type="email" class="form-control" placeholder="contact@supplier.com" style="border-radius:8px;">
-                                    </div>
-
-                                    <div class="col-12">
-                                        <label class="form-label">Description <span class="text-muted fw-normal">(optional)</span></label>
-                                        <textarea class="form-control" rows="2" placeholder="Brief info about the supplier" style="border-radius:8px;"></textarea>
+                                    <div class="mb-3">
+                                        <label class="form-label">Select Supplier</label>
+                                        <select name="fornecedor_id" class="form-select" required>
+                                            <?php 
+                                            $stmt = $pdo->query("SELECT id, nome_empresa FROM fornecedores ORDER BY nome_empresa");
+                                            foreach($stmt->fetchAll() as $f): ?>
+                                                <option value="<?= $f['id'] ?>"><?= $f['nome_empresa'] ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
                                     </div>
                                 </div>
-
-                            </div>
-                            <div class="modal-footer border-0 pt-3">
-                                <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius:8px;">Cancel</button>
-                                <button type="button" class="btn btn-primary-custom">
-                                    <i class="bi bi-plus-lg me-1"></i> Add Supplier
-                                </button>
-                            </div>
+                                <div class="modal-footer border-0">
+                                    <button type="submit" class="btn btn-primary-custom">Link Equipment</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
 
-                 <!--modal adicionar equipamento-->
+                <!--modals adicionar fornecedor-->
+                <div class="modal fade" id="addSupplierModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content" style="border-radius: 16px; border: none;">
+
+                            <form action="../includes/process_new_supplier.php" method="post">
+                                <div class="modal-header border-0 pb-0">
+                                    <h5 class="modal-title fw-bold">Add New Supplier</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body pt-3">
+
+                                    <div class="d-flex flex-column align-items-center mb-4">
+                                        <div class="qr-placeholder" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; border-radius: 50%;">
+                                            <i class="bi bi-building" style="font-size: 2rem; color: #64748b;"></i>
+                                        </div>
+                                        <small class="text-muted mt-2">Upload or assign a supplier logo</small>
+                                    </div>
+
+                                    <div class="row g-3">
+                                        <div class="col-6">
+                                            <label class="form-label">Nome da Empresa</label>
+                                            <input type="text" name="nome_empresa" class="form-control" placeholder="e.g. Medtronic" style="border-radius:8px;">
+                                        </div>
+                                        
+                                        <div class="col-6">
+                                            <label class="form-label">Tipo de fornecedor </label>
+                                            <select class="form-select" name="tipo_fornecedor" style="border-radius:8px;">
+                                                <option value="">Select category...</option>
+                                                <option value="Fabricante">Fabricante</option>
+                                                <option value="Distribuidor">Distribuidor ou Fornecedor Comercial</option>
+                                                <option value="Assistencia">Empresa de assistencia tecnica</option>
+                                                <option value="Consumiveis">Fornecedor de Consumiveis e acessorios</option>
+                                                <option value="Outro">Outro</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="form-label">Contact Email</label>
+                                            <input type="email" name="email" class="form-control" placeholder="contact@supplier.com" style="border-radius:8px;">
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="form-label">Website</label>
+                                            <input type="text" name="website" class="form-control" placeholder="www.empresa.com" style="border-radius:8px;">
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="form-label">Endereco</label>
+                                            <input type="text" name="endereco" class="form-control" placeholder="Rua XXXX, 123, Porto Portugal" style="border-radius:8px;">
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="form-label">nif</label>
+                                            <input type="text" name="nif" class="form-control" placeholder="123 456 789" style="border-radius:8px;">
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="form-label">Contact Telefone</label>
+                                            <input type="tel" name="telefone" class="form-control" placeholder="+351 911 871 461" style="border-radius:8px;">
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="form-label">Pessoa Contacto (PC)</label>
+                                            <input type="text" name="pessoa_contacto" class="form-control" placeholder="Joana Teixeira" style="border-radius:8px;">
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="form-label">Telefone da (PC)</label>
+                                            <input type="tel" name="telefone_contacto" class="form-control" placeholder="+351 911 871 461" style="border-radius:8px;">
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="form-label">Description <span class="text-muted fw-normal">(optional)</span></label>
+                                            <textarea class="form-control" rows="2" placeholder="Brief info about the supplier" style="border-radius:8px;"></textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer border-0 pt-3">
+                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius:8px;">Cancel</button>
+                                    <button type="submit" class="btn btn-primary-custom">
+                                        <i class="bi bi-plus-lg me-1"></i> Add Supplier
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!--modal adicionar equipamento-->
                 <?php include '../includes/new_equipment.php'; ?>
 
                 <!--modal equip-->
