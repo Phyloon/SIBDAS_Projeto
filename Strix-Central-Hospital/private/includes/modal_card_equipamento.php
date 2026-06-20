@@ -1,6 +1,6 @@
-// IT SAYS ERROR BUT IT WORKS ANYWAY, WHEN IT IS INCLUDED $allEquipments IS DEFINED B4HAND, SO IT WORKS
+<!--IT SAYS ERROR BUT IT WORKS ANYWAY, WHEN IT IS INCLUDED $allEquipments IS DEFINED B4HAND, SO IT WORKS-->
 
-//remover aviso de erro
+<!--remover aviso de erro-->
 <?php /** @var array $allEquipments */ ?>
 
 <?php foreach ($allEquipments as $eq): ?>

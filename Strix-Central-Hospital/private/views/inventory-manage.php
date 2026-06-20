@@ -2,7 +2,9 @@
 require_once '../../config/config.php';
 $stmt = $pdo->query("SELECT * FROM equipamentos");
 $allEquipments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-           
+
+$stmtEq = $pdo->query("SELECT * FROM fornecedores ORDER BY nome_empresa");
+$fornecedores = $stmtEq->fetchAll(PDO::FETCH_ASSOC);
 
 // stats for progress bar
 $total = count($allEquipments);
@@ -16,6 +18,28 @@ $pct_uso  = $total ? round($em_uso    / $total * 100) : 0;
 $pct_man  = $total ? round($manutencao/ $total * 100) : 0;
 $pct_fora = $total ? round($fora      / $total * 100) : 0;
 ?>
+
+
+
+
+<?php if (!empty($_SESSION['success'])): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <?= $_SESSION['success'] ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <?php unset($_SESSION['success']); ?>
+<?php endif; ?>
+
+<?php if (!empty($_SESSION['error'])): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <?= $_SESSION['error'] ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <?php unset($_SESSION['error']); ?>
+<?php endif; ?>
+
+
+
 
 <?php include '../includes/header.php'?>
 
@@ -150,7 +174,7 @@ $pct_fora = $total ? round($fora      / $total * 100) : 0;
                 <?php endforeach; ?> 
             </div> 
 
-            //modal equip
+            <!--modal equip-->
             <?php include '../includes/modal_card_equipamento.php'; ?>
             
             <!--modal adicionar equipamento-->

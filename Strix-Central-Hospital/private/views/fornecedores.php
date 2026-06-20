@@ -386,7 +386,7 @@ foreach($allEquipments as $eq) {
                     </div>
                 </div>
 
-                //modal equip
+                <!--modal equip-->
                 <?php include '../includes/modal_card_equipamento.php'; ?>
             </div>
         </div>
