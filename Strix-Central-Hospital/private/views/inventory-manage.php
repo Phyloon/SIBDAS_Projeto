@@ -3,8 +3,10 @@ require_once '../../config/config.php';
 $stmt = $pdo->query("SELECT * FROM equipamentos");
 $allEquipments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmtEq = $pdo->query("SELECT * FROM fornecedores ORDER BY nome_empresa");
-$fornecedores = $stmtEq->fetchAll(PDO::FETCH_ASSOC);
+//get all suppliers
+$stmt = $pdo->query("SELECT * FROM fornecedores ORDER BY nome_empresa");
+$fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 // stats for progress bar
 $total = count($allEquipments);

@@ -10,11 +10,34 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (document.querySelector('.filter-bar-modal')) {
-    document.querySelector('.filter-bar-modal input')?.addEventListener('input', applyFilters);
-    document.querySelectorAll('.filter-bar-modal select').forEach(select => {
+        document.querySelector('.filter-bar-modal input')?.addEventListener('input', applyFilters);
+        document.querySelectorAll('.filter-bar-modal select').forEach(select => {
         select.addEventListener('change', applyFilters);
     });
 }
+
+    // searchbar fornecedores
+    const searchInput = document.getElementById('supplierSearchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', e => {
+            let filter = e.target.value.toLowerCase().trim();
+            
+            document.querySelectorAll('#suppliers-accordion > .accordion-item').forEach(acc => {
+                let isSupplierMatch = acc.querySelector('.accordion-header').textContent.toLowerCase().includes(filter);
+                let hasGearMatch = false;
+
+                acc.querySelectorAll('.col-3').forEach(card => {
+                    // If the supplier matches, show all gear. Otherwise, only show matching gear.
+                    let showCard = isSupplierMatch || card.textContent.toLowerCase().includes(filter);
+                    card.style.display = showCard ? '' : 'none';
+                    if (showCard) hasGearMatch = true;
+                });
+
+                // Show the accordion if it's empty, if the supplier matched, or if gear matched
+                acc.style.display = (filter === '' || isSupplierMatch || hasGearMatch) ? '' : 'none';
+            });
+        });
+    }
 
     // --- CORREÇÃO 1: Mudar o 'return' por um bloco 'if' seguro ---
     const canvas = document.getElementById('statusChart');

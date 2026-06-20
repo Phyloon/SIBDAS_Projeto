@@ -37,21 +37,24 @@ foreach($allEquipments as $eq) {
                         <p class="text-muted small mb-0">Consulte e gira o seu inventário através da rede de fornecedores da TrueTech.</p>
                     </div>
 
+
                     <!--adicionar fornecedor/item-->
-                    <div class="dropdown align-items-center">
-                        <button class="btn btn-primary-custom btn-sm" data-bs-toggle="dropdown" data-bs-target="#addDropdown" style="border-radius: 8px;">
-                            <i class="bi bi-chevron-down me-2"></i> Adicionar
-                        </button>
-                        <div class="dropdown-menu" id="addDropdown">
-                            <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addSupplierModal">
-                                <i class="bi bi-building me-2"></i> Adicionar Fornecedor
+                    <div class="d-flex align-items-center gap-2">
+                        <input type='text' id='supplierSearchInput' class="form-control form-control-sm" placeholder="Search Supplier or Equipment..." style="border-radius:8px; width:260px;">
+                        <div class="dropdown">
+                            <button class="btn btn-primary-custom btn-sm" data-bs-toggle="dropdown" data-bs-target="#addDropdown" style="border-radius: 8px;">
+                                <i class="bi bi-chevron-down me-2"></i> Adicionar
                             </button>
-                            <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addEquipmentModal">
-                                <i class="bi bi-wrench me-2"></i> Adicionar Equipamento
-                            </button>
+                            <div class="dropdown-menu dropdown-menu-end" id="addDropdown">
+                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addSupplierModal">
+                                    <i class="bi bi-building me-2"></i> Adicionar Fornecedor
+                                </button>
+                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addEquipmentModal">
+                                    <i class="bi bi-wrench me-2"></i> Adicionar Equipamento
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    
                 </div>
 
                 <!--main page content-->
@@ -316,75 +319,7 @@ foreach($allEquipments as $eq) {
                 </div>
 
                  <!--modal adicionar equipamento-->
-                <div class="modal fade" id="addEquipmentModal" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content" style="border-radius: 16px; border: none;">
-                            <div class="modal-header border-0 pb-0">
-                                <h5 class="modal-title fw-bold">Add New Equipment</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body pt-3">
-
-                                <div class="d-flex flex-column align-items-center mb-4">
-                                    <div class="qr-placeholder" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; border-radius: 50%;">
-                                        <i class="bi bi-box-seam" style="font-size: 2rem; color: #64748b;"></i>
-                                    </div>
-                                    <small class="text-muted mt-2">Register new inventory item</small>
-                                </div>
-
-                                <div class="row g-3">
-                                    <div class="col-6">
-                                        <label class="form-label">Equipment Name</label>
-                                        <input type="text" class="form-control" placeholder="e.g. Defibrillator" style="border-radius:8px;">
-                                    </div>
-
-                                    <div class="col-6">
-                                        <label class="form-label">Equipment Model</label>
-                                        <input type="text" class="form-control" placeholder="e.g. R Series" style="border-radius:8px;">
-                                    </div>
-                                    
-                                    <div class="col-6">
-                                        <label class="form-label">Equipment ID</label>
-                                        <input type="text" class="form-control" placeholder="e.g. 04.324.00" style="border-radius:8px;">
-                                    </div>
-
-                                    <div class="col-6">
-                                        <label class="form-label">Criticality</label>
-                                        <select class="form-select" style="border-radius:8px;">
-                                            <option value="">Select criticality...</option>
-                                            <option value="low">Low</option>
-                                            <option value="medium">Medium</option>
-                                            <option value="high">High</option>
-                                            <option value="life support">Life Support</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-12">
-                                        <label class="form-label">Supplier</label>
-                                        <select class="form-select" style="border-radius:8px;">
-                                            <option value="">Select supplier...</option>
-                                                <?php foreach($fornecedores as $f): ?>
-                                                    <option value="<?= $f['id'] ?>"><?= htmlspecialchars($f['nome_empresa']) ?></option>
-                                                <?php endforeach; ?>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-12">
-                                        <label class="form-label">Description <span class="text-muted fw-normal">(optional)</span></label>
-                                        <textarea class="form-control" rows="2" placeholder="Brief technical notes" style="border-radius:8px;"></textarea>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="modal-footer border-0 pt-3">
-                                <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius:8px;">Cancel</button>
-                                <button type="button" class="btn btn-primary-custom">
-                                    <i class="bi bi-plus-lg me-1"></i> Add Equipment
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?php include '../includes/new_equipment.php'; ?>
 
                 <!--modal equip-->
                 <?php include '../includes/modal_card_equipamento.php'; ?>
