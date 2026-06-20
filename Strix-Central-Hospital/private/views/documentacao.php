@@ -1,10 +1,26 @@
 <?php 
 require_once '../../config/config.php';
+//specify each type of foc possible
+$docTypes = [
+    "Manual de Utilizador", "Manual de Servico", "Certificado de Calibracao", 
+    "Contrato de Manutencao", "Faturas/Guia de Aquisicao", 
+    "Declaracao de Conformidade", "Relatorio Tecnico"
+];
 
-//get all equip
-$stmt = $pdo->query("SELECT id, nome, serial FROM equipamentos ORDER BY nome");
-$allEquipments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+//get all documents joined w equip
+$stmt = $pdo->query("SELECT d.*, e.nome as nome_equipamento, e.serial as serial_equipamento FROM documentos_equipamento d JOIN equipamentos e ON d.equipamento_id = e.id ORDER BY d.data_upload DESC ");
+$allDocuments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// all equip
+$stmtEq = $pdo->query("SELECT id, nome, serial FROM equipamentos ORDER BY nome");
+$allEquipments = $stmtEq->fetchAll(PDO::FETCH_ASSOC);
+
+// 3. Helper function to filter docs
+function getDocsByType($docs, $type) {
+    return array_filter($docs, function($d) use ($type) {
+        return $d['tipo_documento'] === $type;
+    });
+}
 ?>
 
 <?php include '../includes/header.php'?>
@@ -34,72 +50,66 @@ $allEquipments = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     
                     <div class="card-header bg-white border-bottom-0 pt-3 pb-0 px-3">
                         <ul class="nav nav-tabs border-bottom-0" id="documentTabs" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active fw-bold" id="all-tab" data-bs-toggle="tab" data-bs-target="#all-docs" type="button" role="tab" style="color: #333;">Manual de Utilizador</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link fw-bold text-muted" id="manuals-tab" data-bs-toggle="tab" data-bs-target="#manuals" type="button" role="tab">Manual de Servico</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link fw-bold text-muted" id="certs-tab" data-bs-toggle="tab" data-bs-target="#certs" type="button" role="tab">Certificado de Calibracao</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link fw-bold text-muted" id="invoices-tab" data-bs-toggle="tab" data-bs-target="#invoices" type="button" role="tab">Contrato de Manutencao</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link fw-bold text-muted" id="invoices-tab" data-bs-toggle="tab" data-bs-target="#invoices" type="button" role="tab">Faturas/Guia de Aquisicao</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link fw-bold text-muted" id="invoices-tab" data-bs-toggle="tab" data-bs-target="#invoices" type="button" role="tab">Declaracao de Conformidade</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link fw-bold text-muted" id="invoices-tab" data-bs-toggle="tab" data-bs-target="#invoices" type="button" role="tab">Relatorio Tecnico</button>
-                            </li>
+                            <?php foreach($docTypes as $index => $type): ?>
+                                <li class="nav-item">
+                                    <button class="nav-link <?= $index === 0 ? 'active' : '' ?>" 
+                                            data-bs-toggle="tab" data-bs-target="#tab-<?= $index ?>" type="button">
+                                        <?= $type ?>
+                                    </button>
+                                </li>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
                     
-                    <!-- TABLE OF DOCUMENTS -->
-                    <div class="card-body p-0 border-top">
-                        <div class="tab-content" id="documentTabsContent">
-                            <div class="tab-pane fade show active p-0" id="all-docs" role="tabpanel">
+                    <!--CONTENT TABLE-->
+                    <div class="tab-content mt-3">
+                        <?php foreach($docTypes as $index => $type): 
+                            $filteredDocs = getDocsByType($allDocuments, $type);
+                        ?>
+                            <div class="tab-pane fade <?= $index === 0 ? 'show active' : '' ?>" id="tab-<?= $index ?>">
                                 <div class="table-responsive">
-                                    <table class="table table-hover align-middle mb-0" style="table-layout: fixed">
-                                        <thead class="table-light text-muted small">
+                                    <table class="table table-hover">
+                                        <thead class="table-light">
                                             <tr>
                                                 <th class="ps-4" style="width: 22%;">Nome do Equipamento</th>
-                                                <th style="width: 22%;">Serial / ID</th>
+                                                <th style="width: 22%;">Serial</th>
                                                 <th style="width: 22%;">Nome do Ficheiro</th>
                                                 <th style="width: 22%;">Data de Upload</th>
                                                 <th class="text-end pe-4" style="width: 12%;">Ações</th>
                                             </tr>
                                         </thead>
-
-                                        <?php foreach($allEquipments as $eq): ?>
                                         <tbody>
-                                            <tr>
-                                                <td class="ps-4 fw-semibold text-dark"><?= htmlspecialchars($eq['nome']) ?></td>
-                                                <td class="text-muted small"><?= htmlspecialchars($eq['serial']) ?></td>
-                                                
-                                                <!-- the thing bellow truncates file name to something small enough to not break everything-->
-                                                <td class="text-truncate" style="max-width: 0;"><i class="bi bi-file-earmark-pdf text-danger me-2"></i>muito_longo.pdf</td>
-                                                <td class="text-muted small">20 Jun 2026</td>
-                                                <td class="text-end pe-4">
-                                                    <a href="#" class="btn btn-sm btn-light border me-1" title="Visualizar"><i class="bi bi-eye"></i></a>
-                                                    <a href="#" class="btn btn-sm btn-primary-custom" title="Download"><i class="bi bi-download"></i></a>
-                                                </td>
-                                            </tr>
+                                            <?php if (empty($filteredDocs)): ?>
+                                                <tr>
+                                                    <td colspan="5" class="text-center text-muted">No documents found for this category.</td>
+                                                </tr>
+                                            <?php else: ?>
+                                                <?php foreach($filteredDocs as $doc): ?>
+                                                    <tr>
+                                                        <td><?= htmlspecialchars($doc['nome_equipamento']) ?></td>
+                                                        <td><?= htmlspecialchars($doc['serial_equipamento']) ?></td>
+                                                        <td><?= htmlspecialchars($doc['nome_ficheiro']) ?></td>
+                                                        <td><?= date('d M Y', strtotime($doc['data_upload'])) ?></td>
+                                                        <td class="text-end">
+                                                            <a href="<?= htmlspecialchars($doc['caminho_ficheiro']) ?>" target="_blank" class="btn btn-sm btn-light border me-1" title="Visualizar">
+                                                                <i class="bi bi-eye"></i>
+                                                            </a>
+                                                            <a href="<?= htmlspecialchars($doc['caminho_ficheiro']) ?>" download class="btn btn-sm btn-primary-custom" title="Download">
+                                                                <i class="bi bi-download"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
                                         </tbody>
-                                        <?php endforeach; ?>
-
                                     </table>
                                 </div>
                             </div>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
-
+                <?php include '../includes/newDocModal.php' ?>
             </div>
-
         </div>
     </div>
 <?php include "../includes/footer.php"?>
