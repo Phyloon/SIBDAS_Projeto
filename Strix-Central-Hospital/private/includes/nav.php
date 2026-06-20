@@ -30,7 +30,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link small">
+                        <a href="/private/views/documentacao.php" class="nav-link small">
                             <i class="bi bi-file-earmark-text me-1"></i> Documentação
                         </a>
                     </li>

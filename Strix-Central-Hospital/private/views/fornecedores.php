@@ -204,11 +204,10 @@ foreach($allEquipments as $eq) {
                                     </div>
                                     <div class="d-flex flex-column flex-grow-1 text-start">
                                         <span class="fs-6"><?= htmlspecialchars($f['nome_empresa']) ?></span>
-                                        <span class="text-muted small fw-normal">Equipamentos associados</span>
                                     </div>
                                     
                                     <span class="badge bg-light text-dark border px-3 py-2 me-3 fw-normal" style="border-radius: 6px;">
-                                        Total Equipments: <?= $totalEq ?>
+                                        Equipamentos associados: <?= $totalEq ?>
                                     </span>
                                 </button>
                             </h2>
@@ -248,7 +247,7 @@ foreach($allEquipments as $eq) {
                                                         </span>
                                                     </li>
                                                     <li class="list-group-item text-muted">
-                                                        <?= htmlspecialchars($eq['departamento'] ?? 'N/A') ?> <i class="bi bi-dot"></i> <?= htmlspecialchars($eq['local_equipamento'] ?? 'N/A') ?>
+                                                        <?= htmlspecialchars($eq['departamento'] ?? 'N/A') ?> <i class="bi bi-dot"></i> <?= htmlspecialchars($eq['location_vector'] ?? 'N/A') ?>
                                                     </li>
                                                 </ul>
                                             </div>

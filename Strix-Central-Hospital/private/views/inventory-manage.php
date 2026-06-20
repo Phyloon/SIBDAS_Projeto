@@ -1,5 +1,6 @@
 <?php 
 require_once '../../config/config.php';
+//get all equip
 $stmt = $pdo->query("SELECT * FROM equipamentos");
 $allEquipments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
