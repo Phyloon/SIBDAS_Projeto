@@ -4,7 +4,7 @@ $stmt = $pdo->query("SELECT * FROM fornecedores ORDER BY nome_empresa");
 $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 //get the join between supplier id's on mixed table and the equipment id's associated to them
-$stmtEq = $pdo->query("SELECT ef.fornecedor_id, e.* FROM equipamento_fornecedor ef INNER JOIN equipamentos e ON ef.equipamento_id = e.id ORDER BY e.nome");
+$stmtEq = $pdo->query("SELECT ef.fornecedor_id, f.tipo_fornecedor, e.* FROM equipamento_fornecedor ef INNER JOIN equipamentos e  ON ef.equipamento_id = e.id LEFT JOIN fornecedores f ON ef.fornecedor_id = f.id ORDER BY e.nome");
 $allEquipments = $stmtEq->fetchAll(PDO::FETCH_ASSOC);
 
 //agrupar equipamento por fornecedor
@@ -40,7 +40,18 @@ foreach($allEquipments as $eq) {
 
                     <!--adicionar fornecedor/item-->
                     <div class="d-flex align-items-center gap-2">
-                        <input type='text' id='supplierSearchInput' class="form-control form-control-sm" placeholder="Search Supplier or Equipment..." style="border-radius:8px; width:260px;">
+                        <div class="d-flex gap-2 align-items-center">
+                            <input type='text' id='supplierSearchInput' class="form-control form-control-sm" placeholder="Search Supplier or Equipment..." style="border-radius:8px; width:260px;">
+                            <select id="supplierTypeFilter" class="form-select form-select-sm" style="border-radius:8px; width:200px;">
+                                <option value="">All Types</option>
+                                <option value="Fabricante">Fabricante</option>
+                                <option value="Distribuidor">Distribuidor ou Fornecedor Comercial</option>
+                                <option value="Assistencia">Empresa de assistencia tecnica</option>
+                                <option value="Consumiveis">Fornecedor de Consumiveis e acessorios</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+
                         <div class="dropdown">
                             <button class="btn btn-primary-custom btn-sm" data-bs-toggle="dropdown" data-bs-target="#addDropdown" style="border-radius: 8px;">
                                 <i class="bi bi-chevron-down me-2"></i> Funcoes
@@ -199,7 +210,7 @@ foreach($allEquipments as $eq) {
                             // Using the numeric ID makes it safe for Bootstrap targets
                             $safeId = $supplierId;
                         ?>
-                        <div class="accordion-item border-0 shadow-sm mb-3" style="border-radius: 12px; overflow: hidden;">
+                        <div class="accordion-item border-0 shadow-sm mb-3" style="border-radius: 12px; overflow: hidden;" data-type="<?= htmlspecialchars($f['tipo_fornecedor']) ?>">
                             <h2 class="accordion-header" id="heading<?= $safeId ?>">
                                 <button class="accordion-button collapsed fw-bold d-flex align-items-center gap-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?= $safeId ?>" aria-expanded="false" style="background-color: #fff; color: #333;">
                                     <div class="bg-light p-2 rounded text-primary">
@@ -207,6 +218,7 @@ foreach($allEquipments as $eq) {
                                     </div>
                                     <div class="d-flex flex-column flex-grow-1 text-start">
                                         <span class="fs-6"><?= htmlspecialchars($f['nome_empresa']) ?></span>
+                                        <span class="fs-6 text-muted py-2"><?= htmlspecialchars($f['tipo_fornecedor']) ?></span>
                                     </div>
                                     
                                     <span class="badge bg-light text-dark border px-3 py-2 me-3 fw-normal" style="border-radius: 6px;">

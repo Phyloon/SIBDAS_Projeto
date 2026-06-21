@@ -8,12 +8,17 @@ $docTypes = [
 ];
 
 //get all documents joined w equip
-$stmt = $pdo->query("SELECT d.*, e.nome as nome_equipamento, e.serial as serial_equipamento FROM documentos_equipamento d JOIN equipamentos e ON d.equipamento_id = e.id ORDER BY d.data_upload DESC ");
+$stmt = $pdo->query("SELECT d.*, e.nome as nome_equipamento, e.serial as serial_equipamento, f.nome_empresa FROM documentos_equipamento d JOIN equipamentos e ON d.equipamento_id = e.id LEFT JOIN fornecedores f ON d.fornecedor_id = f.id ORDER BY d.data_upload DESC ");
 $allDocuments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 // all equip
 $stmtEq = $pdo->query("SELECT id, nome, serial FROM equipamentos ORDER BY nome");
 $allEquipments = $stmtEq->fetchAll(PDO::FETCH_ASSOC);
+
+// all equip
+$stmtFo = $pdo->query("SELECT id, nome_empresa FROM fornecedores ORDER BY nome_empresa  ");
+$fornecedores = $stmtFo->fetchAll(PDO::FETCH_ASSOC);
 
 // 3. Helper function to filter docs
 function getDocsByType($docs, $type) {
@@ -71,32 +76,42 @@ function getDocsByType($docs, $type) {
                                     <table class="table table-hover">
                                         <thead class="table-light">
                                             <tr>
-                                                <th class="ps-4" style="width: 22%;">Nome do Equipamento</th>
-                                                <th style="width: 22%;">Serial</th>
-                                                <th style="width: 22%;">Nome do Ficheiro</th>
-                                                <th style="width: 22%;">Data de Upload</th>
-                                                <th class="text-end pe-4" style="width: 12%;">Ações</th>
+                                                <th class="ps-4">Nome do Equipamento</th>
+                                                <th>Serial</th>
+                                                <th>Fornecedor</th>
+                                                <th>Validade</th>
+                                                <th>Nome do Ficheiro</th>
+                                                <th>Data de Upload</th>
+                                                <th class="text-end pe-4">Ações</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php if (empty($filteredDocs)): ?>
                                                 <tr>
-                                                    <td colspan="5" class="text-center text-muted">No documents found for this category.</td>
+                                                    <td colspan="7" class="text-center text-muted">No documents found for this category.</td>
                                                 </tr>
                                             <?php else: ?>
                                                 <?php foreach($filteredDocs as $doc): ?>
                                                     <tr>
-                                                        <td><?= htmlspecialchars($doc['nome_equipamento']) ?></td>
+                                                        <td class="ps-4"><?= htmlspecialchars($doc['nome_equipamento']) ?></td>
                                                         <td><?= htmlspecialchars($doc['serial_equipamento']) ?></td>
+                                                        <td><?= !empty($doc['nome_empresa']) ? htmlspecialchars($doc['nome_empresa']) : '<span class="text-muted">N/A</span>' ?></td>
+                                                        <td>
+                                                            <?php if (!empty($doc['data_validade'])): 
+                                                                $isExpired = (new DateTime($doc['data_validade'])) < (new DateTime());
+                                                            ?>
+                                                                <span class="badge <?= $isExpired ? 'bg-danger' : 'bg-success bg-opacity-10 text-success' ?>">
+                                                                    <?= $isExpired ? 'Expirado a ' : 'Válido até ' ?><?= date('d/m/Y', strtotime($doc['data_validade'])) ?>
+                                                                </span>
+                                                            <?php else: ?>
+                                                                <span class="text-muted small">N/A</span>
+                                                            <?php endif; ?>
+                                                        </td>
                                                         <td><?= htmlspecialchars($doc['nome_ficheiro']) ?></td>
                                                         <td><?= date('d M Y', strtotime($doc['data_upload'])) ?></td>
-                                                        <td class="text-end">
-                                                            <a href="<?= htmlspecialchars($doc['caminho_ficheiro']) ?>" target="_blank" class="btn btn-sm btn-light border me-1" title="Visualizar">
-                                                                <i class="bi bi-eye"></i>
-                                                            </a>
-                                                            <a href="<?= htmlspecialchars($doc['caminho_ficheiro']) ?>" download class="btn btn-sm btn-primary-custom" title="Download">
-                                                                <i class="bi bi-download"></i>
-                                                            </a>
+                                                        <td class="text-end pe-4">
+                                                            <a href="<?= htmlspecialchars($doc['caminho_ficheiro']) ?>" target="_blank" class="btn btn-sm btn-light border"><i class="bi bi-eye"></i></a>
+                                                            <a href="<?= htmlspecialchars($doc['caminho_ficheiro']) ?>" download class="btn btn-sm btn-primary-custom"><i class="bi bi-download"></i></a>
                                                         </td>
                                                     </tr>
                                                 <?php endforeach; ?>

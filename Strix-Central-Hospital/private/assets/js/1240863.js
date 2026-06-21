@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // searchbar fornecedores
     const searchInput = document.getElementById('supplierSearchInput');
+    const typeFilter  = document.getElementById('supplierTypeFilter');
     if (searchInput) {
         searchInput.addEventListener('input', e => {
             let filter = e.target.value.toLowerCase().trim();
@@ -38,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
+    if (typeFilter)  typeFilter.addEventListener('change', applyFilters);
 
     // --- CORREÇÃO 1: Mudar o 'return' por um bloco 'if' seguro ---
     const canvas = document.getElementById('statusChart');
@@ -110,6 +112,7 @@ function applyFilters() {
     const group        = document.querySelector('select[data-filter="group"]')?.value;
     const criticality  = document.querySelector('select[data-filter="criticality"]')?.value;
 
+
     // only works on the table, cuz it says tbody
     document.querySelectorAll('tbody tr').forEach(row => {
         const matchWing   = !wing || wing === 'All Wings'             || row.dataset.wing === wing;
@@ -132,5 +135,22 @@ function applyFilters() {
         const matchCriticality = !criticality || criticality === "Criticidade" || card.dataset.criticality === criticality;
 
         card.style.display = (matchGroup && matchAvail && matchDept && matchSearch && matchCriticality) ? '' : 'none';
+    });
+
+    // SUPPLIERS ACCORDION
+    const supplierSearch = document.getElementById('supplierSearchInput')?.value.toLowerCase().trim() || '';
+    const supplierType   = document.getElementById('supplierTypeFilter')?.value || '';
+    document.querySelectorAll('#suppliers-accordion > .accordion-item').forEach(acc => {
+        const matchType       = !supplierType || acc.dataset.type === supplierType;
+        const isSupplierMatch = matchType && acc.querySelector('.accordion-header').textContent.toLowerCase().includes(supplierSearch);
+        let hasGearMatch      = false;
+
+        acc.querySelectorAll('.col-3').forEach(card => {
+            const showCard = isSupplierMatch || (matchType && card.textContent.toLowerCase().includes(supplierSearch));
+            card.style.display = showCard ? '' : 'none';
+            if (showCard) hasGearMatch = true;
+        });
+
+        acc.style.display = (!supplierSearch && !supplierType) || isSupplierMatch || hasGearMatch ? '' : 'none';
     });
 }
