@@ -1,5 +1,6 @@
 <?php 
 require_once '../../config/config.php';
+session_start();
 $stmt = $pdo->query("SELECT * FROM staff WHERE deleted_at IS NULL");
 $staff = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

@@ -1,9 +1,9 @@
 <?php 
 require_once '../../config/config.php';
+session_start();
 //specify each type of foc possible
 $docTypes = [
-    "Manual de Utilizador", "Manual de Servico", "Certificado de Calibracao", 
-    "Contrato de Manutencao", "Faturas/Guia de Aquisicao", 
+    "Manual de Utilizador", "Manual de Servico", "Certificado de Calibracao", "Faturas/Guia de Aquisicao", 
     "Declaracao de Conformidade", "Relatorio Tecnico"
 ];
 
@@ -107,7 +107,7 @@ function getDocsByType($docs, $type) {
                                                                 <span class="text-muted small">N/A</span>
                                                             <?php endif; ?>
                                                         </td>
-                                                        <td><?= htmlspecialchars($doc['nome_ficheiro']) ?></td>
+                                                        <td class="text-truncate" style="max-width: 200px;"><?= basename($doc['caminho_ficheiro']) ?></td>
                                                         <td><?= date('d M Y', strtotime($doc['data_upload'])) ?></td>
                                                         <td class="text-end pe-4">
                                                             <a href="<?= htmlspecialchars($doc['caminho_ficheiro']) ?>" target="_blank" class="btn btn-sm btn-light border"><i class="bi bi-eye"></i></a>

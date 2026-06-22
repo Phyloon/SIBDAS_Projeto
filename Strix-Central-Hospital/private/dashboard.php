@@ -1,4 +1,16 @@
-<?php require_once 'includes/funcoes.php'?>
+<?php 
+require_once 'includes/funcoes.php';
+session_start();
+redirect_if_not_logged(); 
+
+// 2. Check Role
+// Change 'admin' to whatever the string is in your database for full access
+if ($_SESSION['role'] !== 'tech' && $_SESSION['role'] !== 'ceo') {
+    // If they aren't an admin, kick them out or show an error
+    header('Location: ../private/views/staff.php'); 
+    exit; // VERY IMPORTANT: stop the script here
+}
+?>
 
 <?php include 'includes/header.php'?>
 

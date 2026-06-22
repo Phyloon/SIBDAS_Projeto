@@ -1,13 +1,15 @@
 <?php 
 include '../includes/header.php';
 include '../includes/location_stats.php';
+session_start();
 ?>
-
+    
     <?php
     // estava a dar undefined variable, isto resolve
     $total = isset($total) ? $total : 0;
     $located = isset($located) ? $located : 0;
     $unconfirmed = isset($unconfirmed) ? $unconfirmed : 0;
+    
     ?>
 
 

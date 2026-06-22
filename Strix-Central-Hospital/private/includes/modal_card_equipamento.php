@@ -3,6 +3,21 @@
 <!--remover aviso de erro-->
 <?php /** @var array $allEquipments */ ?>
 
+<?php
+// 1. Only run this query once per page load
+if (!isset($maintenanceData)) {
+    // Assuming you have access to $pdo from your config.php
+    $stmt = $pdo->query("SELECT * FROM contratos_manutencao");
+    $rawContracts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // 2. Map data by equipment ID for fast access
+    $maintenanceData = [];
+    foreach ($rawContracts as $contract) {
+        $maintenanceData[$contract['equipamento_id']] = $contract;
+    }
+}
+?>
+
 <?php foreach ($allEquipments as $eq): ?>
     <div class="modal fade" id="modal_<?= $eq['id'] ?>" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
@@ -50,6 +65,8 @@
                     </div>  
 
                     <hr>
+
+                    <?php $data = $maintenanceData[$eq['id']] ?? null; ?>
                     <a href="#dates-<?= $eq['id'] ?>" data-bs-toggle="collapse" role="button" class="d-flex justify-content-between align-items-center text-decoration-none text-dark fw-bold mb-2">
                         <span>
                             <i class="bi bi-calendar-event me-2"></i> Datas Importantes
@@ -62,24 +79,20 @@
                         <ul class="list-group list-group-flush p-3">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <div>
-                                    <div class="fw-semibold">Próxima Calibração</div> 
-                                    <div class="small text-muted">15 Jan 2026</div>   
+                                    <div class="fw-semibold">Próxima Manutenção</div>
+                                    <div class="small text-muted">
+                                        <?= $data ? date('d M Y', strtotime($data['data_fim_garantia'])) : 'Sem dados' ?>
+                                    </div>
                                 </div>
-                                <span class="badge bg-warning text-dark rounded-pill">Em breve</span>
+                                <span class="badge <?= $data ? 'bg-warning text-dark' : 'bg-secondary' ?> rounded-pill">
+                                    <?= $data ? 'Agendado' : 'N/A' ?>
+                                </span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <div>
-                                    <div class="fw-semibold">Manutenção Preventiva</div>
-                                    <div class="small text-muted">02 Feb 2026</div>
+                                    <div class="fw-semibold">Contrato</div>
+                                    <div class="small text-muted"><?= htmlspecialchars($data['tipo_contrato'] ?? 'Nenhum') ?></div>
                                 </div>
-                                <span class="badge bg-secondary rounded-pill">Agendado</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="fw-semibold">Validade da Garantia</div>
-                                    <div class="small text-muted">30 Jun 2026</div>
-                                </div>
-                                <span class="badge bg-secondary rounded-pill">Agendado</span>
                             </li>
                         </ul>
                     </div>

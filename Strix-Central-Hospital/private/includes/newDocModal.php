@@ -25,7 +25,6 @@
                             <option value="Manual de Utilizador">Manual de Utilizador</option>
                             <option value="Manual de Servico">Manual de Servico</option>
                             <option value="Certificado de Calibracao">Certificado de Calibracao</option>
-                            <option value="Contrato de Manutencao">Contrato de Manutencao</option>
                             <option value="Faturas/Guia de Aquisicao">Faturas/Guia de Aquisicao</option>
                             <option value="Declaracao de Conformidade">Declaracao de Conformidade</option>
                             <option value="Relatorio Tecnico">Relatorio Tecnico</option>

@@ -1,4 +1,5 @@
 <?php require_once '../includes/header.php';
+session_start();
 //get all suppliers
 $stmt = $pdo->query("SELECT * FROM fornecedores ORDER BY nome_empresa");
 $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
