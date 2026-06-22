@@ -1,4 +1,11 @@
-<?php include '../includes/header.php'?>
+<?php 
+require_once '../../config/config.php';
+session_start();
+?>
+
+<?php include '../includes/header.php';
+
+?>
 
     <div class="d-flex">
 

@@ -73,4 +73,11 @@
         <li class="nav-item"><a href="/private/views/user-add.php" class="nav-link"><i class="bi bi-gear"></i> Adicionar Utilizador </a></li>
         <?php endif; ?>
     </ul>
+
+    <div class="mt-auto p-3">
+        <a href="../../public/logout.php" class="nav-link text-danger border-top pt-3">
+            <i class="bi bi-box-arrow-right"></i> Terminar Sessão
+        </a>
+    </div>
+
 </nav>
