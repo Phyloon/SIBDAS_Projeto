@@ -14,71 +14,61 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (data.success) {
                         const eq = data.equipment;
                         
-                        // Populate fields safely
-                        // Note: Ensure your modify_equipment.php actually HAS an input with id="mod_id"
-                        if(document.getElementById('mod_id')) document.getElementById('mod_id').value = eq.id;
-                        
-                        document.getElementById('mod_nome').value = eq.nome || '';
-                        document.getElementById('mod_modelo').value = eq.modelo || '';
-                        document.getElementById('mod_marca').value = eq.marca || '';
-                        document.getElementById('mod_serial').value = eq.serial || '';
-                        document.getElementById('mod_ano_fabrico').value = eq.ano_fabrico || '';
-                        document.getElementById('mod_location_floor').value = eq.location_floor || '';
-                        document.getElementById('mod_location_room').value = eq.location_room || '';
-                        document.getElementById('mod_custo_aquisicao').value = eq.custo_aquisicao || '';
-                        document.getElementById('mod_data_aquisicao').value = eq.data_aquisicao || '';
-                        document.getElementById('mod_descricao').value = eq.descricao || '';
-                        
-                        document.getElementById('mod_estado').value = eq.estado || 'Disponivel';
-                        document.getElementById('mod_criticidade').value = eq.criticidade || '';
-                        document.getElementById('mod_location_wing').value = eq.location_wing || '';
-                        document.getElementById('mod_departamento').value = eq.departamento || '';
-                        document.getElementById('mod_grupo').value = eq.grupo || '';
-                        document.getElementById('mod_tipo_aquisicao').value = eq.tipo_aquisicao || '';
-                        
-                        if (document.getElementById('mod_fornecedor_id')) {
-                            document.getElementById('mod_fornecedor_id').value = eq.fornecedor_id || '';
+                        // 1. Populate standard hidden/text input fields safely
+                        if (document.getElementById('mod_id')) {
+                            document.getElementById('mod_id').value = eq.id;
                         }
+                        
+                        if (document.getElementById('mod_nome')) document.getElementById('mod_nome').value = eq.nome || '';
+                        if (document.getElementById('mod_modelo')) document.getElementById('mod_modelo').value = eq.modelo || '';
+                        if (document.getElementById('mod_marca')) document.getElementById('mod_marca').value = eq.marca || '';
+                        if (document.getElementById('mod_serial')) document.getElementById('mod_serial').value = eq.serial || '';
+                        if (document.getElementById('mod_ano_fabrico')) document.getElementById('mod_ano_fabrico').value = eq.ano_fabrico || '';
+                        if (document.getElementById('mod_location_floor')) document.getElementById('mod_location_floor').value = eq.location_floor || '';
+                        if (document.getElementById('mod_location_room')) document.getElementById('mod_location_room').value = eq.location_room || '';
+                        if (document.getElementById('mod_custo_aquisicao')) document.getElementById('mod_custo_aquisicao').value = eq.custo_aquisicao || '';
+                        if (document.getElementById('mod_data_aquisicao')) document.getElementById('mod_data_aquisicao').value = eq.data_aquisicao || '';
+                        if (document.getElementById('mod_descricao')) document.getElementById('mod_descricao').value = eq.descricao || '';
+                        
+                        // 2. Map standard Dropdowns (handling both fallback methods)
+                        if (document.getElementById('mod_estado')) {
+                            document.getElementById('mod_estado').value = eq.estado || 'Disponivel';
+                        } else {
+                            const estadoSel = document.querySelector('[name="estado"]');
+                            if (estadoSel) estadoSel.value = eq.estado || 'Disponivel';
+                        }
+
+                        if (document.getElementById('mod_criticidade')) {
+                            document.getElementById('mod_criticidade').value = eq.criticidade || '';
+                        } else {
+                            const critSel = document.querySelector('[name="criticidade"]');
+                            if (critSel) critSel.value = eq.criticidade || '';
+                        }
+
+                        if (document.getElementById('mod_location_wing')) document.getElementById('mod_location_wing').value = eq.location_wing || '';
+                        if (document.getElementById('mod_departamento')) document.getElementById('mod_departamento').value = eq.departamento || '';
+                        if (document.getElementById('mod_grupo')) document.getElementById('mod_grupo').value = eq.grupo || '';
+                        if (document.getElementById('mod_tipo_aquisicao')) document.getElementById('mod_tipo_aquisicao').value = eq.tipo_aquisicao || '';
+                        
+                        // 3. Map multi-supplier mappings if your UI utilizes them
+                        if (document.getElementById('mod_fornecedor_id')) {
+                            document.getElementById('mod_fornecedor_id').value = eq.fornecedor_id || eq.fornecedor_fabricante || '';
+                        }
+                        if (document.getElementById('mod_fornecedor_distribuidor')) {
+                            document.getElementById('mod_fornecedor_distribuidor').value = eq.fornecedor_distribuidor || '';
+                        }
+                        if (document.getElementById('mod_fornecedor_manutencao')) {
+                            document.getElementById('mod_fornecedor_manutencao').value = eq.fornecedor_manutencao || '';
+                        }
+                        if (document.getElementById('mod_fornecedor_consumiveis')) {
+                            document.getElementById('mod_fornecedor_consumiveis').value = eq.fornecedor_consumiveis || '';
+                        }
+                    } else {
+                        console.error('Error fetching details:', data.message);
                     }
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => console.error('Network Error:', error));
         });
-    }
-
-    if (data.success) {
-        const eq = data.equipment;
-
-        document.getElementById('mod_id').value           = eq.id;
-        document.getElementById('mod_nome').value          = eq.nome || '';
-        document.getElementById('mod_modelo').value        = eq.modelo || '';
-        document.getElementById('mod_marca').value         = eq.marca || '';
-        document.getElementById('mod_serial').value        = eq.serial || '';
-        document.getElementById('mod_ano_fabrico').value   = eq.ano_fabrico || '';
-        document.getElementById('mod_location_floor').value= eq.location_floor || '';
-        document.getElementById('mod_location_room').value = eq.location_room || '';
-        document.getElementById('mod_custo_aquisicao').value = eq.custo_aquisicao || '';
-        document.getElementById('mod_data_aquisicao').value  = eq.data_aquisicao || '';
-        document.getElementById('mod_location_wing').value   = eq.location_wing || '';
-        document.getElementById('mod_departamento').value     = eq.departamento || '';
-        document.getElementById('mod_grupo').value            = eq.grupo || '';
-        document.getElementById('mod_tipo_aquisicao').value   = eq.tipo_aquisicao || '';
-
-        // select dropdowns need to match the value exactly
-        const estadoSel = document.querySelector('[name="estado"]');
-        if (estadoSel) estadoSel.value = eq.estado || 'Disponivel';
-
-        const critSel = document.querySelector('[name="criticidade"]');
-        if (critSel) critSel.value = eq.criticidade || '';
-
-        // suppliers
-        if (document.getElementById('mod_fornecedor_id'))
-            document.getElementById('mod_fornecedor_id').value           = eq.fornecedor_fabricante || '';
-        if (document.getElementById('mod_fornecedor_distribuidor'))
-            document.getElementById('mod_fornecedor_distribuidor').value  = eq.fornecedor_distribuidor || '';
-        if (document.getElementById('mod_fornecedor_manutencao'))
-            document.getElementById('mod_fornecedor_manutencao').value    = eq.fornecedor_manutencao || '';
-        if (document.getElementById('mod_fornecedor_consumiveis'))
-            document.getElementById('mod_fornecedor_consumiveis').value   = eq.fornecedor_consumiveis || '';
     }
 
     // 4 bar graph on dashboard

@@ -1,7 +1,7 @@
 <?php require_once '../includes/header.php';
 session_start();
 //get all suppliers
-$stmt = $pdo->query("SELECT * FROM fornecedores ORDER BY nome_empresa");
+$stmt = $pdo->query("SELECT * FROM fornecedores WHERE deleted_at IS NULL ORDER BY nome_empresa ");
 $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 //get the join between supplier id's on mixed table and the equipment id's associated to them
@@ -60,6 +60,12 @@ foreach($allEquipments as $eq) {
                             <div class="dropdown-menu dropdown-menu-end" id="addDropdown">
                                 <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addSupplierModal">
                                     <i class="bi bi-building me-2"></i> Adicionar Fornecedor
+                                </button>
+                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteSupplierModal">
+                                    <i class="bi bi-x me-2"></i> Remover um Fornecedor
+                                </button>
+                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modifySupplierModal">
+                                    <i class="bi bi-x me-2"></i> Editar um Fornecedor
                                 </button>
                                 <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addEquipmentModal">
                                     <i class="bi bi-wrench me-2"></i> Adicionar Equipamento
@@ -317,94 +323,13 @@ foreach($allEquipments as $eq) {
                 </div>
 
                 <!--modals adicionar fornecedor-->
-                <div class="modal fade" id="addSupplierModal" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content" style="border-radius: 16px; border: none;">
+                <?php include '../includes/modal_supplier.php'; ?>
 
-                            <form action="../includes/process_new_supplier.php" method="post">
-                                <div class="modal-header border-0 pb-0">
-                                    <h5 class="modal-title fw-bold">Add New Supplier</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body pt-3">
+                <!--modal remover fornecedor-->
+                <?php include '../includes/modal_delete_supplier.php'; ?>
 
-                                    <div class="d-flex flex-column align-items-center mb-4">
-                                        <div class="qr-placeholder" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; border-radius: 50%;">
-                                            <i class="bi bi-building" style="font-size: 2rem; color: #64748b;"></i>
-                                        </div>
-                                        <small class="text-muted mt-2">Upload or assign a supplier logo</small>
-                                    </div>
-
-                                    <div class="row g-3">
-                                        <div class="col-6">
-                                            <label class="form-label">Nome da Empresa</label>
-                                            <input type="text" name="nome_empresa" class="form-control" placeholder="e.g. Medtronic" style="border-radius:8px;">
-                                        </div>
-                                        
-                                        <div class="col-6">
-                                            <label class="form-label">Tipo de fornecedor </label>
-                                            <select class="form-select" name="tipo_fornecedor" style="border-radius:8px;">
-                                                <option value="">Select category...</option>
-                                                <option value="Fabricante">Fabricante</option>
-                                                <option value="Distribuidor">Distribuidor ou Fornecedor Comercial</option>
-                                                <option value="Assistencia">Empresa de assistencia tecnica</option>
-                                                <option value="Consumiveis">Fornecedor de Consumiveis e acessorios</option>
-                                                <option value="Outro">Outro</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="col-12">
-                                            <label class="form-label">Contact Email</label>
-                                            <input type="email" name="email" class="form-control" placeholder="contact@supplier.com" style="border-radius:8px;">
-                                        </div>
-
-                                        <div class="col-6">
-                                            <label class="form-label">Website</label>
-                                            <input type="text" name="website" class="form-control" placeholder="www.empresa.com" style="border-radius:8px;">
-                                        </div>
-
-                                        <div class="col-6">
-                                            <label class="form-label">Endereco</label>
-                                            <input type="text" name="endereco" class="form-control" placeholder="Rua XXXX, 123, Porto Portugal" style="border-radius:8px;">
-                                        </div>
-
-                                        <div class="col-6">
-                                            <label class="form-label">nif</label>
-                                            <input type="text" name="nif" class="form-control" placeholder="123 456 789" style="border-radius:8px;">
-                                        </div>
-
-                                        <div class="col-6">
-                                            <label class="form-label">Contact Telefone</label>
-                                            <input type="tel" name="telefone" class="form-control" placeholder="+351 911 871 461" style="border-radius:8px;">
-                                        </div>
-
-                                        <div class="col-6">
-                                            <label class="form-label">Pessoa Contacto (PC)</label>
-                                            <input type="text" name="pessoa_contacto" class="form-control" placeholder="Joana Teixeira" style="border-radius:8px;">
-                                        </div>
-
-                                        <div class="col-6">
-                                            <label class="form-label">Telefone da (PC)</label>
-                                            <input type="tel" name="telefone_contacto" class="form-control" placeholder="+351 911 871 461" style="border-radius:8px;">
-                                        </div>
-
-                                        <div class="col-12">
-                                            <label class="form-label">Description <span class="text-muted fw-normal">(optional)</span></label>
-                                            <textarea class="form-control" rows="2" placeholder="Brief info about the supplier" style="border-radius:8px;"></textarea>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="modal-footer border-0 pt-3">
-                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius:8px;">Cancel</button>
-                                    <button type="submit" class="btn btn-primary-custom">
-                                        <i class="bi bi-plus-lg me-1"></i> Add Supplier
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                <!--modal editar fornecedor-->
+                <?php include '../includes/modal_modify_supplier.php'; ?>
 
                 <!--modal adicionar equipamento-->
                 <?php include '../includes/new_equipment.php'; ?>
