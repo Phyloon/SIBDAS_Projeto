@@ -16,6 +16,23 @@ if (!isset($maintenanceData)) {
         $maintenanceData[$contract['equipamento_id']] = $contract;
     }
 }
+
+
+// 2. NOVA LÓGICA: Carregar TODOS os documentos e agrupar por equipamento_id
+if (!isset($docsByEquipment)) {
+    $stmtDocs = $pdo->query("
+        SELECT id, equipamento_id, tipo_documento, nome_ficheiro, caminho_ficheiro, data_upload, data_validade 
+        FROM documentos_equipamento 
+        ORDER BY data_upload DESC
+    ");
+    $rawDocs = $stmtDocs->fetchAll(PDO::FETCH_ASSOC);
+
+    $docsByEquipment = [];
+    foreach ($rawDocs as $doc) {
+        // Agrupa os documentos usando o equipamento_id como chave
+        $docsByEquipment[$doc['equipamento_id']][] = $doc;
+    }
+}
 ?>
 
 <?php foreach ($allEquipments as $eq): ?>
@@ -66,16 +83,16 @@ if (!isset($maintenanceData)) {
 
                     <hr>
 
-                    <?php $data = $maintenanceData[$eq['id']] ?? null; ?>
+                    
                     <a href="#dates-<?= $eq['id'] ?>" data-bs-toggle="collapse" role="button" class="d-flex justify-content-between align-items-center text-decoration-none text-dark fw-bold mb-2">
                         <span>
                             <i class="bi bi-calendar-event me-2"></i> Datas Importantes
-                            <span class="badge rounded-pill bg-danger ms-1">3</span>
                         </span>
                         <i class="bi bi-chevron-down small"></i>
                     </a>
 
                     <div id="dates-<?= $eq['id'] ?>" class="collapse mb-2">
+                        <?php $data = $maintenanceData[$eq['id']] ?? null; ?>
                         <ul class="list-group list-group-flush p-3">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <div>
@@ -90,8 +107,7 @@ if (!isset($maintenanceData)) {
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <div>
-                                    <div class="fw-semibold">Contrato</div>
-                                    <div class="small text-muted"><?= htmlspecialchars($data['tipo_contrato'] ?? 'Nenhum') ?></div>
+                                    <div class="fw-semibold">Fim da Garantia</div>
                                 </div>
                             </li>
                         </ul>
@@ -166,17 +182,60 @@ if (!isset($maintenanceData)) {
                     </div>
 
                     <hr>
-                    <h6 class="fw-bold mb-3"><i class="bi bi-file-earmark-pdf me-2 text-danger"></i>Documentação</h6>
-                    <div class="d-flex flex-column gap-2">
-                        <a href="#" class="btn btn-outline-secondary btn-sm text-start">
-                            <i class="bi bi-file-earmark-pdf text-danger me-2"></i> Manual do Utilizador.pdf
-                        </a>
-                        <a href="#" class="btn btn-outline-secondary btn-sm text-start">
-                            <i class="bi bi-file-earmark-pdf text-danger me-2"></i> Ficha Técnica.pdf
-                        </a>
-                        <a href="#" class="btn btn-outline-secondary btn-sm text-start">
-                            <i class="bi bi-file-earmark-pdf text-danger me-2"></i> Certificado de Calibração.pdf
-                        </a>
+
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="bi bi-file-earmark-text"></i> Documentos Associados</h5>
+                        </div>
+                        <div class="card-body">
+                            <?php $documentos = $docsByEquipment[$eq['id']] ?? [];?>
+
+                            <?php if (count($documentos) > 0): ?>
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Tipo</th>
+                                                <th>Nome do Ficheiro</th>
+                                                <th>Data Upload</th>
+                                                <th>Validade</th>
+                                                <th>Ação</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($documentos as $doc): ?>
+                                                <tr>
+                                                    <td>
+                                                        <span class="badge bg-secondary">
+                                                            <?= htmlspecialchars($doc['tipo_documento']) ?>
+                                                        </span>
+                                                    </td>
+                                                    <td><?= htmlspecialchars($doc['nome_ficheiro']) ?></td>
+                                                    <td><?= date('d/m/Y', strtotime($doc['data_upload'])) ?></td>
+                                                    <td>
+                                                        <?= $doc['data_validade'] ? date('d/m/Y', strtotime($doc['data_validade'])) : '<span class="text-muted">N/A</span>' ?>
+                                                    </td>
+                                                    <td>
+                                                        <a href="../private/<?= htmlspecialchars($doc['caminho_ficheiro']) ?>" 
+                                                        target="_blank"  class="btn btn-sm btn-outline-secondary">
+                                                        <i class="bi bi-eye "></i> Ver
+                                                        </a>
+                                                        
+                                                        <a href="../private/<?= htmlspecialchars($doc['caminho_ficheiro']) ?>" 
+                                                        download="<?= htmlspecialchars($doc['nome_ficheiro']) ?>" 
+                                                        class="btn btn-sm btn-primary-custom">
+                                                        <i class="bi bi-download"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            <?php else: ?>
+                                <p class="text-muted mb-0">Não existem documentos associados a este equipamento.</p>
+                            <?php endif; ?>
+                        </div>
                     </div>
 
                     <hr>

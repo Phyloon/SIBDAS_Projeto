@@ -246,7 +246,7 @@ foreach($allEquipments as $eq) {
                                                 elseif ($estado === 'Em Manutenção') $bClass = 'warning text-dark';
                                                 elseif ($estado === 'Fora de Servico') $bClass = 'danger';
                                             ?>
-                                        <div class="col-3">
+                                        <div class="col-2 col-md-3">
                                             <div class="card border-0 shadow-sm h-100" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modal_<?= $eq['id'] ?>">
                                                 <div style="padding: 15px;">   
                                                     <img src="<?= htmlspecialchars($eq['imagem']) ?>" class="card-img-top" alt="..." style="border-radius: 10px; height: 140px; object-fit: cover;">

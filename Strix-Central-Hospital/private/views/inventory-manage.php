@@ -2,7 +2,7 @@
 require_once '../../config/config.php';
 session_start();
 //get all equip
-$stmt = $pdo->query("SELECT * FROM equipamentos");
+$stmt = $pdo->query("SELECT * FROM equipamentos WHERE deleted_at IS NULL");
 $allEquipments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 //get all suppliers
@@ -144,10 +144,31 @@ $pct_fora = $total ? round($fora      / $total * 100) : 0;
                                 </button>
                             </div>
                         </div>
-                        <div>
-                            <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addEquipmentModal">
-                                <i class="bi bi-plus-lg me-2"></i> Add Inventory
+                        <div class="dropdown">
+                            <button class="btn btn-primary-custom dropdown-toggle" type="button" id="inventoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-tools me-2"></i> Manage Inventory
                             </button>
+                            <ul class="dropdown-menu shadow" aria-labelledby="inventoryDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addEquipmentModal">
+                                        <i class="bi bi-plus-lg me-2 text-success"></i> Add Equipment
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modifyEquipmentModal">
+                                        <i class="bi bi-pencil-square me-2 text-warning"></i> Modify Equipment
+                                    </a>
+                                </li>
+                                
+                                <li><hr class="dropdown-divider"></li>
+                                
+                                <li>
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteEquipmentModal">
+                                        <i class="bi bi-trash-fill me-2 text-danger"></i>Delete
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
 
@@ -184,6 +205,13 @@ $pct_fora = $total ? round($fora      / $total * 100) : 0;
             <!--modal adicionar equipamento-->
             <?php include '../includes/new_equipment.php'?>
 
+            <!--modal modificar equipamento-->
+            <?php include '../includes/modify_equipment.php' ?>
+
+            <!--modal delete equipamento-->
+            <?php include '../includes/modal_delete_equipment.php' ?>
+
         </div>
     </div>
+    
 <?php include "../includes/footer.php"?>

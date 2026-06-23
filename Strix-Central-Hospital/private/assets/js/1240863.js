@@ -1,5 +1,86 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+    // 1. Move this to the top level inside document.addEventListener('DOMContentLoaded', ...)
+    const equipmentSelect = document.getElementById('equipmentSelect');
+
+    if (equipmentSelect) {
+        equipmentSelect.addEventListener('change', function() {
+            const equipmentId = this.value;
+            if (!equipmentId) return;
+
+            fetch(`../includes/get_equipment_details.php?id=${equipmentId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const eq = data.equipment;
+                        
+                        // Populate fields safely
+                        // Note: Ensure your modify_equipment.php actually HAS an input with id="mod_id"
+                        if(document.getElementById('mod_id')) document.getElementById('mod_id').value = eq.id;
+                        
+                        document.getElementById('mod_nome').value = eq.nome || '';
+                        document.getElementById('mod_modelo').value = eq.modelo || '';
+                        document.getElementById('mod_marca').value = eq.marca || '';
+                        document.getElementById('mod_serial').value = eq.serial || '';
+                        document.getElementById('mod_ano_fabrico').value = eq.ano_fabrico || '';
+                        document.getElementById('mod_location_floor').value = eq.location_floor || '';
+                        document.getElementById('mod_location_room').value = eq.location_room || '';
+                        document.getElementById('mod_custo_aquisicao').value = eq.custo_aquisicao || '';
+                        document.getElementById('mod_data_aquisicao').value = eq.data_aquisicao || '';
+                        document.getElementById('mod_descricao').value = eq.descricao || '';
+                        
+                        document.getElementById('mod_estado').value = eq.estado || 'Disponivel';
+                        document.getElementById('mod_criticidade').value = eq.criticidade || '';
+                        document.getElementById('mod_location_wing').value = eq.location_wing || '';
+                        document.getElementById('mod_departamento').value = eq.departamento || '';
+                        document.getElementById('mod_grupo').value = eq.grupo || '';
+                        document.getElementById('mod_tipo_aquisicao').value = eq.tipo_aquisicao || '';
+                        
+                        if (document.getElementById('mod_fornecedor_id')) {
+                            document.getElementById('mod_fornecedor_id').value = eq.fornecedor_id || '';
+                        }
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    }
+
+    if (data.success) {
+        const eq = data.equipment;
+
+        document.getElementById('mod_id').value           = eq.id;
+        document.getElementById('mod_nome').value          = eq.nome || '';
+        document.getElementById('mod_modelo').value        = eq.modelo || '';
+        document.getElementById('mod_marca').value         = eq.marca || '';
+        document.getElementById('mod_serial').value        = eq.serial || '';
+        document.getElementById('mod_ano_fabrico').value   = eq.ano_fabrico || '';
+        document.getElementById('mod_location_floor').value= eq.location_floor || '';
+        document.getElementById('mod_location_room').value = eq.location_room || '';
+        document.getElementById('mod_custo_aquisicao').value = eq.custo_aquisicao || '';
+        document.getElementById('mod_data_aquisicao').value  = eq.data_aquisicao || '';
+        document.getElementById('mod_location_wing').value   = eq.location_wing || '';
+        document.getElementById('mod_departamento').value     = eq.departamento || '';
+        document.getElementById('mod_grupo').value            = eq.grupo || '';
+        document.getElementById('mod_tipo_aquisicao').value   = eq.tipo_aquisicao || '';
+
+        // select dropdowns need to match the value exactly
+        const estadoSel = document.querySelector('[name="estado"]');
+        if (estadoSel) estadoSel.value = eq.estado || 'Disponivel';
+
+        const critSel = document.querySelector('[name="criticidade"]');
+        if (critSel) critSel.value = eq.criticidade || '';
+
+        // suppliers
+        if (document.getElementById('mod_fornecedor_id'))
+            document.getElementById('mod_fornecedor_id').value           = eq.fornecedor_fabricante || '';
+        if (document.getElementById('mod_fornecedor_distribuidor'))
+            document.getElementById('mod_fornecedor_distribuidor').value  = eq.fornecedor_distribuidor || '';
+        if (document.getElementById('mod_fornecedor_manutencao'))
+            document.getElementById('mod_fornecedor_manutencao').value    = eq.fornecedor_manutencao || '';
+        if (document.getElementById('mod_fornecedor_consumiveis'))
+            document.getElementById('mod_fornecedor_consumiveis').value   = eq.fornecedor_consumiveis || '';
+    }
+
     // 4 bar graph on dashboard
     // only attach filters if the filter bar exists on this page
     if (document.querySelector('.filter-bar')) {
@@ -99,6 +180,8 @@ document.addEventListener('DOMContentLoaded', function () {
             applyFilters();
         });
     }
+
+    
 });
 
 function applyFilters() {
@@ -153,4 +236,7 @@ function applyFilters() {
 
         acc.style.display = (!supplierSearch && !supplierType) || isSupplierMatch || hasGearMatch ? '' : 'none';
     });
+
+
+    
 }

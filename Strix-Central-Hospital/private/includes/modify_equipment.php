@@ -1,24 +1,40 @@
-<!--remover aviso de erro-->
 <?php /** @var array $fornecedores */ ?>
+<?php /** @var array $allEquipments */ ?>
 
-<div class="modal fade" id="addEquipmentModal" tabindex="-1">
+<div class="modal fade" id="modifyEquipmentModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content" style="border-radius: 16px; border: none;">
-            <form action="../includes/process_new_item.php" method="post">
+            <form action="../includes/process_modify_item.php" method="post" id="modifyEquipmentForm">
+                <input type="hidden" name="id" id="mod_id">
                 <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold">Add New Equipment</h5>
+                    <h5 class="modal-title fw-bold">Modify Equipment</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body pt-3">
 
                     <div class="d-flex flex-column align-items-center mb-4">
-                        <div class="qr-placeholder" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; border-radius: 50%;">
-                            <i class="bi bi-box-seam" style="font-size: 2rem; color: #64748b;"></i>
+                        <div class="qr-placeholder" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: #fffbeb; border-radius: 50%;">
+                            <i class="bi bi-pencil-square" style="font-size: 2rem; color: #d97706;"></i>
                         </div>
-                        <small class="text-muted mt-2">Register new inventory item</small>
+                        <small class="text-muted mt-2">Update existing inventory item</small>
                     </div>
 
-                    
+                    <div class="row g-3 mb-4 pb-4" style="border-bottom: 1px dashed #cbd5e1;">
+                        <div class="col-12">
+                            <label class="form-label fw-bold" style="color: #0f172a;">Select Equipment</label>
+                            <select name="id" id="equipmentSelect" class="form-select border-warning" style="border-radius:8px;" required>
+                                <option value="">Choose an item from inventory...</option>
+                                <?php if(!empty($allEquipments)): ?>
+                                    <?php foreach($allEquipments as $eq): ?>
+                                        <option value="<?= $eq['id'] ?>">
+                                            <?= htmlspecialchars($eq['nome']) ?> (SN: <?= htmlspecialchars($eq['serial']) ?>)
+                                        </option>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="row g-3">
                         <input type="hidden" name="estado" id="mod_estado" value="Disponivel">
 
@@ -38,7 +54,7 @@
                                 <option value="Disponivel">Disponível (Free)</option>
                                 <option value="Em Uso">Em Uso (In Use)</option>
                                 <option value="Em Manutencao">Em Manutenção (Under Repair)</option>
-                                <option value="Fora de Servico">Fora de Servico (Inactive)</option>
+                                <option value="Inativo">Inativo (Inactive)</option>
                             </select>
                         </div>
 
@@ -190,12 +206,11 @@
                         </div>
                     </div>
                     
-                    
                 </div>
                 <div class="modal-footer border-0 pt-3">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius:8px;">Cancel</button>
-                    <button type="submit" class="btn btn-primary-custom">
-                        <i class="bi bi-plus-lg me-1"></i> Add Equipment
+                    <button type="submit" class="btn btn-warning" style="border-radius:8px;">
+                        <i class="bi bi-save me-1"></i> Save Changes
                     </button>
                 </div>
             </form>

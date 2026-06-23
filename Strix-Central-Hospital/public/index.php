@@ -11,9 +11,9 @@
 
     <!--Favicon-->
     <link rel="shortcut icon" href="assets/images/logo.png" type="image/png" />
-    <link rel="stylesheet" href="assets/css/main.css"/>
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="assets/css/bootstrap-icons.css"/>
+    <link rel="stylesheet" href="../private/assets/css/main.css"/> <!--main.css-->
+    <link rel="stylesheet" href="../private/assets/css/bootstrap.min.css"/> <!--bootstrap.min.css-->
+    <link rel="stylesheet" href="../private/assets/css/bootstrap-icons.css"/> <!--bootstrap-icons.css-->
 </head>
 
 <body class="body">
@@ -101,7 +101,7 @@
                 <div class="col-12 col-md-6 col-lg-3">
                     <div class="team-card card h-100 border-0 shadow-sm rounded-4 p-3 text-center strix-card-hover">                        
                         <div>
-                            <img src="/assets/images/engineer_man.jpg" class="rounded-3 mb-3" width="200" height="200" alt="Foto de perfil de John Mariah">
+                            <img src="../private/assets/images/engineer_man.jpg" class="rounded-3 mb-3" width="200" height="200" alt="Foto de perfil de John Mariah">
                         </div>
                         <div class="card-body">
                             <h5 class="fw-bold mb-1">Alex Johnson</h5>
@@ -117,7 +117,7 @@
                 <div class="col-12 col-md-6 col-lg-3">
                     <div class="team-card card h-100 border-0 shadow-sm rounded-4 p-3 text-center strix-card-hover">
                         <div>
-                            <img src="/assets/images/doctor_dude_man.jpg" class="rounded-3 mb-3" width="200" height="200" alt="Foto de perfil de John Mariah">
+                            <img src="../private/assets/images/doctor_dude_man.jpg" class="rounded-3 mb-3" width="200" height="200" alt="Foto de perfil de John Mariah">
                         </div>
                         <div class="card-body">
                             <h5 class="fw-bold mb-1">Sarah Chen</h5>
@@ -133,7 +133,7 @@
                 <div class="col-12 col-md-6 col-lg-3">
                     <div class="team-card card h-100 border-0 shadow-sm rounded-4 p-3 text-center strix-card-hover">
                         <div>
-                            <img src="/assets/images/one_of_the_dudes.jpg" class="rounded-3 mb-3" width="200" height="200" alt="Foto de perfil de John Mariah">
+                            <img src="../private/assets/images/one_of_the_dudes.jpg" class="rounded-3 mb-3" width="200" height="200" alt="Foto de perfil de John Mariah">
                         </div>
                         <div class="card-body">
                             <h5 class="fw-bold mb-1">John Mariah</h5>
@@ -262,7 +262,7 @@
     </footer>
 
     <!-- Bootstrap Bundle JS (Necessário para a sanfona funcionar) -->
-    <script src="/js/1240863.js"></script>
-    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="../private/assets/js/1240863.js"></script>
+    <script src="../private/assets/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
