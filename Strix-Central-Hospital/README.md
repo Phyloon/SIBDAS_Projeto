@@ -1,0 +1,9 @@
+Strixhaven é um software desenvolviddo pela TrueTech incorporated para auxiliar na manutenção e controlo de equipamentos médicos, os seus documentos correspondentes e também o staff de um modo básico.
+
+Este website apresenta uma estrutura simples com 4 ficheiros principais, config, includes, private e public. 
+O ficheiro config apresenta o documento php que estebelece a ligacao com a base de dados, enquanto que o includes possui documentos que são gerados ao adicionar na base de dados. 
+
+Dentro do public temos a página à qual é possível ter acesso sem ser feito login, assim como as páginas que tratam do login e logout. Tem também um ficheiro chamado assets que possui ficheiros css, imagens que são utilizadas na frontpage e até um ficheiro com fontes.
+
+Dentro do private é onde a maioria do software se concentra, tendo 2 páginas principais não pertencentes a nenhum ficheiro, dashboard, sendo a página que informa o técnico de informações básicas para o seu dia a dia, e login_process que trata do procedimento de login enviado pela página de login no ficheiro public.
+Temos ainda 3 ficheiros, assets, includes e views. O assets tem novamente ficheiros css, js, imagens e ainda fontes. O includes possui todas as páginas que não são diretamente acessíveis ou evidentes, como modais, ou ficheiros que tratam de eliminar, modificar e adicionar coisas à base de dados. Tem também dentro de si um ficheiro de documentos para alojar documentos criados por documentos ao serem adicionados.Por fim temos o ficheiro Views que tem as páginas principais e acessíveis como o staff, o stock inteiro de equipamentos, até uma pequena página com contactos de emergencia caso o hospital use pagers para comunicar.

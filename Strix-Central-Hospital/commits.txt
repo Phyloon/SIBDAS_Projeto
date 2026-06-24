@@ -1,0 +1,46 @@
+d64fe06 - Phyloon - 2026-06-24 15:34:06 +0100 - adição da parte de edição da front page, reorganização e adição de comentários na totalidade do projeto
+88d6249 - Phyloon - 2026-06-24 13:34:43 +0100 - reorganizacao de porcoes de codigo, adicao de codigos de pager
+727a337 - Phyloon - 2026-06-24 03:47:00 +0100 - adicao e correcao dos meios de adicao e apresentacao das garantias e contratos de manutencao
+152cf00 - Phyloon - 2026-06-24 01:40:42 +0100 - alteracao de premissao da pagina de adicao de utilizadores
+f3699d8 - Phyloon - 2026-06-24 01:39:56 +0100 - melhoramento do processo de adicao/edicao de equipamentos, datas importantes na card do equipamento, apresentacao de garantias e contratos de diferentes tipos, adicao de utilizadores
+6062bdf - Phyloon - 2026-06-23 20:28:45 +0100 - implementação de processos de deleção e modificação de fornecedores
+36f6641 - Phyloon - 2026-06-23 17:35:44 +0100 - adicao e delecao de staff e equipamentos
+688c298 - Phyloon - 2026-06-22 23:31:27 +0100 - adicao do botao de logout
+d30ca68 - Phyloon - 2026-06-22 23:05:07 +0100 - implementacao de login e etapas de verificacao de role. Melhorias no processo de adicao de documentos
+f7d801f - Phyloon - 2026-06-22 00:30:05 +0100 - organizacao do display de documentos, filtros na porcao de fornecedores adicao de campos na tabela de documentos
+15a6a92 - Phyloon - 2026-06-21 00:06:32 +0100 - conecao da base de dados a tabela de documentos e dinamizaccao da mesma. Adicao do modal para adicionar e simultaneamente conectar a um instrumento
+e2d3e79 - Phyloon - 2026-06-20 21:14:43 +0100 - adicao da funcionalidade de atualizacao de localizacao do equipamento, adicao da capacidade de conectar equipamentos pre existentes a um fornecedor e adicao de fornecedor
+094a100 - Phyloon - 2026-06-20 17:06:54 +0100 - implementacao da tabela de documentos em inventory/documentacao
+a7c6c93 - Phyloon - 2026-06-20 14:00:45 +0100 - implementacao da barra de pesquisa na pagina de fornecedores
+6c25f54 - Phyloon - 2026-06-20 03:47:46 +0100 - Ligacao do botao "adicionar inventario" a base de dados e confirmacao do seu funcionamento
+2fd7a81 - Phyloon - 2026-06-20 02:48:55 +0100 - adicao do modal de equipamento a tabela de fornecedores
+465db24 - Phyloon - 2026-06-20 00:42:25 +0100 - implementacao da correlacao correta e display claro das relacoes entre fornecedor-equipamento, dinamizacao da tabela de informacao e dropdowns
+31f3577 - Phyloon - 2026-06-19 23:19:50 +0100 - apresentacao dos dados corretos de fornecedores e respetivos equipamentos
+90e7d05 - Phyloon - 2026-06-19 22:47:36 +0100 - implementacao funcional do filtro na tabela  inventory_manage
+01cbab4 - Phyloon - 2026-06-18 23:27:20 +0100 - display do valor correto nos stat cards do "location"
+0a26494 - Phyloon - 2026-06-18 22:20:18 +0100 - gráficos do dashboard conectados à base de dados
+8c0bf93 - Phyloon - 2026-06-15 10:56:39 +0100 - implementação do processo de adição de staff e integração com a database
+a075347 - Phyloon - 2026-06-12 11:01:20 +0100 - Adição da base de dados e conversão de porções de html em php
+285fa06 - Phyloon - 2026-06-11 23:35:24 +0100 - conversão em php e restruturação da hierarquia dos ficheiros do projeto
+ace5d67 - Phyloon - 2026-06-03 14:16:54 +0100 - adição de inventário no gestor de equipamento e filtros na tabela de informação dos fornecedores
+74c92ad - Phyloon - 2026-06-03 12:39:32 +0100 - ajuste de interface dos fornecedores, adicao de modais para adicao quer de fornecedores como de equipmentos e adicao de tabela de informacao de contacto para todos os fornecedores
+393b6a6 - Phyloon - 2026-06-03 11:05:34 +0100 - adicao da pagina fornecedores e estabelecimento da estrutura inicial
+06809c4 - Phyloon - 2026-06-02 23:41:19 +0100 - mudanca do design da tabela de filtros e adicao/reorganizacao de componentes do modal
+baec014 - Phyloon - 2026-06-02 21:30:30 +0100 - Reorganizacao e implementacao de novos parametros para os modais do equipamento
+3f22b40 - Phyloon - 2026-06-01 22:35:04 +0100 - Adicao dos modals no inventario
+4e0ab8e - Phyloon - 2026-06-01 21:46:48 +0100 - Reorganizacao da sidebar e adicao de filtro e barra de progresso no inventario
+e673ec8 - Phyloon - 2026-05-28 15:20:16 +0100 - Implementação do ficheiro BOOTSTRAP e correção de erros que surgiram como consequência da implementação do mesmo
+4f3d618 - Phyloon - 2026-05-20 11:54:40 +0100 - quick contacts initial frame
+9cdc083 - Phyloon - 2026-05-19 23:09:37 +0100 - some touchups and implementing staff
+ef198d6 - Phyloon - 2026-05-18 20:35:36 +0100 - Inventory images and Location
+545b279 - Phyloon - 2026-05-15 17:55:38 +0100 - Tech dashboard,inventory and tickets
+6efd80e - Phyloon - 2026-05-15 12:15:11 +0100 - Upgraded logo, team profile logs
+94fa244 - Phyloon - 2026-05-15 01:04:13 +0100 - Hero section,who we are, team and other frontpage stuff
+b1e0698 - Phyloon - 2026-05-13 20:40:58 +0100 - FAQ, gradiente, espacamento ancoragem, inicio implementacao do botao darkmode
+8ba09ae - Phyloon - 2026-04-10 15:30:40 +0100 - Final test- ensure correct procedure
+f189f6d - Phyloon - 2026-04-10 15:24:20 +0100 - :wp
+98d1567 - Phyloon - 2026-04-10 15:21:14 +0100 - test-opening on new machine
+e95640d - Phyloon - 2026-04-10 15:11:36 +0100 - File pull onto home pc
+33565d8 - Phyloon - 2026-03-27 17:16:29 +0000 - Barra superior de navegacao
+acd3497 - Phyloon - 2026-03-27 12:39:19 +0000 - Outline inicial do frontend
+1ba9107 - Phyloon - 2026-03-27 11:15:40 +0000 - test
