@@ -62,7 +62,7 @@
         <li class="nav-item"><a href="/private/views/quick-contacts.php" class="nav-link"><i class="bi bi-phone-vibrate"></i> Quick Contacts</a></li>
         
         <?php if ($isCEO): ?>
-        <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-gear"></i> Frontpage edit </a></li>
+        <li class="nav-item"><a href="/private/views/modify_frontend.php" class="nav-link"><i class="bi bi-gear"></i> Frontpage edit </a></li>
         <li class="nav-item"><a href="/private/views/user-add.php" class="nav-link"><i class="bi bi-gear"></i> Adicionar Utilizador </a></li>
         <?php endif; ?>
     </ul>

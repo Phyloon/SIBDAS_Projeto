@@ -1,240 +1,255 @@
 <?php 
+// Load header (HTML start, styles, etc.)
 include '../includes/header.php';
+// Load statistics calculations (total, located, unconfirmed)
 include '../includes/location_stats.php';
+// Start session to display success/error messages
 session_start();
 ?>
     
-    <?php
-    // estava a dar undefined variable, isto resolve
-    $total = isset($total) ? $total : 0;
-    $located = isset($located) ? $located : 0;
-    $unconfirmed = isset($unconfirmed) ? $unconfirmed : 0;
-    
-    ?>
+<?php
+// Prevent undefined variable warnings if location_stats didn't set these
+$total = isset($total) ? $total : 0;
+$located = isset($located) ? $located : 0;
+$unconfirmed = isset($unconfirmed) ? $unconfirmed : 0;
+?>
 
 
-    <div class="d-flex">
+<div class="d-flex">
 
-        <?php include '../includes/nav.php'?>
+    <!-- Sidebar navigation -->
+    <?php include '../includes/nav.php'?>
 
-        <div id="content">
+    <div id="content">
 
-            <!-- Top Navigation Bar -->
-            <?php include '../includes/topbar.php'?>
+        <!-- Top bar (user info, notifications, etc.) -->
+        <?php include '../includes/topbar.php'?>
 
-            <div class="container-fluid p-4">
+        <div class="container-fluid p-4">
 
-                <!-- Page header -->
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <div>
-                        <h3 class="fw-bold mb-1">Equipment Location</h3>
-                        <p class="text-muted small mb-0">Live tracking via QR scan — last updated 2 min ago</p>
-                    </div>
-                    <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#updateLocationModal">
-                        <i class="bi bi-qr-code-scan me-2"></i> Log QR Scan
-                    </button>
+            <!-- PAGE HEADER with title and "Log QR Scan" button -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h3 class="fw-bold mb-1">Equipment Location</h3>
+                    <p class="text-muted small mb-0">Live tracking via QR scan — last updated 2 min ago</p>
                 </div>
-
-                <!-- Stat cards -->
-                <div class="row g-3 mb-4">
-                    
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="stat-card" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">
-                            <div class="stat-icon"><i class="bi bi-boxes"></i></div>
-                            <div>
-                                <div class="stat-value"><?=$total?></div>
-                                <div class="stat-label">Total Tracked Items</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="stat-card" style="background: linear-gradient(135deg, #10b981, #059669);">
-                            <div class="stat-icon"><i class="bi bi-geo-alt"></i></div>
-                            <div>
-                                <div class="stat-value"><?= $located ?></div>
-                                <div class="stat-label">Located</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="stat-card" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
-                            <div class="stat-icon"><i class="bi bi-question-circle"></i></div>
-                            <div>
-                                <div class="stat-value"><?= $unconfirmed ?></div>
-                                <div class="stat-label">Unconfirmed</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="stat-card" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
-                            <div class="stat-icon"><i class="bi bi-exclamation-triangle"></i></div>
-                            <div>
-                                <div class="stat-value"></div>
-                                <div class="stat-label">Missing / Not Scanned</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Filters -->
-                <div class="filter-bar mb-4">
-                    <i class="bi bi-funnel text-muted"></i>
-                    <select data-filter="wing">
-                        <option>All Wings</option>
-                        <option>Wing A</option>
-                        <option>Wing B</option>
-                        <option>Wing C</option>
-                        <option>Unknown</option>
-                    </select>
-                    <select data-filter="floor">
-                        <option>All Floors</option>
-                        <option>Floor 1</option>
-                        <option>Floor 2</option>
-                        <option>Floor 3</option>
-                        <option>Unknown</option>
-                    </select>
-                    <select data-filter="department">
-                        <option>All Departments</option>
-                        <option>Cardiology</option>
-                        <option>Radiology</option>
-                        <option>Neurology</option>
-                        <option>ICU</option>
-                        <option>Unknown</option>
-                    </select>
-                    <input type="text" placeholder="Search by room, equipment name or ID..." class="col-3">
-                </div>
-
-                <!-- Location table -->
-                <div class="card">
-                    <div class="card-body p-0">
-                        <table class="table location-table mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Equipment and ID</th>
-                                    <th>Wing</th>
-                                    <th>Floor</th>
-                                    <th>Room</th>
-                                    <th>Department</th>
-                                    <th>Last Scanned</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php 
-                                    try {
-                                        $smt = $pdo->query("SELECT nome, serial, location_wing, location_floor, location_room, departamento, last_scanned FROM equipamentos ORDER BY nome ");
-                                        $equipamentos = $smt->fetchAll(PDO::FETCH_ASSOC);
-                                        foreach ($equipamentos as $row): 
-                                            // Logic to determine status badge based on data presence
-                                            $isLocated = (!empty($row['location_wing']) && !empty($row['location_room']));
-                                            $badgeClass = $isLocated ? 'bg-success' : 'bg-danger';
-                                  
-                                            $statusText = $isLocated ? 'Located' : 'Missing';
-                                ?>
-                                    <tr data-wing="<?= htmlspecialchars($row['location_wing'] ?? 'Unknown') ?>" 
-                                        data-floor="<?= htmlspecialchars($row['location_floor'] ?? 'Unknown') ?>" 
-                                        data-department="<?= htmlspecialchars($row['departamento'] ?? 'Unknown') ?>">
-                                        
-                                        <td>
-                                            <div class="equipment-name"><?= htmlspecialchars($row['nome']) ?></div>
-                                            <div class="equipment-id"><?= htmlspecialchars($row['serial']) ?></div>
-                                        </td>
-                                        
-                                        <td><span class="location-pill"><i class="bi bi-building"></i> <?= htmlspecialchars($row['location_wing'] ?? 'Unknown') ?></span></td>
-                                        <td><span class="location-pill"><i class="bi bi-layers"></i> <?= htmlspecialchars($row['location_floor'] ?? 'Unknown') ?></span></td>
-                                        <td><span class="location-pill"><i class="bi bi-door-open"></i> <?= htmlspecialchars($row['location_room'] ?? 'Unknown') ?></span></td>
-                                        <td><?= htmlspecialchars($row['departamento'] ?? 'Unknown') ?></td>
-                                        
-                                        <td class="scan-time"><i class="bi bi-clock"></i> <?= htmlspecialchars($row['last_scanned'] ?? 'Unknown') ?></td>
-                                    </tr>
-
-                                <?php endforeach; } catch (PDOException $e) {echo "<tr><td colspan='7'>Error loading data: " . $e->getMessage() . "</td></tr>"; } ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
+                <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#updateLocationModal">
+                    <i class="bi bi-qr-code-scan me-2"></i> Log QR Scan
+                </button>
             </div>
+
+            <!-- STATISTICS CARDS: Total, Located, Unconfirmed, Missing -->
+            <div class="row g-3 mb-4">
+                <!-- Total items -->
+                <div class="col-sm-6 col-xl-3">
+                    <div class="stat-card" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">
+                        <div class="stat-icon"><i class="bi bi-boxes"></i></div>
+                        <div>
+                            <div class="stat-value"><?=$total?></div>
+                            <div class="stat-label">Total Tracked Items</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Located items (have wing and room) -->
+                <div class="col-sm-6 col-xl-3">
+                    <div class="stat-card" style="background: linear-gradient(135deg, #10b981, #059669);">
+                        <div class="stat-icon"><i class="bi bi-geo-alt"></i></div>
+                        <div>
+                            <div class="stat-value"><?= $located ?></div>
+                            <div class="stat-label">Located</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Unconfirmed (have location but no scan timestamp) -->
+                <div class="col-sm-6 col-xl-3">
+                    <div class="stat-card" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                        <div class="stat-icon"><i class="bi bi-question-circle"></i></div>
+                        <div>
+                            <div class="stat-value"><?= $unconfirmed ?></div>
+                            <div class="stat-label">Unconfirmed</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Missing / Not Scanned (will be populated by JS or separate query) -->
+                <div class="col-sm-6 col-xl-3">
+                    <div class="stat-card" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                        <div class="stat-icon"><i class="bi bi-exclamation-triangle"></i></div>
+                        <div>
+                            <div class="stat-value"></div>
+                            <div class="stat-label">Missing / Not Scanned</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FILTER BAR: Wing, Floor, Department, Search -->
+            <div class="filter-bar mb-4">
+                <i class="bi bi-funnel text-muted"></i>
+                <select data-filter="wing">
+                    <option>All Wings</option>
+                    <option>Wing A</option>
+                    <option>Wing B</option>
+                    <option>Wing C</option>
+                    <option>Unknown</option>
+                </select>
+                <select data-filter="floor">
+                    <option>All Floors</option>
+                    <option>Floor 1</option>
+                    <option>Floor 2</option>
+                    <option>Floor 3</option>
+                    <option>Unknown</option>
+                </select>
+                <select data-filter="department">
+                    <option>All Departments</option>
+                    <option>Cardiology</option>
+                    <option>Radiology</option>
+                    <option>Neurology</option>
+                    <option>ICU</option>
+                    <option>Unknown</option>
+                </select>
+                <input type="text" placeholder="Search by room, equipment name or ID..." class="col-3">
+            </div>
+
+            <!-- LOCATION TABLE: Shows all equipment with location data -->
+            <div class="card">
+                <div class="card-body p-0">
+                    <table class="table location-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Equipment and ID</th>
+                                <th>Wing</th>
+                                <th>Floor</th>
+                                <th>Room</th>
+                                <th>Department</th>
+                                <th>Last Scanned</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                                // Fetch all equipment with location info and last_scanned timestamp
+                                try {
+                                    $smt = $pdo->query("
+                                        SELECT nome, serial, location_wing, location_floor, 
+                                               location_room, departamento, last_scanned 
+                                        FROM equipamentos 
+                                        ORDER BY nome
+                                    ");
+                                    $equipamentos = $smt->fetchAll(PDO::FETCH_ASSOC);
+                                    foreach ($equipamentos as $row): 
+                                        // Determine if equipment has a location set
+                                        $isLocated = (!empty($row['location_wing']) && !empty($row['location_room']));
+                                        $badgeClass = $isLocated ? 'bg-success' : 'bg-danger';
+                                        $statusText = $isLocated ? 'Located' : 'Missing';
+                            ?>
+                                <tr data-wing="<?= htmlspecialchars($row['location_wing'] ?? 'Unknown') ?>" 
+                                    data-floor="<?= htmlspecialchars($row['location_floor'] ?? 'Unknown') ?>" 
+                                    data-department="<?= htmlspecialchars($row['departamento'] ?? 'Unknown') ?>">
+                                    
+                                    <td>
+                                        <div class="equipment-name"><?= htmlspecialchars($row['nome']) ?></div>
+                                        <div class="equipment-id"><?= htmlspecialchars($row['serial']) ?></div>
+                                    </td>
+                                    
+                                    <td><span class="location-pill"><i class="bi bi-building"></i> <?= htmlspecialchars($row['location_wing'] ?? 'Unknown') ?></span></td>
+                                    <td><span class="location-pill"><i class="bi bi-layers"></i> <?= htmlspecialchars($row['location_floor'] ?? 'Unknown') ?></span></td>
+                                    <td><span class="location-pill"><i class="bi bi-door-open"></i> <?= htmlspecialchars($row['location_room'] ?? 'Unknown') ?></span></td>
+                                    <td><?= htmlspecialchars($row['departamento'] ?? 'Unknown') ?></td>
+                                    
+                                    <td class="scan-time"><i class="bi bi-clock"></i> <?= htmlspecialchars($row['last_scanned'] ?? 'Unknown') ?></td>
+                                </tr>
+
+                            <?php endforeach; } catch (PDOException $e) {echo "<tr><td colspan='7'>Error loading data: " . $e->getMessage() . "</td></tr>"; } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
     </div>
+</div>
 
-    <!-- Update Location Modal -->
-    <div class="modal fade" id="updateLocationModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content" style="border-radius: 16px; border: none;">
-                <form method="POST" action="../includes/process_location_update.php">
-                    <div class="modal-header border-0 pb-0">
-                        <h5 class="modal-title fw-bold">Log Equipment Location</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body pt-3">
+<!-- UPDATE LOCATION MODAL: Form to change equipment location -->
+<div class="modal fade" id="updateLocationModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius: 16px; border: none;">
+            <!-- The form submits to process_location_update.php -->
+            <form method="POST" action="../includes/process_location_update.php">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold">Log Equipment Location</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body pt-3">
 
-                        <!-- QR placeholder -->
-                        <div class="d-flex flex-column align-items-center mb-4">
-                            <div class="qr-placeholder">
-                                <i class="bi bi-qr-code-scan"></i>
-                                <span>QR scanner goes here</span>
-                            </div>
-                            <small class="text-muted mt-2">Scan the QR code on the equipment, or select it below</small>
+                    <!-- QR scanner placeholder (future integration) -->
+                    <div class="d-flex flex-column align-items-center mb-4">
+                        <div class="qr-placeholder">
+                            <i class="bi bi-qr-code-scan"></i>
+                            <span>QR scanner goes here</span>
                         </div>
+                        <small class="text-muted mt-2">Scan the QR code on the equipment, or select it below</small>
+                    </div>
 
-                        <!-- Equipment Selection -->
-                        <div class="mb-3">
-                            <label class="form-label">Select Equipment <span class="text-danger">*</span></label>
-                            <select name="equipment_id" class="form-select" style="border-radius:8px;" required>
-                                <option value="">-- Select Equipment --</option>
-                                <?php 
-                                try {
-                                    $stmt = $pdo->query("SELECT id, nome, serial FROM equipamentos ORDER BY nome");
-                                    while ($eq = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                        echo "<option value='{$eq['id']}'>{$eq['nome']} - {$eq['serial']}</option>";
-                                    }
-                                } catch (PDOException $e) {
-                                    echo "<option value=''>Error loading equipment</option>";
+                    <!-- Equipment dropdown (populated from database) -->
+                    <div class="mb-3">
+                        <label class="form-label">Select Equipment <span class="text-danger">*</span></label>
+                        <select name="equipment_id" class="form-select" style="border-radius:8px;" required>
+                            <option value="">-- Select Equipment --</option>
+                            <?php 
+                            try {
+                                $stmt = $pdo->query("SELECT id, nome, serial FROM equipamentos ORDER BY nome");
+                                while ($eq = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                    echo "<option value='{$eq['id']}'>{$eq['nome']} - {$eq['serial']}</option>";
                                 }
-                                ?>
+                            } catch (PDOException $e) {
+                                echo "<option value=''>Error loading equipment</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <hr>
+
+                    <!-- Location input fields: Wing, Floor, Room -->
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label">Wing <span class="text-danger">*</span></label>
+                            <select name="location_wing" class="form-select" style="border-radius:8px;" required>
+                                <option value="">Select wing...</option>
+                                <option value="WA">Wing A</option>
+                                <option value="WB">Wing B</option>
+                                <option value="WC">Wing C</option>
+                                <option value="WD">Wing D</option>
+                                <option value="WE">Wing E</option>
                             </select>
                         </div>
-
-                        <hr>
-
-                        <!-- Location fields -->
-                        <div class="row g-3">
-                            <div class="col-12">
-                                <label class="form-label">Wing <span class="text-danger">*</span></label>
-                                <select name="location_wing" class="form-select" style="border-radius:8px;" required>
-                                    <option value="">Select wing...</option>
-                                    <option value="WA">Wing A</option>
-                                    <option value="WB">Wing B</option>
-                                    <option value="WC">Wing C</option>
-                                    <option value="WD">Wing D</option>
-                                    <option value="WE">Wing E</option>
-                                </select>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">Floor</label>
-                             <input type="text" class="form-control" name="location_floor" placeholder="e.g. 02" style="border-radius:8px;">
-                            </div>
-
-                            <div class="col-6">
-                                <label class="form-label">Room</label>
-                                <input type="text" class="form-control" name="location_room" placeholder="e.g. 201" style="border-radius:8px;">
-                            </div>
-
-                            <div class="col-12">
-                                <label class="form-label">Notes <span class="text-muted fw-normal">(optional)</span></label>
-                                <textarea  class="form-control" rows="2" placeholder="e.g. Left next to bed 3" style="border-radius:8px;"></textarea>
-                            </div>
+                        <div class="col-6">
+                            <label class="form-label">Floor</label>
+                            <input type="text" class="form-control" name="location_floor" placeholder="e.g. 02" style="border-radius:8px;">
                         </div>
 
+                        <div class="col-6">
+                            <label class="form-label">Room</label>
+                            <input type="text" class="form-control" name="location_room" placeholder="e.g. 201" style="border-radius:8px;">
+                        </div>
+
+                        <!-- Optional notes field -->
+                        <div class="col-12">
+                            <label class="form-label">Notes <span class="text-muted fw-normal">(optional)</span></label>
+                            <textarea class="form-control" rows="2" placeholder="e.g. Left next to bed 3" style="border-radius:8px;"></textarea>
+                        </div>
                     </div>
-                    <div class="modal-footer border-0 pt-0">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius:8px;">Cancel</button>
-                        <button type="submit" name="update_location" class="btn btn-primary-custom">
-                            <i class="bi bi-check-lg me-1"></i> Confirm Location
-                        </button>
-                    </div>
-                </form>
-            </div>
+
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius:8px;">Cancel</button>
+                    <button type="submit" name="update_location" class="btn btn-primary-custom">
+                        <i class="bi bi-check-lg me-1"></i> Confirm Location
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-<?php include "../includes/footer.php"?>  
+</div>
+
+<!-- Include footer (closing HTML tags and scripts) -->
+<?php include "../includes/footer.php"?>

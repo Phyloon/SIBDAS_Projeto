@@ -1,15 +1,23 @@
-<!--remover aviso de erro-->
+<!-- REMOVE ERROR NOTICE: These variables are defined in the parent page before this file is included -->
 <?php /** @var array $allEquipments */ ?>
-<!--remover aviso de erro-->
 <?php /** @var array $fornecedores */ ?>
 
+<!-- ============================================================ -->
+<!-- MODAL BODY with two tabs: Garantia (Warranty) and Contrato (Contract) -->
+<!-- ============================================================ -->
 <div class="modal-body">
     <div class="tab-content">
         
+        <!-- ========================================================== -->
+        <!-- TAB 1: WARRANTY (Garantia)                                   -->
+        <!-- ========================================================== -->
         <div class="tab-pane fade show active" id="garantia" role="tabpanel">
+            <!-- Form submits to process_new_maintenance.php, includes file upload -->
             <form action="../includes/process_new_maintenance.php" method="post" enctype="multipart/form-data">
+                <!-- Hidden field identifies this as a warranty record -->
                 <input type="hidden" name="tipo_registo" value="garantia">
                 
+                <!-- Equipment and Supplier dropdowns -->
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label">Equipamento</label>
@@ -31,6 +39,7 @@
                     </div>
                 </div>
 
+                <!-- Warranty start and end dates -->
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label">Início da Garantia</label>
@@ -42,16 +51,19 @@
                     </div>
                 </div>
 
+                <!-- File upload for warranty document -->
                 <div class="mb-3">
                     <label class="form-label">Documento da Garantia (PDF, Imagem)</label>
                     <input type="file" name="ficheiro_documento" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
                 </div>
 
+                <!-- Optional observations -->
                 <div class="mb-3">
                     <label class="form-label">Observações</label>
                     <textarea name="observacoes" class="form-control" rows="2" placeholder="Detalhes adicionais..."></textarea>
                 </div>
                 
+                <!-- Form action buttons -->
                 <div class="text-end mt-4">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Guardar Garantia</button>
@@ -59,10 +71,15 @@
             </form>
         </div>
 
+        <!-- ========================================================== -->
+        <!-- TAB 2: MAINTENANCE CONTRACT (Contrato)                       -->
+        <!-- ========================================================== -->
         <div class="tab-pane fade" id="contrato" role="tabpanel">
+            <!-- Form submits to same processor, with hidden tipo_registo = 'contrato' -->
             <form action="../includes/process_new_maintenance.php" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="tipo_registo" value="contrato">
                 
+                <!-- Equipment and Supplier dropdowns -->
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label">Equipamento</label>
@@ -84,6 +101,7 @@
                     </div>
                 </div>
 
+                <!-- Contract start and end dates -->
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label">Início do Contrato</label>
@@ -95,6 +113,7 @@
                     </div>
                 </div>
 
+                <!-- Contract type and frequency -->
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label">Tipo de Contrato</label>
@@ -115,16 +134,19 @@
                     </div>
                 </div>
 
+                <!-- File upload for contract document (PDF) -->
                 <div class="mb-3">
                     <label class="form-label">Ficheiro do Contrato (PDF)</label>
                     <input type="file" name="ficheiro_documento" class="form-control" accept=".pdf">
                 </div>
 
+                <!-- Optional observations -->
                 <div class="mb-3">
                     <label class="form-label">Observações</label>
                     <textarea name="observacoes" class="form-control" rows="2" placeholder="Detalhes adicionais..."></textarea>
                 </div>
 
+                <!-- Form action buttons -->
                 <div class="text-end mt-4">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Guardar Contrato</button>
@@ -133,4 +155,4 @@
         </div>
 
     </div>
-    </div>
+</div>

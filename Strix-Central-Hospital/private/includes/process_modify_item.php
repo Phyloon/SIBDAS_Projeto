@@ -1,13 +1,15 @@
 <?php
-// process_modify_item.php
+// process_modify_item.php - updates an existing equipment item and its supplier links
+
 require_once '../../config/config.php';
 
+// Only allow POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ../views/inventory-manage.php');
     exit;
 }
 
-// Collect inputs (including the item ID to update)
+// Collect all form inputs
 $equipamento_id  = intval($_POST['id']           ?? 0);
 $nome            = trim($_POST['nome']           ?? '');
 $modelo          = trim($_POST['modelo']         ?? '');
@@ -15,7 +17,7 @@ $marca           = trim($_POST['marca']          ?? '');
 $serial          = trim($_POST['serial']         ?? '');
 $estado          = trim($_POST['estado']         ?? 'Disponivel');
 $criticidade     = trim($_POST['criticidade']    ?? '');
-// Collect all four supplier IDs
+// Collect all supplier IDs from the four dropdowns (filter out zeros)
 $fornecedores_ids = array_filter([
     intval($_POST['fornecedor_id']           ?? 0),
     intval($_POST['fornecedor_distribuidor'] ?? 0),
@@ -32,12 +34,12 @@ $data_aquisicao  = trim($_POST['data_aquisicao'] ?? null);
 $custo_aquisicao = floatval($_POST['custo_aquisicao'] ?? 0);
 $ano_fabrico     = intval($_POST['ano_fabrico']  ?? 0);
 
-// Build location vector exactly like the insertion step
+// Build the location vector (format: wing.floor.room with zero padding)
 $location_vector = $location_wing . '.' . 
                    str_pad($location_floor, 2, '0', STR_PAD_LEFT) . '.' . 
                    str_pad($location_room,  3, '0', STR_PAD_LEFT);
 
-// Validate required fields
+// Validate required fields (name, serial, and valid ID)
 if (empty($nome) || empty($serial) || $equipamento_id <= 0) {
     $_SESSION['error'] = 'Nome, Serial e ID do equipamento são obrigatórios.';
     header('Location: ../views/inventory-manage.php');
@@ -45,7 +47,7 @@ if (empty($nome) || empty($serial) || $equipamento_id <= 0) {
 }
 
 try {
-    // Update existing equipment entry
+    // Update the equipment record in the 'equipamentos' table
     $stmt = $pdo->prepare("
         UPDATE equipamentos 
         SET 
@@ -88,11 +90,12 @@ try {
         ':id'              => $equipamento_id,
     ]);
 
-    // Update the junction table relationship: 
-    // 1. Remove any old supplier link for this asset
+    // Update supplier links (many-to-many relation via junction table)
+    // 1. Remove all existing links for this equipment
     $stmtDel = $pdo->prepare("DELETE FROM equipamento_fornecedor WHERE equipamento_id = :equipamento_id");
     $stmtDel->execute([':equipamento_id' => $equipamento_id]);
 
+    // 2. Insert new links for each selected supplier
     $stmtRel = $pdo->prepare("
         INSERT IGNORE INTO equipamento_fornecedor (equipamento_id, fornecedor_id)
         VALUES (:equipamento_id, :fornecedor_id)
@@ -110,10 +113,12 @@ try {
     $_SESSION['success'] = 'Equipamento atualizado com sucesso!';
 
 } catch (PDOException $e) {
+    // If an error occurs, show it (for debugging) – consider logging instead in production
     echo "SQL Error: " . $e->getMessage(); 
     exit;
 }
 
+// Redirect back to the inventory management page
 header('Location: ../views/inventory-manage.php');
 exit;
 ?>

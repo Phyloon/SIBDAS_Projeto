@@ -1,14 +1,20 @@
+<!-- Modal for modifying an existing supplier -->
 <div class="modal fade" id="modifySupplierModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content" style="border-radius: 16px; border: none;">
 
+            <!-- Form submits to process_modify_supplier.php via POST -->
             <form action="../includes/process_modify_supplier.php" method="post">
+                
+                <!-- Modal header: title and close button -->
                 <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold">Add New Supplier</h5>
+                    <h5 class="modal-title fw-bold">Add New Supplier</h5> <!-- NOTE: Title says "Add" but this is a modify modal -->
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
+                
                 <div class="modal-body pt-3">
 
+                    <!-- Decorative building icon and helper text -->
                     <div class="d-flex flex-column align-items-center mb-4">
                         <div class="qr-placeholder" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; border-radius: 50%;">
                             <i class="bi bi-building" style="font-size: 2rem; color: #64748b;"></i>
@@ -16,11 +22,12 @@
                         <small class="text-muted mt-2">Modify a supplier</small>
                     </div>
 
+                    <!-- Supplier selection dropdown (the supplier to modify) -->
                     <div class="row g-3 mb-4 pb-4" style="border-bottom: 1px dashed #cbd5e1;">
                         <div class="col-12">
-                            <label class="form-label fw-bold" style="color: #0f172a;">Select Equipment</label>
+                            <label class="form-label fw-bold" style="color: #0f172a;">Select Equipment</label> <!-- NOTE: "Equipment" might be a typo, should be "Supplier" -->
                             <select name="id" id="supplierSelect" class="form-select border-warning" style="border-radius:8px;" required>
-                                <option value="">Choose an item from inventory...</option>
+                                <option value="">Choose an item from inventory...</option> <!-- Inventory implies equipment, but this is supplier -->
                                 <?php if(!empty($fornecedores)): ?>
                                     <?php foreach($fornecedores as $fo): ?>
                                         <option value="<?= $fo['id'] ?>">
@@ -32,12 +39,15 @@
                         </div>
                     </div>
 
+                    <!-- Fields to modify supplier details -->
                     <div class="row g-3">
+                        <!-- Company name -->
                         <div class="col-6">
                             <label class="form-label">Nome da Empresa</label>
                             <input type="text" name="nome_empresa" class="form-control" placeholder="e.g. Medtronic" style="border-radius:8px;">
                         </div>
                         
+                        <!-- Supplier type dropdown -->
                         <div class="col-6">
                             <label class="form-label">Tipo de fornecedor </label>
                             <select class="form-select" name="tipo_fornecedor" style="border-radius:8px;">
@@ -50,41 +60,49 @@
                             </select>
                         </div>
 
+                        <!-- Contact email -->
                         <div class="col-12">
                             <label class="form-label">Contact Email</label>
                             <input type="email" name="email" class="form-control" placeholder="contact@supplier.com" style="border-radius:8px;">
                         </div>
 
+                        <!-- Website URL -->
                         <div class="col-6">
                             <label class="form-label">Website</label>
                             <input type="text" name="website" class="form-control" placeholder="www.empresa.com" style="border-radius:8px;">
                         </div>
 
+                        <!-- Address -->
                         <div class="col-6">
                             <label class="form-label">Endereco</label>
                             <input type="text" name="endereco" class="form-control" placeholder="Rua XXXX, 123, Porto Portugal" style="border-radius:8px;">
                         </div>
 
+                        <!-- Tax ID (NIF) -->
                         <div class="col-6">
                             <label class="form-label">nif</label>
                             <input type="text" name="nif" class="form-control" placeholder="123 456 789" style="border-radius:8px;">
                         </div>
 
+                        <!-- Main phone number -->
                         <div class="col-6">
                             <label class="form-label">Contact Telefone</label>
                             <input type="tel" name="telefone" class="form-control" placeholder="+351 911 871 461" style="border-radius:8px;">
                         </div>
 
+                        <!-- Contact person name -->
                         <div class="col-6">
                             <label class="form-label">Pessoa Contacto (PC)</label>
                             <input type="text" name="pessoa_contacto" class="form-control" placeholder="Joana Teixeira" style="border-radius:8px;">
                         </div>
 
+                        <!-- Contact person phone -->
                         <div class="col-6">
                             <label class="form-label">Telefone da (PC)</label>
                             <input type="tel" name="telefone_contacto" class="form-control" placeholder="+351 911 871 461" style="border-radius:8px;">
                         </div>
 
+                        <!-- Optional description/notes -->
                         <div class="col-12">
                             <label class="form-label">Description <span class="text-muted fw-normal">(optional)</span></label>
                             <textarea class="form-control" rows="2" placeholder="Brief info about the supplier" style="border-radius:8px;"></textarea>
@@ -92,10 +110,11 @@
                     </div>
 
                 </div>
+                <!-- Modal footer: cancel and submit buttons -->
                 <div class="modal-footer border-0 pt-3">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius:8px;">Cancel</button>
                     <button type="submit" class="btn btn-primary-custom">
-                        <i class="bi bi-plus-lg me-1"></i> Add Supplier
+                        <i class="bi bi-plus-lg me-1"></i> Add Supplier <!-- Again, "Add" should be "Modify" -->
                     </button>
                 </div>
             </form>

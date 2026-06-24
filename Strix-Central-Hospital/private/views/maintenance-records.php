@@ -1,8 +1,12 @@
 <?php
+// 1. Load configuration and start session for user messages
 require_once '../../config/config.php';
 session_start();
 
-// Fetch all documents with equipment and supplier info
+// 2. FETCH ALL RECORDS (documents) with equipment and supplier details
+//    - Left join with equipamentos and fornecedores to get names
+//    - Includes: equipment name, doc ID, type, contract type, dates, file path, supplier
+//    - Ordered by equipment name and start date descending
 $stmt = $pdo->query("
     SELECT 
         e.nome AS equipamento,
@@ -21,7 +25,8 @@ $stmt = $pdo->query("
 ");
 $allRecords = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Define tab filters
+// 3. DEFINE FILTERS FOR EACH TAB
+//    Used to split records into categories: Garantia, Preventiva, Corretiva, Total
 $tabFilters = [
     'Garantia'   => ['tipo_documento' => 'Garantia'],
     'Preventiva' => ['tipo_documento' => 'Contrato', 'tipo_contrato' => 'Preventiva'],
@@ -29,7 +34,7 @@ $tabFilters = [
     'Total'      => ['tipo_documento' => 'Contrato', 'tipo_contrato' => 'Total'],
 ];
 
-// Labels for tabs
+// 4. LABELS FOR TABS (display names)
 $regTypes = [
     'Garantia'   => 'Garantia',
     'Preventiva' => 'Manutenção Preventiva',
@@ -37,6 +42,8 @@ $regTypes = [
     'Total'      => 'Contrato Total',
 ];
 
+// 5. HELPER: Filter records based on tab key
+//    Uses the $tabFilters array to apply conditions
 function getRecordsByType($allRecords, $typeKey, $tabFilters) {
     $filter = $tabFilters[$typeKey] ?? null;
     if (!$filter) return [];
@@ -48,7 +55,8 @@ function getRecordsByType($allRecords, $typeKey, $tabFilters) {
     });
 }
 
-// Helper function to render document buttons
+// 6. HELPER: Render view/download buttons for documents
+//    Returns HTML with icons for viewing and downloading
 function renderDocumentButtons($caminho) {
     if (empty($caminho)) {
         return '<span class="text-muted small">Sem doc.</span>';
@@ -62,7 +70,8 @@ function renderDocumentButtons($caminho) {
     return $html;
 }
 
-// Fetch data for the Modal dropdowns
+// 7. FETCH LISTS FOR MODAL DROPDOWNS (equipments and suppliers)
+//    Used when adding a new record via the modal
 $stmtEq = $pdo->query("SELECT id, nome, serial FROM equipamentos ORDER BY nome");
 $allEquipments = $stmtEq->fetchAll(PDO::FETCH_ASSOC);
 
@@ -70,13 +79,17 @@ $stmtFo = $pdo->query("SELECT id, nome_empresa FROM fornecedores ORDER BY nome_e
 $fornecedores = $stmtFo->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
+<!-- Include header (HTML start, styles) -->
 <?php include '../includes/header.php' ?>
 <div class="d-flex">
+    <!-- Sidebar navigation -->
     <?php include '../includes/nav.php' ?>
     <div id="content" class="w-100">
+        <!-- Top bar with user info -->
         <?php include '../includes/topbar.php' ?>
         
         <div class="p-4">
+           <!-- PAGE HEADER with title and "New Record" button -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h5 class="fw-bold text-dark"><i class="bi bi-shield-check text-primary me-2"></i>Garantias e Contratos</h5>
                 <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#newContractModal">
@@ -84,6 +97,7 @@ $fornecedores = $stmtFo->fetchAll(PDO::FETCH_ASSOC);
                 </button>
             </div>
 
+            <!-- TABS: One tab per category (Garantia, Preventiva, Corretiva, Total) -->
             <ul class="nav nav-tabs mb-4" role="tablist">
                 <?php $index = 0; foreach($regTypes as $dbValue => $displayLabel): ?>
                     <li class="nav-item" role="presentation">
@@ -95,9 +109,10 @@ $fornecedores = $stmtFo->fetchAll(PDO::FETCH_ASSOC);
                 <?php $index++; endforeach; ?>
             </ul>
 
+            <!-- TAB CONTENT: Each tab shows a filtered table -->
             <div class="tab-content">
                 <?php $index = 0; foreach($regTypes as $dbValue => $displayLabel): 
-                    // Use the helper function to filter records for this specific tab
+                    // Get records for this specific tab using the helper
                     $filteredRecords = getRecordsByType($allRecords, $dbValue, $tabFilters);
                 ?>
                     <div class="tab-pane fade <?= $index === 0 ? 'show active' : '' ?>" id="view-tab-<?= $index ?>" role="tabpanel">
@@ -108,12 +123,13 @@ $fornecedores = $stmtFo->fetchAll(PDO::FETCH_ASSOC);
                                         <tr>
                                             <th class="ps-4">Equipamento</th>
                                             <?php if ($dbValue === 'Garantia'): ?>
+                                                <!-- Columns for warranty records -->
                                                 <th>Início Garantia</th>
                                                 <th>Fim Garantia</th>
                                                 <th>Entidade Responsável</th>
                                                 <th>Documento</th>
-                                                <th class="pe-4">Observações</th>
                                             <?php else: ?>
+                                                <!-- Columns for contract records (preventive, corrective, total) -->
                                                 <th>Início</th>
                                                 <th>Fim</th>
                                                 <th>Periodicidade</th>
@@ -130,15 +146,18 @@ $fornecedores = $stmtFo->fetchAll(PDO::FETCH_ASSOC);
                                                 </td>
                                             </tr>
                                         <?php else: ?>
+                                            <!-- Loop through filtered records and display each row -->
                                             <?php foreach($filteredRecords as $r): ?>
                                             <tr>
                                                 <td class="fw-bold ps-4"><?= htmlspecialchars($r['equipamento']) ?></td>
                                                 <td><?= $r['data_inicio_garantia'] ? date('d/m/Y', strtotime($r['data_inicio_garantia'])) : '-' ?></td>
                                                 <td><?= $r['data_fim_garantia'] ? date('d/m/Y', strtotime($r['data_fim_garantia'])) : '-' ?></td>
                                                 <?php if ($dbValue !== 'Garantia'): ?>
+                                                    <!-- Extra column for contract records: periodicidade -->
                                                     <td><?= htmlspecialchars($r['periodicidade'] ?: '-') ?></td>
                                                 <?php endif; ?>
                                                 <td><?= htmlspecialchars($r['entidade_responsavel'] ?: 'N/A') ?></td>
+                                                <!-- Document view/download buttons -->
                                                 <td><?= renderDocumentButtons($r['caminho_ficheiro'] ?? '') ?></td>
                                             </tr>
                                             <?php endforeach; ?>
@@ -151,7 +170,8 @@ $fornecedores = $stmtFo->fetchAll(PDO::FETCH_ASSOC);
                 <?php $index++; endforeach; ?>
             </div>
 
-            <!--modal add registry-->
+            <!-- MODAL: Add New Record (Warranty or Maintenance Contract) -->
+            <!-- The modal contains tabs inside it to switch between adding warranty or contract -->
             <div class="modal fade" id="newContractModal" tabindex="-1">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -160,6 +180,7 @@ $fornecedores = $stmtFo->fetchAll(PDO::FETCH_ASSOC);
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         
+                        <!-- Inner tabs for choosing warranty or contract -->
                         <div class="modal-header pt-2">
                             <ul class="nav nav-tabs w-100" id="registryTabs" role="tablist">
                                 <li class="nav-item" role="presentation">
@@ -175,6 +196,7 @@ $fornecedores = $stmtFo->fetchAll(PDO::FETCH_ASSOC);
                             </ul>
                         </div>
 
+                        <!-- Include the actual modal form content from an external file -->
                         <?php include '../includes/modal_maintenance-records.php' ?>
                     </div>
                 </div>

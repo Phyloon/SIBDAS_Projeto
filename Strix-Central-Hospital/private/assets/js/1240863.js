@@ -1,6 +1,13 @@
+/**
+ * Main initialization when DOM is fully loaded
+ */
 document.addEventListener('DOMContentLoaded', function () {
 
-    // 1. Fetch Equipment Details
+    // ================================================================
+    // 1. FETCH EQUIPMENT DETAILS FOR MODIFY MODAL
+    //    When a user selects an equipment from dropdown, fetch its data
+    //    via AJAX and populate the modification form fields.
+    // ================================================================
     const equipmentSelect = document.getElementById('equipmentSelect');
 
     if (equipmentSelect) {
@@ -14,11 +21,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (data.success) {
                         const eq = data.equipment;
                         
-                        // 1. Populate standard hidden/text input fields safely
+                        // Populate hidden ID field
                         if (document.getElementById('mod_id')) {
                             document.getElementById('mod_id').value = eq.id;
                         }
                         
+                        // Populate text/input fields
                         if (document.getElementById('mod_nome')) document.getElementById('mod_nome').value = eq.nome || '';
                         if (document.getElementById('mod_modelo')) document.getElementById('mod_modelo').value = eq.modelo || '';
                         if (document.getElementById('mod_marca')) document.getElementById('mod_marca').value = eq.marca || '';
@@ -30,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (document.getElementById('mod_data_aquisicao')) document.getElementById('mod_data_aquisicao').value = eq.data_aquisicao || '';
                         if (document.getElementById('mod_descricao')) document.getElementById('mod_descricao').value = eq.descricao || '';
                         
-                        // 2. Map standard Dropdowns (handling both fallback methods)
+                        // Populate dropdown selects (with fallback)
                         if (document.getElementById('mod_estado')) {
                             document.getElementById('mod_estado').value = eq.estado || 'Disponivel';
                         } else {
@@ -50,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (document.getElementById('mod_grupo')) document.getElementById('mod_grupo').value = eq.grupo || '';
                         if (document.getElementById('mod_tipo_aquisicao')) document.getElementById('mod_tipo_aquisicao').value = eq.tipo_aquisicao || '';
                         
-                        // 3. Map multi-supplier mappings if your UI utilizes them
+                        // Multi‑supplier mappings (if present)
                         if (document.getElementById('mod_fornecedor_id')) {
                             document.getElementById('mod_fornecedor_id').value = eq.fornecedor_id || eq.fornecedor_fabricante || '';
                         }
@@ -71,7 +79,11 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 2. Filter Bar (Dashboard / Tables)
+    // ================================================================
+    // 2. FILTER BAR: Live filtering of tables and cards
+    //    Listeners for search input and dropdowns on both .filter-bar
+    //    and .filter-bar-modal (for different pages).
+    // ================================================================
     if (document.querySelector('.filter-bar')) {
         document.querySelector('.filter-bar input').addEventListener('input', applyFilters);
         document.querySelectorAll('.filter-bar select').forEach(select => {
@@ -86,7 +98,11 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 3. Searchbar Fornecedores
+    // ================================================================
+    // 3. SEARCHBAR FOR FORNECEDORES PAGE
+    //    Filters suppliers by name and/or type, and shows/hides
+    //    equipment cards accordingly.
+    // ================================================================
     const searchInput = document.getElementById('supplierSearchInput');
     const typeFilter  = document.getElementById('supplierTypeFilter');
     if (searchInput) {
@@ -109,7 +125,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     if (typeFilter) typeFilter.addEventListener('change', applyFilters);
 
-    // 4. Status Bar Graph (Fetch via AJAX)
+    // ================================================================
+    // 4. STATUS BAR GRAPH (Dashboard)
+    //    Fetches equipment status counts from backend and renders a
+    //    horizontal bar chart with a special 'Total' bar.
+    // ================================================================
     const statusCanvas = document.getElementById('statusChart');
     if (statusCanvas) {
         fetch('/private/includes/4_bar_graph.php')
@@ -120,7 +140,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
                 
-                // 1. Calcula o total somando todos os estados dinamicamente
                 const totalEquipments = 
                     (statusData.Used || 0) + 
                     (statusData.Broken || 0) + 
@@ -131,7 +150,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        // 2. Adiciona a etiqueta 'Total' no fim da lista
                         labels: ['Used', 'Broken', 'Maint.', 'Available', 'Total'],
                         datasets: [{
                             data: [
@@ -139,9 +157,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                 statusData.Broken || 0,
                                 statusData.Maintenance || 0,
                                 statusData.Available || 0,
-                                totalEquipments // 3. Adiciona a variável do total aqui
+                                totalEquipments
                             ],
-                            // 4. Adiciona uma cor cinza/slate elegante para distinguir o total
                             backgroundColor: ['#10b981', '#ef4444', '#f59e0b', '#3b82f6', '#64748b'],
                             borderRadius: 8
                         }]
@@ -158,12 +175,14 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(err => console.error('Error loading chart:', err));
     }
 
-    // 5. Dashboard Additional Charts (Locais, Documentos, Fornecedores)
-    // Verifica se a variável global 'dashboardData' foi injetada no PHP
+    // ================================================================
+    // 5. ADDITIONAL DASHBOARD CHARTS (Location, Documents, Suppliers)
+    //    Uses a global variable 'dashboardData' injected by PHP.
+    // ================================================================
     if (typeof dashboardData !== 'undefined') {
         const colors = ['#0d6efd', '#198754', '#ffc107', '#dc3545', '#0dcaf0', '#6610f2'];
 
-        // Gráfico: Equipamentos por Serviço
+        // Equipment by wing (doughnut)
         const locCanvas = document.getElementById('locationChart');
         if (locCanvas) {
             new Chart(locCanvas.getContext('2d'), {
@@ -176,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        // Gráfico: Tipos de Documentação
+        // Document types (pie)
         const docsCanvas = document.getElementById('docsChart');
         if (docsCanvas) {
             new Chart(docsCanvas.getContext('2d'), {
@@ -189,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        // Gráfico: Top Fornecedores
+        // Top suppliers (horizontal bar)
         const suppCanvas = document.getElementById('suppliersChart');
         if (suppCanvas) {
             new Chart(suppCanvas.getContext('2d'), {
@@ -209,7 +228,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // 6. Clear Filters Button
+    // ================================================================
+    // 6. CLEAR FILTERS BUTTON
+    //    Resets all filter dropdowns and search input to default, then
+    //    reapplies the (now empty) filters.
+    // ================================================================
     const clearBtn = document.getElementById('clearFiltersBtn');
     if (clearBtn) {
         clearBtn.addEventListener('click', function() {
@@ -224,7 +247,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+/**
+ * Global filter function used by search and dropdown changes.
+ * Applies filters on table rows, equipment cards, and supplier accordion.
+ */
 function applyFilters() {
+    // Read all filter values from DOM elements
     const wing         = document.querySelector('select[data-filter="wing"]')?.value;
     const floor        = document.querySelector('select[data-filter="floor"]')?.value;
     const department   = document.querySelector('select[data-filter="department"]')?.value;
@@ -234,7 +262,9 @@ function applyFilters() {
     const group        = document.querySelector('select[data-filter="group"]')?.value;
     const criticality  = document.querySelector('select[data-filter="criticality"]')?.value;
 
-    // Table rows filtering
+    // -----------------------------------------------------------------
+    // Filter TABLE rows (staff, location, etc.)
+    // -----------------------------------------------------------------
     document.querySelectorAll('tbody tr').forEach(row => {
         const matchWing         = !wing || wing === 'All Wings' || row.dataset.wing === wing;
         const matchFloor        = !floor || floor === 'All Floors' || row.dataset.floor === floor;
@@ -246,7 +276,9 @@ function applyFilters() {
         row.style.display = (matchWing && matchFloor && matchDept && matchSearch && matchRole && matchAvailability) ? '' : 'none';
     });
 
-    // Cards filtering
+    // -----------------------------------------------------------------
+    // Filter CARDS (inventory grid)
+    // -----------------------------------------------------------------
     document.querySelectorAll('[data-group]').forEach(card => {
         const matchGroup       = !group || group === 'Grupo' || card.dataset.group === group;
         const matchAvail       = !availability || availability === 'Disponibilidade' || card.dataset.availability === availability;
@@ -257,32 +289,26 @@ function applyFilters() {
         card.style.display = (matchGroup && matchAvail && matchDept && matchSearch && matchCriticality) ? '' : 'none';
     });
 
-    // SUPPLIERS ACCORDION
+    // -----------------------------------------------------------------
+    // Filter SUPPLIERS ACCORDION (fornecedores page)
+    // -----------------------------------------------------------------
     const supplierSearch = document.getElementById('supplierSearchInput')?.value.toLowerCase().trim() || '';
     const supplierType   = document.getElementById('supplierTypeFilter')?.value || '';
 
     document.querySelectorAll('#suppliers-accordion > .accordion-item').forEach(acc => {
-        // 1. Validate Type Match
         const matchType = !supplierType || acc.dataset.type === supplierType;
-        
-        // 2. Check header match
         const headerText = acc.querySelector('.accordion-header').textContent.toLowerCase();
         const matchHeader = headerText.includes(supplierSearch);
 
-        // 3. Evaluate Card matches
         let hasVisibleCards = false;
         acc.querySelectorAll('.col-3').forEach(card => {
             const cardText = card.textContent.toLowerCase();
-            // A card is visible only if BOTH type and search criteria are met
             const showCard = matchType && (supplierSearch === '' || cardText.includes(supplierSearch));
-            
             card.style.display = showCard ? '' : 'none';
             if (showCard) hasVisibleCards = true;
         });
 
-        // 4. Final visibility: 
-        // Show if the accordion header matches AND type matches, 
-        // OR if any card inside matches the search criteria (provided the type also matches)
+        // Show accordion if header matches OR any card matches, and type matches
         const shouldShow = matchType && (supplierSearch === '' || matchHeader || hasVisibleCards);
         acc.style.display = shouldShow ? '' : 'none';
     });
