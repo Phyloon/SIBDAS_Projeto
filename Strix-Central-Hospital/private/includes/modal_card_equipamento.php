@@ -7,7 +7,7 @@
 // 1. Only run this query once per page load
 if (!isset($maintenanceData)) {
     // Assuming you have access to $pdo from your config.php
-    $stmt = $pdo->query("SELECT * FROM contratos_manutencao");
+    $stmt = $pdo->query("SELECT * FROM documentos_equipamento");
     $rawContracts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     // 2. Map data by equipment ID for fast access
