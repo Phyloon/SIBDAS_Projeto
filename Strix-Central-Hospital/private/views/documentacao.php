@@ -20,6 +20,8 @@ $allEquipments = $stmtEq->fetchAll(PDO::FETCH_ASSOC);
 $stmtFo = $pdo->query("SELECT id, nome_empresa FROM fornecedores ORDER BY nome_empresa  ");
 $fornecedores = $stmtFo->fetchAll(PDO::FETCH_ASSOC);
 
+
+
 // 3. Helper function to filter docs
 function getDocsByType($docs, $type) {
     return array_filter($docs, function($d) use ($type) {

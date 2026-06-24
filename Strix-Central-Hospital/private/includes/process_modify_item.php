@@ -15,7 +15,13 @@ $marca           = trim($_POST['marca']          ?? '');
 $serial          = trim($_POST['serial']         ?? '');
 $estado          = trim($_POST['estado']         ?? 'Disponivel');
 $criticidade     = trim($_POST['criticidade']    ?? '');
-$fornecedor_id   = intval($_POST['fornecedor_id']?? 0);
+// Collect all four supplier IDs
+$fornecedores_ids = array_filter([
+    intval($_POST['fornecedor_id']           ?? 0),
+    intval($_POST['fornecedor_distribuidor'] ?? 0),
+    intval($_POST['fornecedor_manutencao']   ?? 0),
+    intval($_POST['fornecedor_consumiveis']  ?? 0),
+]);
 $location_wing   = trim($_POST['location_wing']  ?? '');
 $location_floor  = trim($_POST['location_floor'] ?? '');
 $location_room   = trim($_POST['location_room']  ?? '');
@@ -87,16 +93,18 @@ try {
     $stmtDel = $pdo->prepare("DELETE FROM equipamento_fornecedor WHERE equipamento_id = :equipamento_id");
     $stmtDel->execute([':equipamento_id' => $equipamento_id]);
 
-    // 2. Insert the updated supplier link if one was chosen
-    if ($fornecedor_id > 0) {
-        $stmtRel = $pdo->prepare("
-            INSERT INTO equipamento_fornecedor (equipamento_id, fornecedor_id)
-            VALUES (:equipamento_id, :fornecedor_id)
-        ");
-        $stmtRel->execute([
-            ':equipamento_id' => $equipamento_id,
-            ':fornecedor_id'  => $fornecedor_id,
-        ]);
+    $stmtRel = $pdo->prepare("
+        INSERT IGNORE INTO equipamento_fornecedor (equipamento_id, fornecedor_id)
+        VALUES (:equipamento_id, :fornecedor_id)
+    ");
+
+    foreach ($fornecedores_ids as $fid) {
+        if ($fid > 0) {
+            $stmtRel->execute([
+                ':equipamento_id' => $equipamento_id,
+                ':fornecedor_id'  => $fid,
+            ]);
+        }
     }
 
     $_SESSION['success'] = 'Equipamento atualizado com sucesso!';

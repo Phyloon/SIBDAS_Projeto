@@ -13,7 +13,13 @@ $marca           = trim($_POST['marca']          ?? '');
 $serial          = trim($_POST['serial']         ?? '');
 $estado          = trim($_POST['estado']         ?? 'Disponivel');
 $criticidade     = trim($_POST['criticidade']    ?? '');
-$fornecedor_id   = intval($_POST['fornecedor_id']?? 0);
+// Collect all four supplier IDs
+$fornecedores_ids = array_filter([
+    intval($_POST['fornecedor_id']           ?? 0),
+    intval($_POST['fornecedor_distribuidor'] ?? 0),
+    intval($_POST['fornecedor_manutencao']   ?? 0),
+    intval($_POST['fornecedor_consumiveis']  ?? 0),
+]);
 $location_wing   = trim($_POST['location_wing']  ?? '');
 $location_floor  = trim($_POST['location_floor'] ?? '');
 $location_room   = trim($_POST['location_room']  ?? '');
@@ -27,8 +33,8 @@ $imagem          = '../assets/images/Placeholder.jpg';
 
 // Build location vector
 $location_vector = $location_wing . '.' . 
-                   str_pad($location_floor, 2, '0', STR_PAD_LEFT) . '.' . 
-                   str_pad($location_room,  3, '0', STR_PAD_LEFT);
+    str_pad($location_floor, 2, '0', STR_PAD_LEFT) . '.' . 
+    str_pad($location_room,  3, '0', STR_PAD_LEFT);
 
 // Validate required fields
 if (empty($nome) || empty($serial)) {
@@ -73,16 +79,18 @@ try {
     // Get the new equipment ID
     $equipamento_id = $pdo->lastInsertId();
 
-    // Insert into junction table if supplier was selected
-    if ($fornecedor_id > 0) {
-        $stmtRel = $pdo->prepare("
-            INSERT INTO equipamento_fornecedor (equipamento_id, fornecedor_id)
-            VALUES (:equipamento_id, :fornecedor_id)
-        ");
-        $stmtRel->execute([
-            ':equipamento_id' => $equipamento_id,
-            ':fornecedor_id'  => $fornecedor_id,
-        ]);
+    $stmtRel = $pdo->prepare("
+        INSERT IGNORE INTO equipamento_fornecedor (equipamento_id, fornecedor_id)
+        VALUES (:equipamento_id, :fornecedor_id)
+    ");
+
+    foreach ($fornecedores_ids as $fid) {
+        if ($fid > 0) {
+            $stmtRel->execute([
+                ':equipamento_id' => $equipamento_id,
+                ':fornecedor_id'  => $fid,
+            ]);
+        }
     }
 
     $_SESSION['success'] = 'Equipamento adicionado com sucesso!';

@@ -11,6 +11,7 @@ $stmt = $pdo->query("
         c.tipo_contrato, 
         c.periodicidade, 
         c.observacoes,
+        c.tipo_registo,
         f.nome_empresa AS entidade_responsavel
     FROM equipamentos e
     LEFT JOIN contratos_manutencao c ON e.id = c.equipamento_id
@@ -18,6 +19,20 @@ $stmt = $pdo->query("
     ORDER BY e.nome
 ");
 $records = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+//
+$regTypes = [
+    "Garantia" => "Garantia",
+    "Preventiva" => "Manutenção Preventiva",
+    "Corretiva" => "Manutenção Corretiva",
+    "Total" => "Contrato Total"
+];
+
+function getRecordsByType($allRecords, $typeKey) {
+    return array_filter($allRecords, function($r) use ($typeKey) {
+        return isset($r['tipo_contrato']) && $r['tipo_contrato'] === $typeKey;
+    });
+}
 
 // 2. Fetch data for the Modal (The missing part)
 $stmtEq = $pdo->query("SELECT id, nome, serial FROM equipamentos ORDER BY nome");
@@ -41,40 +56,76 @@ $fornecedores = $stmtFo->fetchAll(PDO::FETCH_ASSOC);
                 </button>
             </div>
 
-            <div class="card shadow-sm border-0">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Equipamento</th>
-                                <th>Garantia (Início/Fim)</th>
-                                <th>Contrato</th>
-                                <th>Entidade</th>
-                                <th>Periodicidade</th>
-                                <th>Obs.</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach($records as $r): ?>
-                            <tr>
-                                <td class="fw-bold"><?= htmlspecialchars($r['equipamento']) ?></td>
-                                <td>
-                                    <?php if($r['data_inicio_garantia']): ?>
-                                        <div class="small">Início: <?= $r['data_inicio_garantia'] ?></div>
-                                        <div class="small text-danger fw-bold">Fim: <?= $r['data_fim_garantia'] ?></div>
-                                    <?php else: ?>
-                                        <span class="text-muted small">Sem garantia</span>
-                                    <?php endif; ?>
-                                </td>
-                                <td><?= htmlspecialchars($r['tipo_contrato'] ?: 'N/A') ?></td>
-                                <td><?= htmlspecialchars($r['entidade_responsavel'] ?: 'N/A') ?></td>
-                                <td><?= htmlspecialchars($r['periodicidade'] ?: 'N/A') ?></td>
-                                <td><?= htmlspecialchars($r['observacoes'] ?: '-') ?></td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
+            <ul class="nav nav-tabs mb-4" role="tablist">
+                <?php $index = 0; foreach($regTypes as $dbValue => $displayLabel): ?>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link text-dark fw-bold <?= $index === 0 ? 'active' : '' ?>" 
+                                data-bs-toggle="tab" data-bs-target="#view-tab-<?= $index ?>" type="button" role="tab">
+                            <?= $displayLabel ?>
+                        </button>
+                    </li>
+                <?php $index++; endforeach; ?>
+            </ul>
+
+            <div class="tab-content">
+                <?php $index = 0; foreach($regTypes as $dbValue => $displayLabel): 
+                    // Use the helper function to filter records for this specific tab
+                    $filteredRecords = getRecordsByType($records, $dbValue);
+                ?>
+                    <div class="tab-pane fade <?= $index === 0 ? 'show active' : '' ?>" id="view-tab-<?= $index ?>" role="tabpanel">
+                        <div class="card shadow-sm border-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th class="ps-4">Equipamento</th>
+                                            <?php if ($dbValue === 'Garantia'): ?>
+
+                                                <th>Início Garantia</th>
+                                                <th>Fim Garantia</th>
+                                                <th>Entidade Responsavel</th>
+                                                <th class="pe-4">Observações</th>
+
+                                            <?php else: ?>
+
+                                                <th>Tipo Contrato</th>
+                                                <th>Periodicidade</th>
+                                                <th>Entidade Responsavel</th>
+                                                <th class="pe-4">Observações</th>
+
+                                            <?php endif; ?>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php if (empty($filteredRecords)): ?>
+                                            <tr>
+                                                <td colspan="6" class="text-center text-muted py-4">Sem registos encontrados para esta categoria.</td>
+                                            </tr>
+                                        <?php else: ?>
+                                            <?php foreach($filteredRecords as $r): ?>
+                                            <tr>
+                                                <td class="fw-bold ps-4"><?= htmlspecialchars($r['equipamento']) ?> </td>
+                                                <?php if ($dbValue === 'Garantia'): ?>
+                                                    <td><?= $r['data_inicio_garantia'] ? date('d/m/Y', strtotime($r['data_inicio_garantia'])) : '-' ?></td>
+                                                    <td><?= $r['data_fim_garantia'] ? date('d/m/Y', strtotime($r['data_fim_garantia'])) : '-' ?> </td>
+                                                    <td> <?= htmlspecialchars($r['entidade_responsavel'] ?: 'N/A') ?> </td>
+                                                    <td class="pe-4"> <?= htmlspecialchars($r['observacoes'] ?: '-') ?> </td>
+                                                <?php else: ?>
+                                                    <td> <?= htmlspecialchars($r['tipo_contrato'] ?: 'N/A') ?> </td>
+                                                    <td> <?= htmlspecialchars($r['periodicidade'] ?: 'N/A') ?> </td>
+                                                    <td> <?= htmlspecialchars($r['entidade_responsavel'] ?: 'N/A') ?> </td>
+                                                    <td class="pe-4"> <?= htmlspecialchars($r['observacoes'] ?: '-') ?> </td>
+                                                <?php endif; ?>
+
+                                            </tr>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                <?php $index++; endforeach; ?>
             </div>
 
             <!--modal add registry-->

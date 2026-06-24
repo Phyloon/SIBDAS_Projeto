@@ -1,5 +1,5 @@
 <?php
-require_once '../config/config.php';
+require_once '../../config/config.php';
 require_once 'funcoes.php';
 
 start_session();
@@ -7,7 +7,7 @@ start_session();
 // STRICT SECURITY CHECK
 $userRole = $_SESSION['role'] ?? '';
 if ($userRole !== 'tech' && $userRole !== 'ceo') {
-    header("Location: ../private/home.php");
+    header("Location: ../../public/index.php");
     exit;
 }
 
@@ -20,13 +20,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Basic validation
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $_SESSION['server_error'] = "O email fornecido não é válido.";
-        header("Location: ../private/registar_utilizador.php");
+        header("Location: ../views/user-add.php");
         exit;
     }
 
     if (strlen($pass) < 6 || strlen($pass) > 12) {
         $_SESSION['server_error'] = "A password deve ter entre 6 e 12 caracteres.";
-        header("Location: ../private/registar_utilizador.php");
+        header("Location: ../views/user-add.php");
         exit;
     }
 
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         $_SESSION['success_message'] = "Utilizador '$nome' registado com sucesso!";
-        header("Location: ../private/registar_utilizador.php");
+        header("Location: ../views/user-add.php");
         exit;
 
     } catch (PDOException $e) {
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $_SESSION['server_error'] = "Erro ao registar utilizador: " . $e->getMessage();
         }
-        header("Location: ../private/registar_utilizador.php");
+        header("Location: ../views/user-add.php");
         exit;
     }
 }

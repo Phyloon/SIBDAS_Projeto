@@ -14,9 +14,32 @@ if (!isset($maintenanceData)) {
     $maintenanceData = [];
     foreach ($rawContracts as $contract) {
         $maintenanceData[$contract['equipamento_id']] = $contract;
-    }
-}
+        if (!empty($contract['data_inicio_garantia'])) {
 
+            $proxima = new DateTime($contract['data_inicio_garantia']);
+
+            switch ($contract['periodicidade']) {
+                case '3 meses':
+                    $proxima->modify('+3 months');
+                    break;
+
+                case '6 meses':
+                    $proxima->modify('+6 months');
+                    break;
+
+                case '12 meses':
+                    $proxima->modify('+12 months');
+                    break;
+            }
+
+            $contract['proxima_manutencao'] = $proxima->format('Y-m-d');
+        } else {
+                $contract['proxima_manutencao'] = null;
+        }
+        $maintenanceData[$contract['equipamento_id']] = $contract;
+    }
+
+}
 
 // 2. NOVA LÓGICA: Carregar TODOS os documentos e agrupar por equipamento_id
 if (!isset($docsByEquipment)) {
@@ -98,7 +121,9 @@ if (!isset($docsByEquipment)) {
                                 <div>
                                     <div class="fw-semibold">Próxima Manutenção</div>
                                     <div class="small text-muted">
-                                        <?= $data ? date('d M Y', strtotime($data['data_fim_garantia'])) : 'Sem dados' ?>
+                                        <?= !empty($data['proxima_manutencao'])
+                                            ? date('d M Y', strtotime($data['proxima_manutencao']))
+                                            : 'Sem dados' ?>
                                     </div>
                                 </div>
                                 <span class="badge <?= $data ? 'bg-warning text-dark' : 'bg-secondary' ?> rounded-pill">
@@ -108,6 +133,9 @@ if (!isset($docsByEquipment)) {
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <div>
                                     <div class="fw-semibold">Fim da Garantia</div>
+                                    <div class="small text-muted">
+                                        <?= $data ? date('d M Y', strtotime($data['data_fim_garantia'])) : 'Sem dados' ?>
+                                    </div>
                                 </div>
                             </li>
                         </ul>
