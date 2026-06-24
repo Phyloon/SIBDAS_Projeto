@@ -11,6 +11,7 @@
     // Define who gets full access
     $userRole = $_SESSION['role'] ?? '';
     $isFullAccess = ($userRole === 'tech' || $userRole === 'ceo');
+    $isCEO = ($userRole === 'ceo');
     ?>
 
     <ul class="nav flex-column mt-2">
@@ -68,7 +69,7 @@
 
         <li class="nav-item"><a href="/private/views/quick-contacts.php" class="nav-link"><i class="bi bi-phone-vibrate"></i> Quick Contacts</a></li>
         
-        <?php if ($isFullAccess): ?>
+        <?php if ($isCEO): ?>
         <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-gear"></i> Frontpage edit </a></li>
         <li class="nav-item"><a href="/private/views/user-add.php" class="nav-link"><i class="bi bi-gear"></i> Adicionar Utilizador </a></li>
         <?php endif; ?>
