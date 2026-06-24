@@ -185,8 +185,8 @@
                         </div>
 
                         <div class="col-12">
-                            <label class="form-label">Description <span class="text-muted fw-normal">(optional)</span></label>
-                            <textarea name="descricao" id="mod_descricao" class="form-control" rows="2" placeholder="Brief technical notes" style="border-radius:8px;"></textarea>
+                            <label class="form-label">Observacoes <span class="text-muted fw-normal">(optional)</span></label>
+                            <textarea name="observacao" id="mod_observacoes" class="form-control" rows="2" placeholder="Brief technical notes" style="border-radius:8px;"></textarea>
                         </div>
                     </div>
                     

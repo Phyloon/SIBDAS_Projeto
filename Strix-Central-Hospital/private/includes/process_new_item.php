@@ -13,6 +13,7 @@ $marca           = trim($_POST['marca']          ?? '');
 $serial          = trim($_POST['serial']         ?? '');
 $estado          = trim($_POST['estado']         ?? 'Disponivel');
 $criticidade     = trim($_POST['criticidade']    ?? '');
+$observacao      = trim($_POST['observacao']      ?? '');
 // Collect all four supplier IDs
 $fornecedores_ids = array_filter([
     intval($_POST['fornecedor_id']           ?? 0),
@@ -47,11 +48,11 @@ try {
     // Insert equipment
     $stmt = $pdo->prepare("
         INSERT INTO equipamentos 
-            (nome, modelo, marca, serial, estado, criticidade,
+            (nome, modelo, marca, serial, estado, criticidade, observacao,
             location_vector, location_wing, location_floor, location_room,
             departamento, grupo, tipo_aquisicao, custo_aquisicao, ano_fabrico, data_aquisicao, imagem)
         VALUES 
-            (:nome, :modelo, :marca, :serial, :estado, :criticidade,
+            (:nome, :modelo, :marca, :serial, :estado, :criticidade, :observacao,
             :location_vector, :location_wing, :location_floor, :location_room,
             :departamento, :grupo, :tipo_aquisicao, :custo_aquisicao, :ano_fabrico, :data_aquisicao, :imagem)
     ");
@@ -63,6 +64,7 @@ try {
         ':serial'          => $serial,
         ':estado'          => $estado,
         ':criticidade'     => $criticidade,
+        ':observacao'      => $observacao,
         ':location_vector' => $location_vector,
         ':location_wing'   => $location_wing,
         ':location_floor'  => $location_floor,

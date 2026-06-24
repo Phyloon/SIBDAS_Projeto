@@ -57,15 +57,7 @@
             
         </li>
 
-        <?php if ($isFullAccess): ?>
-        <li class="nav-item"><a href="/private/views/tickets.php" class="nav-link"><i class="bi bi-ticket"></i> Tickets</a></li>
-        <?php endif; ?>
-
         <li class="nav-item"><a href="/private/views/location.php" class="nav-link"><i class="bi bi-pin-map"></i> Location</a></li>
-
-        <?php if ($isFullAccess): ?>
-        <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-file-earmark-bar-graph"></i> Reports</a></li>
-        <?php endif; ?>
 
         <li class="nav-item"><a href="/private/views/quick-contacts.php" class="nav-link"><i class="bi bi-phone-vibrate"></i> Quick Contacts</a></li>
         

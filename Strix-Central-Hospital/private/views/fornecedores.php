@@ -1,11 +1,11 @@
 <?php require_once '../includes/header.php';
 session_start();
 //get all suppliers
-$stmt = $pdo->query("SELECT * FROM fornecedores WHERE deleted_at IS NULL ORDER BY nome_empresa ");
+$stmt = $pdo->query("SELECT * FROM fornecedores WHERE deleted_at IS NULL ORDER BY nome_empresa");
 $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 //get the join between supplier id's on mixed table and the equipment id's associated to them
-$stmtEq = $pdo->query("SELECT ef.fornecedor_id, f.tipo_fornecedor, e.* FROM equipamento_fornecedor ef INNER JOIN equipamentos e  ON ef.equipamento_id = e.id LEFT JOIN fornecedores f ON ef.fornecedor_id = f.id ORDER BY e.nome");
+$stmtEq = $pdo->query("SELECT ef.fornecedor_id, f.tipo_fornecedor, e.* FROM equipamento_fornecedor ef INNER JOIN equipamentos e  ON ef.equipamento_id = e.id LEFT JOIN fornecedores f ON ef.fornecedor_id = f.id WHERE e.deleted_at IS NULL ORDER BY e.nome ");
 $allEquipments = $stmtEq->fetchAll(PDO::FETCH_ASSOC);
 
 //agrupar equipamento por fornecedor
@@ -54,26 +54,39 @@ foreach($allEquipments as $eq) {
                         </div>
 
                         <div class="dropdown">
-                            <button class="btn btn-primary-custom btn-sm" data-bs-toggle="dropdown" data-bs-target="#addDropdown" style="border-radius: 8px;">
-                                <i class="bi bi-chevron-down me-2"></i> Funcoes
+                            <button class="btn btn-primary-custom dropdown-toggle btn-sm" type="button" id="funcoesDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 8px;">
+                                <i class="bi bi-gear me-2"></i> Funções
                             </button>
-                            <div class="dropdown-menu dropdown-menu-end" id="addDropdown">
-                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addSupplierModal">
-                                    <i class="bi bi-building me-2"></i> Adicionar Fornecedor
-                                </button>
-                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteSupplierModal">
-                                    <i class="bi bi-x me-2"></i> Remover um Fornecedor
-                                </button>
-                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modifySupplierModal">
-                                    <i class="bi bi-x me-2"></i> Editar um Fornecedor
-                                </button>
-                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addEquipmentModal">
-                                    <i class="bi bi-wrench me-2"></i> Adicionar Equipamento
-                                </button>
-                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#linkEquipmentModal">
-                                    <i class="bi bi-link-45deg me-2"></i> Ligar Equipamento a Fornecedor
-                                </button>
-                            </div>
+                            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="funcoesDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addSupplierModal">
+                                        <i class="bi bi-building-add me-2 text-success"></i> Adicionar Fornecedor
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modifySupplierModal">
+                                        <i class="bi bi-pencil-square me-2 text-warning"></i> Editar um Fornecedor
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteSupplierModal">
+                                        <i class="bi bi-trash-fill me-2 text-danger"></i> Remover um Fornecedor
+                                    </a>
+                                </li>
+                                
+                                <li><hr class="dropdown-divider"></li>
+                                
+                                <li>
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addEquipmentModal">
+                                        <i class="bi bi-wrench-adjustable me-2 text-primary"></i> Adicionar Equipamento
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#linkEquipmentModal">
+                                        <i class="bi bi-link-45deg me-2 text-info"></i> Ligar Equipamento a Fornecedor
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -102,29 +115,6 @@ foreach($allEquipments as $eq) {
                                 <div class="accordion-body bg-light border-top p-4">
                                     <div class="row g-4">
                                         <div class="card border-0 shadow-sm mb-4">
-                                            <div class="card-body">
-                                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                                    <h6 class="fw-bold m-0"><i class="bi bi-funnel me-2"></i>Filtrar Fornecedores</h6>
-                                                    
-                                                    <button class="btn btn-sm btn-light border" type="button" data-bs-toggle="collapse" data-bs-target="#advancedFilters" aria-expanded="false" aria-controls="advancedFilters">
-                                                        <i class="bi bi-chevron-down"></i> More filters
-                                                    </button>
-                                                </div>
-
-                                                <div class="row g-3">
-                                                    <div class="col-md-4">
-                                                        <label class="form-label small">Nome da empresa</label>
-                                                        <input type="text" class="form-control form-control-sm" placeholder="Nome...">
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label class="form-label small">Nif</label>
-                                                        <input type="text" class="form-control form-control-sm" placeholder="NIF...">
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label class="form-label small">Telefone</label>
-                                                        <input type="text" class="form-control form-control-sm" placeholder="Telefone...">
-                                                    </div>
-                                                </div>
 
                                                 <div class="collapse" id="advancedFilters">
                                                     <div class="row g-3 pt-3">
@@ -154,7 +144,7 @@ foreach($allEquipments as $eq) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            
                                         </div>
                                         <table class="table table-bordered">
                                             <thead>

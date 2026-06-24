@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    // 1. Move this to the top level inside document.addEventListener('DOMContentLoaded', ...)
+    // 1. Fetch Equipment Details
     const equipmentSelect = document.getElementById('equipmentSelect');
 
     if (equipmentSelect) {
@@ -71,8 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 4 bar graph on dashboard
-    // only attach filters if the filter bar exists on this page
+    // 2. Filter Bar (Dashboard / Tables)
     if (document.querySelector('.filter-bar')) {
         document.querySelector('.filter-bar input').addEventListener('input', applyFilters);
         document.querySelectorAll('.filter-bar select').forEach(select => {
@@ -83,11 +82,11 @@ document.addEventListener('DOMContentLoaded', function () {
     if (document.querySelector('.filter-bar-modal')) {
         document.querySelector('.filter-bar-modal input')?.addEventListener('input', applyFilters);
         document.querySelectorAll('.filter-bar-modal select').forEach(select => {
-        select.addEventListener('change', applyFilters);
-    });
-}
+            select.addEventListener('change', applyFilters);
+        });
+    }
 
-    // searchbar fornecedores
+    // 3. Searchbar Fornecedores
     const searchInput = document.getElementById('supplierSearchInput');
     const typeFilter  = document.getElementById('supplierTypeFilter');
     if (searchInput) {
@@ -99,22 +98,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 let hasGearMatch = false;
 
                 acc.querySelectorAll('.col-3').forEach(card => {
-                    // If the supplier matches, show all gear. Otherwise, only show matching gear.
                     let showCard = isSupplierMatch || card.textContent.toLowerCase().includes(filter);
                     card.style.display = showCard ? '' : 'none';
                     if (showCard) hasGearMatch = true;
                 });
 
-                // Show the accordion if it's empty, if the supplier matched, or if gear matched
                 acc.style.display = (filter === '' || isSupplierMatch || hasGearMatch) ? '' : 'none';
             });
         });
     }
-    if (typeFilter)  typeFilter.addEventListener('change', applyFilters);
+    if (typeFilter) typeFilter.addEventListener('change', applyFilters);
 
-    // --- CORREÇÃO 1: Mudar o 'return' por um bloco 'if' seguro ---
-    const canvas = document.getElementById('statusChart');
-    if (canvas) {
+    // 4. Status Bar Graph (Fetch via AJAX)
+    const statusCanvas = document.getElementById('statusChart');
+    if (statusCanvas) {
         fetch('/private/includes/4_bar_graph.php')
             .then(response => response.json())
             .then(statusData => {
@@ -123,20 +120,29 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
                 
-                const ctx = canvas.getContext('2d');
+                // 1. Calcula o total somando todos os estados dinamicamente
+                const totalEquipments = 
+                    (statusData.Used || 0) + 
+                    (statusData.Broken || 0) + 
+                    (statusData.Maintenance || 0) + 
+                    (statusData.Available || 0);
+                
+                const ctx = statusCanvas.getContext('2d');
                 new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: ['Used', 'Broken', 'Maint.', 'Available'],
+                        // 2. Adiciona a etiqueta 'Total' no fim da lista
+                        labels: ['Used', 'Broken', 'Maint.', 'Available', 'Total'],
                         datasets: [{
-                            // --- CORREÇÃO 3: Usar os dados reais vindos do PHP ---
                             data: [
                                 statusData.Used || 0,
                                 statusData.Broken || 0,
                                 statusData.Maintenance || 0,
-                                statusData.Available || 0
+                                statusData.Available || 0,
+                                totalEquipments // 3. Adiciona a variável do total aqui
                             ],
-                            backgroundColor: ['#10b981', '#ef4444', '#f59e0b', '#3b82f6'],
+                            // 4. Adiciona uma cor cinza/slate elegante para distinguir o total
+                            backgroundColor: ['#10b981', '#ef4444', '#f59e0b', '#3b82f6', '#64748b'],
                             borderRadius: 8
                         }]
                     },
@@ -145,19 +151,65 @@ document.addEventListener('DOMContentLoaded', function () {
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: { legend: { display: false } },
-                        scales: {
-                            x: {
-                                beginAtZero: true,
-                                ticks: { precision: 0 }
-                            }
-                        }
-                    }
+                        scales: { x: { beginAtZero: true, ticks: { precision: 0 } } }
+                    }   
                 });
-            }) // --- CORREÇÃO 2: Fechar corretamente o .then() ---
+            })
             .catch(err => console.error('Error loading chart:', err));
     }
 
-    // filter clear
+    // 5. Dashboard Additional Charts (Locais, Documentos, Fornecedores)
+    // Verifica se a variável global 'dashboardData' foi injetada no PHP
+    if (typeof dashboardData !== 'undefined') {
+        const colors = ['#0d6efd', '#198754', '#ffc107', '#dc3545', '#0dcaf0', '#6610f2'];
+
+        // Gráfico: Equipamentos por Serviço
+        const locCanvas = document.getElementById('locationChart');
+        if (locCanvas) {
+            new Chart(locCanvas.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: dashboardData.locLabels,
+                    datasets: [{ data: dashboardData.locCounts, backgroundColor: colors, borderWidth: 0 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 12 } } } }
+            });
+        }
+
+        // Gráfico: Tipos de Documentação
+        const docsCanvas = document.getElementById('docsChart');
+        if (docsCanvas) {
+            new Chart(docsCanvas.getContext('2d'), {
+                type: 'pie',
+                data: {
+                    labels: dashboardData.docLabels,
+                    datasets: [{ data: dashboardData.docCounts, backgroundColor: colors.slice().reverse(), borderWidth: 0 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 12 } } } }
+            });
+        }
+
+        // Gráfico: Top Fornecedores
+        const suppCanvas = document.getElementById('suppliersChart');
+        if (suppCanvas) {
+            new Chart(suppCanvas.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: dashboardData.fornLabels,
+                    datasets: [{ label: 'Equipamentos', data: dashboardData.fornCounts, backgroundColor: '#0d6efd', borderRadius: 4 }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                }
+            });
+        }
+    }
+
+    // 6. Clear Filters Button
     const clearBtn = document.getElementById('clearFiltersBtn');
     if (clearBtn) {
         clearBtn.addEventListener('click', function() {
@@ -170,41 +222,36 @@ document.addEventListener('DOMContentLoaded', function () {
             applyFilters();
         });
     }
-
-    
 });
 
 function applyFilters() {
     const wing         = document.querySelector('select[data-filter="wing"]')?.value;
     const floor        = document.querySelector('select[data-filter="floor"]')?.value;
     const department   = document.querySelector('select[data-filter="department"]')?.value;
-    // Evita crash se a filter-bar não existir na página atual usando ?.value
     const search       = document.querySelector('.filter-bar input')?.value.toLowerCase() || document.querySelector('.filter-bar-modal input')?.value.toLowerCase() || '';
     const role         = document.querySelector('select[data-filter="role"]')?.value;
     const availability = document.querySelector('select[data-filter="availability"]')?.value;
     const group        = document.querySelector('select[data-filter="group"]')?.value;
     const criticality  = document.querySelector('select[data-filter="criticality"]')?.value;
 
-
-    // only works on the table, cuz it says tbody
+    // Table rows filtering
     document.querySelectorAll('tbody tr').forEach(row => {
-        const matchWing   = !wing || wing === 'All Wings'             || row.dataset.wing === wing;
-        const matchFloor  = !floor || floor === 'All Floors'           || row.dataset.floor === floor;
-        const matchDept   = !department || department === 'All Departments' || row.dataset.department === department;
-        const matchSearch = !search || search === ''                    || row.textContent.toLowerCase().includes(search);
-        const matchRole   = !role || role === 'All Roles'             || row.dataset.role === role;
-        const matchAvailability = !availability || availability === 'All Availability'     || row.dataset.availability === availability;
-
-        
+        const matchWing         = !wing || wing === 'All Wings' || row.dataset.wing === wing;
+        const matchFloor        = !floor || floor === 'All Floors' || row.dataset.floor === floor;
+        const matchDept         = !department || department === 'All Departments' || row.dataset.department === department;
+        const matchSearch       = !search || search === '' || row.textContent.toLowerCase().includes(search);
+        const matchRole         = !role || role === 'All Roles' || row.dataset.role === role;
+        const matchAvailability = !availability || availability === 'All Availability' || row.dataset.availability === availability;
 
         row.style.display = (matchWing && matchFloor && matchDept && matchSearch && matchRole && matchAvailability) ? '' : 'none';
     });
 
+    // Cards filtering
     document.querySelectorAll('[data-group]').forEach(card => {
-        const matchGroup  = !group || group === 'Grupo' || card.dataset.group === group;
-        const matchAvail  = !availability || availability === 'Disponibilidade' || card.dataset.availability === availability;
-        const matchDept   = !department || department === 'Departamento' || card.dataset.department === department;
-        const matchSearch = !search || card.textContent.toLowerCase().includes(search);
+        const matchGroup       = !group || group === 'Grupo' || card.dataset.group === group;
+        const matchAvail       = !availability || availability === 'Disponibilidade' || card.dataset.availability === availability;
+        const matchDept        = !department || department === 'Departamento' || card.dataset.department === department;
+        const matchSearch      = !search || card.textContent.toLowerCase().includes(search);
         const matchCriticality = !criticality || criticality === "Criticidade" || card.dataset.criticality === criticality;
 
         card.style.display = (matchGroup && matchAvail && matchDept && matchSearch && matchCriticality) ? '' : 'none';
@@ -213,20 +260,30 @@ function applyFilters() {
     // SUPPLIERS ACCORDION
     const supplierSearch = document.getElementById('supplierSearchInput')?.value.toLowerCase().trim() || '';
     const supplierType   = document.getElementById('supplierTypeFilter')?.value || '';
-    document.querySelectorAll('#suppliers-accordion > .accordion-item').forEach(acc => {
-        const matchType       = !supplierType || acc.dataset.type === supplierType;
-        const isSupplierMatch = matchType && acc.querySelector('.accordion-header').textContent.toLowerCase().includes(supplierSearch);
-        let hasGearMatch      = false;
 
+    document.querySelectorAll('#suppliers-accordion > .accordion-item').forEach(acc => {
+        // 1. Validate Type Match
+        const matchType = !supplierType || acc.dataset.type === supplierType;
+        
+        // 2. Check header match
+        const headerText = acc.querySelector('.accordion-header').textContent.toLowerCase();
+        const matchHeader = headerText.includes(supplierSearch);
+
+        // 3. Evaluate Card matches
+        let hasVisibleCards = false;
         acc.querySelectorAll('.col-3').forEach(card => {
-            const showCard = isSupplierMatch || (matchType && card.textContent.toLowerCase().includes(supplierSearch));
+            const cardText = card.textContent.toLowerCase();
+            // A card is visible only if BOTH type and search criteria are met
+            const showCard = matchType && (supplierSearch === '' || cardText.includes(supplierSearch));
+            
             card.style.display = showCard ? '' : 'none';
-            if (showCard) hasGearMatch = true;
+            if (showCard) hasVisibleCards = true;
         });
 
-        acc.style.display = (!supplierSearch && !supplierType) || isSupplierMatch || hasGearMatch ? '' : 'none';
+        // 4. Final visibility: 
+        // Show if the accordion header matches AND type matches, 
+        // OR if any card inside matches the search criteria (provided the type also matches)
+        const shouldShow = matchType && (supplierSearch === '' || matchHeader || hasVisibleCards);
+        acc.style.display = shouldShow ? '' : 'none';
     });
-
-
-    
 }

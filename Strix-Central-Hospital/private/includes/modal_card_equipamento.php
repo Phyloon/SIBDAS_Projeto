@@ -180,35 +180,7 @@ if (!isset($docsByEquipment)) {
                         </ul>
                     </div>
 
-                    <hr>
-                    <a href="#components-<?= $eq['id'] ?>" data-bs-toggle="collapse" role="button" class="d-flex justify-content-between align-items-center text-decoration-none text-dark fw-bold mb-2">
-                        <span><i class="bi bi-gear me-2"></i> Componentes Associados</span>
-                        <i class="bi bi-chevron-down small"></i>
-                    </a>
-
-                    <div id="components-<?= $eq['id'] ?>" class="collapse">
-                        <ul class="list-group list-group-flush p-3">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="fw-semibold">Sensor de Ritmo Cardíaco</div>
-                                    <div class="small text-muted">ID: 00-0000-01</div>
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="fw-semibold">Cabo de Eletrodos</div>
-                                    <div class="small text-muted">ID: 00-0000-02</div>
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="fw-semibold">Bateria Principal</div>
-                                    <div class="small text-muted">ID: 00-0000-03</div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-
+                    
                     <hr>
 
                     <div class="card mt-4">
@@ -267,12 +239,20 @@ if (!isset($docsByEquipment)) {
                     </div>
 
                     <hr>
+                    
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h6 class="fw-bold mb-0"><i class="bi bi-exclamation-circle me-2 text-decoration-none"></i> Observações:</h6>
+                        <h6 class="fw-bold mb-0">
+                            <i class="bi bi-exclamation-circle me-2 text-decoration-none"></i> Observações:
+                        </h6>
                     </div> 
-                    <div class="me-2 p-2">
-                        dadadad jhjhjh jhjhjh jh jhjh jhj h jhjhj hjhjh jhj hh
-                    </div> 
+
+                    <div class="me-2 p-2 bg-light rounded" style="font-size: 0.9rem; color: #475569;">
+                        <?php if (!empty($eq['observacao'])): ?>
+                            <?= nl2br(htmlspecialchars($eq['observacao'])) ?>
+                        <?php else: ?>
+                            <span class="text-muted fst-italic">Sem observações registradas.</span>
+                        <?php endif; ?>
+                    </div>
                 </div>
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
